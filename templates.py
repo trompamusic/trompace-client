@@ -17,15 +17,15 @@ CreatePerson(
 }}
 
   CreateEntryPoint(
-  contributor: "www.upf.edu"
-  title : "Hello"
-  name: "Hello"
-  creator: "UPF"
-  description: "Example"
-  language: en
-  format: "Hello"
-  source: "Helloo"
-  subject: "Bubs"
+  contributor: {}
+  title : {}
+  name: {}
+  creator: {}
+  description: {}
+  language: {}
+  format: {}
+  source: {}
+  subject: {}
 )
 {{
   identifier
