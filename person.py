@@ -16,31 +16,38 @@ CreatePerson(
 
 
 
-def mutation_artist(artist_name: str, artist_id: str, description: str):
+def mutation_artist(artist_name: str, publisher: str, contributor: str, creator: str, source: str, description: str, language: str):
     """Returns a mutation for creating a person object
     Arguments:
         str artist_name: The name of the artist
-        str artist_if: The musicbraniz id of the artist
-        str description: The relavent description of the artist
+        str publisher: The person, organization or service responsible for making the artist inofrmation available
+        str contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
+        str creator: The person, organization or service who created the thing the web resource is about.
+        srt sourcer: The URL of the web resource to be represented by the node.
+        str description: An account of the artist. 
+        str language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
+
 
     Returns:
         The string for the mutation for creating the artist.
     Raises:
-        None
+        Assertion error if the input language is not one of the supported languages. 
     """
+
+    assert language.lower() in ["en","es","ca","nl","de","fr"], "Language {} not supported".format(language)
+    
     args = {
         "title": artist_name,
         "name": artist_name,
-        "publisher": "https://musicbrainz.org",
-        "contributor": "https://musicbrainz.org",
-        "creator": "https://musicbrainz.org",
-        "source": "https://musicbrainz.org/artist/{}".format(artist_id),
+        "publisher": publisher,
+        "contributor": contributor,
+        "creator": creator,
+        "source": source,
         "subject": "artist",
         "description": description,
         "format": "text/html",  # an artist doesn't have a mimetype, use the mimetype of the source (musicbrainz page)
-        "language": StringConstant("en"),
+        "language": StringConstant(language.lower()),
             }
     create_person = CREATE_PERSON.format(parameters=make_parameters(**args))
     return MUTATION.format(mutation=create_person)
-
 
