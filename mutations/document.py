@@ -1,5 +1,5 @@
-from __init__ import StringConstant, make_parameters, MUTATION
-from templates import mutation_create
+from . import StringConstant, make_parameters, MUTATION
+from .templates import mutation_create
 
 
 # We say that 2 different scores of the same thing are a broad match
@@ -93,8 +93,8 @@ def get_query_remove_document_broad_match(from_document_id, to_document_id):
 def mutation_create_document(document_name: str, publisher: str, contributor: str, creator: str, source: str, description: str, subject:str, language: str):
     """Returns a mutation for creating a digital document object
     Arguments:
-        str artist_name: The name of the digital document
-        str publisher: The person, organization or service responsible for making the artist inofrmation available
+        str artist_name: The name of the digital document.
+        str publisher: The person, organization or service responsible for making the artist inofrmation available.
         str contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
         str creator: The person, organization or service who created the thing the web resource is about.
         srt sourcer: The URL of the web resource to be represented by the node.
@@ -108,6 +108,27 @@ def mutation_create_document(document_name: str, publisher: str, contributor: st
         Assertion error if the input language is not one of the supported languages. 
     """
     return mutation_create(document_name, publisher, contributor, creator, source, description, language, subject, CREATE_DIGITAL_DOCUMENT)
+
+def mutation_update_document(identifier:str, document_name = None, publisher= None, contributor= None, creator= None, source= None, description= None, language= None):
+    """Returns a mutation for updating a person object
+    Arguments:
+        str identifier: The unique identifier of the digital document.
+        str document_name: The name of the digital document, OPTIONAL.
+        str publisher: The person, organization or service responsible for making the artist inofrmation available, OPTIONAL.
+        str contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL, OPTIONAL.
+        str creator: The person, organization or service who created the thing the web resource is about, OPTIONAL.
+        srt sourcer: The URL of the web resource to be represented by the node, OPTIONAL.
+        str description: An account of the artist, OPTIONAL. 
+        str language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr, OPTIONAL
+
+
+    Returns:
+        The string for the mutation for creating the artist.
+    Raises:
+        Assertion error if the input language is not one of the supported languages. 
+    """
+
+    return mutation_update(identifier, UPDATE_DIGITAL_DOCUMENT, document_name, publisher, contributor, creator, source, description, language)
 
 
 def get_query_remove_document_composition(composition_id, document_id):

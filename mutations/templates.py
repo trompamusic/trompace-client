@@ -1,14 +1,5 @@
-from __init__ import StringConstant, make_parameters, MUTATION
+from . import StringConstant, make_parameters, MUTATION
 
-
-UPDATE_PERSON = '''
-UpdatePerson(
-  {parameters}
-) {{
-  identifier
-  relation
-}}
-'''
 
 def mutation_create(name: str, publisher: str, contributor: str, creator: str, source: str, description: str, language: str, subject:str, mutation_string: str):
     """Returns a mutation for creating a digital document object

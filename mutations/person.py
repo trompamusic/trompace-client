@@ -1,8 +1,8 @@
 # GEnerate GraphQL queries for mutations.
 
 
-from __init__ import StringConstant, make_parameters, MUTATION
-from templates import mutation_create, mutation_update
+from . import StringConstant, make_parameters, MUTATION
+from .templates import mutation_create, mutation_update
 
 
 CREATE_PERSON = '''

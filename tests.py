@@ -1,6 +1,7 @@
-from person import mutation_create_artist, mutation_update_artist
-from document import mutation_create_document
-from work import mutation_create_composition
+import mutations
+from mutations.person import mutation_create_artist, mutation_update_artist
+from mutations.document import mutation_create_document
+from mutations.work import mutation_create_composition
 def create_artist_test():
 	created_artist = mutation_create_artist("booboo", "booboo", "booboo", "booboo", "booboo", "booboo", "en")
 

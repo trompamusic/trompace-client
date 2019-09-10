@@ -2,8 +2,8 @@
 # from cequery import wikipedia
 # from cequery.person import get_wikidata_url
 
-from __init__ import StringConstant, make_parameters, MUTATION
-from templates import mutation_create
+from . import StringConstant, make_parameters, MUTATION
+from .templates import mutation_create
 
 MUTATION = '''mutation {{
   {mutation}
