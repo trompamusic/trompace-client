@@ -1,80 +1,92 @@
-# Templates for mutations
+from __init__ import StringConstant, make_parameters, MUTATION
 
 
-
-MUTATION = '''
-mutation {{
-  {mutation}
-}}
-'''
-
-CREATE_ENTRY_POINT = '''
-CreatePerson(
-{parameters}
+UPDATE_PERSON = '''
+UpdatePerson(
+  {parameters}
 ) {{
   identifier
-  name
-}}
-
-  CreateEntryPoint(
-  contributor: {}
-  title : {}
-  name: {}
-  creator: {}
-  description: {}
-  language: {}
-  format: {}
-  source: {}
-  subject: {}
-)
-{{
-  identifier
-  name
+  relation
 }}
 '''
 
-
-def get_wikidata_url(mb_artist):
-    # The relation type for artist-url relation type
-    wikidata_mb_rel_type = "689870a4-a1e4-4912-b17f-7b2664215698"
-    for l in mb_artist.get("url-relation-list", []):
-        if l["type-id"] == wikidata_mb_rel_type:
-            return l["target"]
-    return None
-
-
-def transform_data_artist(composer_args):
-    """Transform data from scraped composers data file"""
-
-    return mutation_artist(**composer_args)
+def mutation_create(name: str, publisher: str, contributor: str, creator: str, source: str, description: str, language: str, subject:str, mutation_string: str):
+    """Returns a mutation for creating a digital document object
+    Arguments:
+        str artist_name: The name of the digital document
+        str publisher: The person, organization or service responsible for making the artist inofrmation available
+        str contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
+        str creator: The person, organization or service who created the thing the web resource is about.
+        srt sourcer: The URL of the web resource to be represented by the node.
+        str description: An account of the artist. 
+        str language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
 
 
-def transform_musicbrainz_artist(mb_artist):
-    """Transform a musicbrainz artist to a CreatePerson mutation for the CE"""
+    Returns:
+        The string for the mutation for creating the artist.
+    Raises:
+        Assertion error if the input language is not one of the supported languages. 
+    """
 
-    # possible languages: en,es,ca,nl,de,fr
-
-    wikidata_url = get_wikidata_url(mb_artist)
-    description = ""
-    if wikidata_url:
-        description = wikipedia.get_description_for_wikidata(wikidata_url)
-
-    artist_name = mb_artist["name"]
+    assert language.lower() in ["en","es","ca","nl","de","fr"], "Language {} not supported".format(language)
+    
     args = {
-        "title": artist_name,
-        "name": artist_name,
-        "publisher": "https://musicbrainz.org",
-        "contributor": "https://musicbrainz.org",
-        "creator": "https://musicbrainz.org",
-        "source": "https://musicbrainz.org/artist/{}".format(mb_artist["id"]),
-        "subject": "artist",
+        "title": name,
+        "name": name,
+        "publisher": publisher,
+        "contributor": contributor,
+        "creator": creator,
+        "source": source,
+        "subject": subject,
         "description": description,
         "format": "text/html",  # an artist doesn't have a mimetype, use the mimetype of the source (musicbrainz page)
-        "language": StringConstant("en"),
+        "language": StringConstant(language.lower()),
             }
-    return mutation_artist(**args)
+
+    create_mutation = mutation_string.format(parameters=make_parameters(**args))
+    return MUTATION.format(mutation=create_mutation)
+
+def mutation_update(identifier: str, mutation_string: str, name = None, publisher = None, contributor = None, creator = None, source = None, description = None, language = None):
+    """Returns a mutation for creating a digital document object
+    Arguments:
+        str artist_name: The name of the digital document
+        str publisher: The person, organization or service responsible for making the artist inofrmation available
+        str contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
+        str creator: The person, organization or service who created the thing the web resource is about.
+        srt sourcer: The URL of the web resource to be represented by the node.
+        str description: An account of the artist. 
+        str language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
 
 
-def mutation_entrypoint(**kwargs):
-    create_person = CREATE_PERSON.format(parameters=make_parameters(**kwargs))
-    return MUTATION.format(mutation=create_person)
+    Returns:
+        The string for the mutation for creating the artist.
+    Raises:
+        Assertion error if the input language is not one of the supported languages. 
+    """
+
+    if language:
+
+      assert language.lower() in ["en","es","ca","nl","de","fr"], "Language {} not supported".format(language)
+    
+    args = {"identifier": identifier}
+    if name:
+      args["title"] = name
+      args["name"] = name
+    if publisher:
+      args["publisher"] = publisher
+    if contributor:
+      args["contributor"] = contributor
+    if creator:
+      args["creator"] = creator
+    if source:
+      args["source"] = source
+
+
+    create_mutation = mutation_string.format(parameters=make_parameters(**args))
+    return MUTATION.format(mutation=create_mutation)
+
+# def main():
+#   print(mutation_update("aiaiaia", UPDATE_PERSON, publisher = "booboo"))
+
+# if __name__ == '__main__':
+#     main()
