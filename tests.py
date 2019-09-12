@@ -2,12 +2,16 @@ import mutations
 from mutations.person import mutation_create_artist, mutation_update_artist
 from mutations.document import mutation_create_document
 from mutations.work import mutation_create_composition
+from connection import submit_query
+
 def create_artist_test():
-	created_artist = mutation_create_artist("booboo", "booboo", "booboo", "booboo", "booboo", "booboo", "en")
+	created_artist = mutation_create_artist("A. J. Fynn", "https://www.cpdl.org", "https://www.cpdl.org", "https://www.upf.edu", "https://www.cpdl.org/wiki/index.php/A._J._Fynn", "Born circa 1860Died circa 1920A. J. Fynn was an early 20th Century scholar in literature and anthropology, specializing in the American West and Native American culture. His most notable musical composition was \u201cWhere The Columbines Grow\u201d, which was adopted as the official state song of the US State of Colorado in 1915.View the Wikipedia article on A. J. Fynn.", "en")
 
-	expected_artist = '\nmutation {\n  \nCreatePerson(\ntitle: "booboo"\nname: "booboo"\npublisher: "booboo"\ncontributor: "booboo"\ncreator: "booboo"\nsource: "booboo"\nsubject: "artist"\ndescription: "booboo"\nformat: "text/html"\nlanguage: en\n) {\n  identifier\n  name\n}\n\n}\n'
 
-	updated_artist = mutation_update_artist("id", publisher = "blah-blah")
+	import pdb;pdb.set_trace()
+
+	expected_artist = '\nmutation {\n  \nCreatePerson(\ntitle: "A. J. Fynn"\nname: "A. J. Fynn"\npublisher: "https://www.cpdl.org"\ncontributor: "https://www.cpdl.org"\ncreator: "https://www.upf.edu"\nsource: "https://www.cpdl.org/wiki/index.php/A._J._Fynn"\nsubject: "artist"\ndescription: "Born circa 1860Died circa 1920A. J. Fynn was an early 20th Century scholar in literature and anthropology, specializing in the American West and Native American culture. His most notable musical composition was \\u201cWhere The Columbines Grow\\u201d, which was adopted as the official state song of the US State of Colorado in 1915.View the Wikipedia article on A. J. Fynn."\nformat: "text/html"\nlanguage: en\n) {\n  identifier\n  name\n}\n\n}\n'
+	updated_artist = mutation_update_artist('6eb279a6-8f40-4e02-b532-5641b5a4e6c6', publisher = "blah-blah")
 
 	expected_update = '\nmutation {\n  \nUpdatePerson(\n  identifier: "id"\npublisher: "blah-blah"\n) {\n  identifier\n  relation\n}\n\n}\n'
 

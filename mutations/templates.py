@@ -1,7 +1,8 @@
 from . import StringConstant, make_parameters, MUTATION
 
 
-def mutation_create(name: str, publisher: str, contributor: str, creator: str, source: str, description: str, language: str, subject:str, mutation_string: str):
+def mutation_create(name: str, publisher: str, contributor: str, creator: str, source: str, description: str, language: str, subject:str, mutation_string: str,
+ coverage=None, date=None, disambiguatingDescription=None, identifier=None, relation=None, rights=None, type=None, alternateName=None, image=None, sameAs=None, url=None):
     """Returns a mutation for creating a digital document object
     Arguments:
         str artist_name: The name of the digital document
@@ -33,6 +34,8 @@ def mutation_create(name: str, publisher: str, contributor: str, creator: str, s
         "format": "text/html",  # an artist doesn't have a mimetype, use the mimetype of the source (musicbrainz page)
         "language": StringConstant(language.lower()),
             }
+    if coverage:
+        args["coverage"] = coverage
 
     create_mutation = mutation_string.format(parameters=make_parameters(**args))
     return MUTATION.format(mutation=create_mutation)

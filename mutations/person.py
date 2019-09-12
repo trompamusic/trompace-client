@@ -27,13 +27,13 @@ UpdatePerson(
 def mutation_create_artist(artist_name: str, publisher: str, contributor: str, creator: str, source: str, description: str, language: str):
     """Returns a mutation for creating a person object
     Arguments:
-        str artist_name: The name of the artist
-        str publisher: The person, organization or service responsible for making the artist inofrmation available
-        str contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
-        str creator: The person, organization or service who created the thing the web resource is about.
-        srt sourcer: The URL of the web resource to be represented by the node.
-        str description: An account of the artist. 
-        str language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
+        artist_name: The name of the artist
+        publisher: The person, organization or service responsible for making the artist inofrmation available
+        contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
+        creator: The person, organization or service who created the thing the web resource is about.
+        sourcer: The URL of the web resource to be represented by the node.
+        description: An account of the artist. 
+        language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
 
 
     Returns:
@@ -44,21 +44,21 @@ def mutation_create_artist(artist_name: str, publisher: str, contributor: str, c
 
     return mutation_create(artist_name, publisher, contributor, creator, source, description, language, "artist", CREATE_PERSON)
 
-def mutation_update_artist(identifier:str, artist_name = None, publisher= None, contributor= None, creator= None, source= None, description= None, language= None):
+def mutation_update_artist(identifier: str, artist_name=None, publisher=None, contributor=None, creator=None, source=None, description=None, language=None):
     """Returns a mutation for updating a person object
     Arguments:
-        str identifier: The unique identifier of the artist
-        str artist_name: The name of the artist, OPTIONAL.
-        str publisher: The person, organization or service responsible for making the artist inofrmation available, OPTIONAL.
-        str contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL, OPTIONAL.
-        str creator: The person, organization or service who created the thing the web resource is about, OPTIONAL.
-        srt sourcer: The URL of the web resource to be represented by the node, OPTIONAL.
-        str description: An account of the artist, OPTIONAL. 
-        str language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr, OPTIONAL
+        identifier: The unique identifier of the artist
+        artist_name (optional): The name of the artist
+        publisher (optional): The person, organization or service responsible for making the artist inofrmation available.
+        contributor (optional): A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL, OPTIONAL.
+        creator (optional): The person, organization or service who created the thing the web resource is about, OPTIONAL.
+        sourcer (optional): The URL of the web resource to be represented by the node, OPTIONAL.
+        description (optional): An account of the artist, OPTIONAL. 
+        language (optional): The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr, OPTIONAL
 
 
     Returns:
-        The string for the mutation for creating the artist.
+        The string for the mutation for updating the artist.
     Raises:
         Assertion error if the input language is not one of the supported languages. 
     """

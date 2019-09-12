@@ -93,13 +93,13 @@ def get_query_remove_document_broad_match(from_document_id, to_document_id):
 def mutation_create_document(document_name: str, publisher: str, contributor: str, creator: str, source: str, description: str, subject:str, language: str):
     """Returns a mutation for creating a digital document object
     Arguments:
-        str artist_name: The name of the digital document.
-        str publisher: The person, organization or service responsible for making the artist inofrmation available.
-        str contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
-        str creator: The person, organization or service who created the thing the web resource is about.
-        srt sourcer: The URL of the web resource to be represented by the node.
-        str description: An account of the artist. 
-        str language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
+        artist_name: The name of the digital document.
+        publisher: The person, organization or service responsible for making the artist inofrmation available.
+        contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
+        creator: The person, organization or service who created the thing the web resource is about.
+        sourcer: The URL of the web resource to be represented by the node.
+        description: An account of the artist. 
+        language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
 
 
     Returns:
@@ -109,19 +109,17 @@ def mutation_create_document(document_name: str, publisher: str, contributor: st
     """
     return mutation_create(document_name, publisher, contributor, creator, source, description, language, subject, CREATE_DIGITAL_DOCUMENT)
 
-def mutation_update_document(identifier:str, document_name = None, publisher= None, contributor= None, creator= None, source= None, description= None, language= None):
+def mutation_update_document(identifier:str, document_name=None, publisher=None, contributor=None, creator=None, source=None, description=None, language=None):
     """Returns a mutation for updating a person object
     Arguments:
-        str identifier: The unique identifier of the digital document.
-        str document_name: The name of the digital document, OPTIONAL.
-        str publisher: The person, organization or service responsible for making the artist inofrmation available, OPTIONAL.
-        str contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL, OPTIONAL.
-        str creator: The person, organization or service who created the thing the web resource is about, OPTIONAL.
-        srt sourcer: The URL of the web resource to be represented by the node, OPTIONAL.
-        str description: An account of the artist, OPTIONAL. 
-        str language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr, OPTIONAL
-
-
+        identifier: The unique identifier of the digital document.
+        document_name (optional): The name of the digital document.
+        publisher (optional): The person, organization or service responsible for making the artist inofrmation available.
+        contributor (optional): A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
+        creator (optional): The person, organization or service who created the document that the web resource is about.
+        sourcer (optional): The URL of the web resource to be represented by the node.
+        description (optional): An account of the artist. 
+        language (optional): The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr.
     Returns:
         The string for the mutation for creating the artist.
     Raises:

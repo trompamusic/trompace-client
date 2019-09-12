@@ -179,3 +179,22 @@ def mutation_create_composition(composition_name: str, publisher: str, contribut
         Assertion error if the input language is not one of the supported languages. 
     """
     return mutation_create(composition_name, publisher, contributor, creator, source, description, language, subject, CREATE_MUSIC_COMPOSITION)
+
+def mutation_update_document(identifier:str, composition_name=None, publisher=None, contributor=None, creator=None, source=None, description=None, language=None):
+    """Returns a mutation for updating a person object
+    Arguments:
+        identifier: The unique identifier of the composition.
+        composition_name (optional): The name of the composition.
+        publisher (optional): The person, organization or service responsible for making the artist inofrmation available.
+        contributor (optional): A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
+        creator (optional): The person, organization or service who created the composition that the web resource is about.
+        sourcer (optional): The URL of the web resource to be represented by the node.
+        description (optional): An account of the artist. 
+        language (optional): The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr.
+    Returns:
+        The string for the mutation for creating the artist.
+    Raises:
+        Assertion error if the input language is not one of the supported languages. 
+    """
+
+    return mutation_update(identifier, UPDATE_MUSIC_COMPOSITION, composition_name, publisher, contributor, creator, source, description, language)

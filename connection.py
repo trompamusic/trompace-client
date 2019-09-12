@@ -2,7 +2,6 @@ import configparser
 
 import requests
 
-from cequery import query
 
 config = configparser.ConfigParser()
 config.read('import.ini')
@@ -21,19 +20,4 @@ def submit_query(querystr: str):
     return r.json()
 
 
-def get_digital_document_by_source(source):
-    querystr = query.query_document_by_source(source)
-    resp = submit_query(querystr)
-    return resp["data"]["DigitalDocument"]
 
-
-def get_person_by_source(source):
-    querystr = query.query_person_by_source(source)
-    resp = submit_query(querystr)
-    return resp["data"]["Person"]
-
-
-def get_music_composition_by_source(source):
-    querystr = query.query_music_composition_by_source(source)
-    resp = submit_query(querystr)
-    return resp["data"]["MusicComposition"]

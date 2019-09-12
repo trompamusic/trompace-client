@@ -1,6 +1,7 @@
-import json
-
 name = "mutations"
+
+
+import json
 
 class StringConstant:
     """Some values in GraphQL are constants, not strings, and so they shouldn't
