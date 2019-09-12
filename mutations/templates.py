@@ -1,21 +1,23 @@
+# Templates for generate GraphQL queries for mutations.
+
 from . import StringConstant, make_parameters, MUTATION
 
 
-def mutation_create(name: str, publisher: str, contributor: str, creator: str, source: str, description: str, language: str, subject:str, mutation_string: str,
- coverage=None, date=None, disambiguatingDescription=None, identifier=None, relation=None, rights=None, type=None, alternateName=None, image=None, sameAs=None, url=None):
-    """Returns a mutation for creating a digital document object
+def mutation_create(name: str, publisher: str, contributor: str, creator: str, source: str, description: str, language: str, subject:str, mutation_string: str, coverage=None, date=None,
+    disambiguatingDescription=None, relation=None, _type=None, _searchScore=None, additionalType=None, alternateName=None, image=None, sameAs=None, url=None, additionalName=None,
+    award=None, birthDate=None, deathDate=None, familyName=None, gender=None, givenName=None, honorificPrefix=None, honorificSuffix=None, jobTitle=None, knowsLanguage=None):
+    """Returns a mutation for creating an object.
     Arguments:
-        str artist_name: The name of the digital document
-        str publisher: The person, organization or service responsible for making the artist inofrmation available
-        str contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
-        str creator: The person, organization or service who created the thing the web resource is about.
-        srt sourcer: The URL of the web resource to be represented by the node.
-        str description: An account of the artist. 
-        str language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
-
+        name: The name of the object.
+        publisher: The person, organization or service responsible for making the artist inofrmation available
+        contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
+        creator: The person, organization or service who created the thing the web resource is about.
+        sourcer: The URL of the web resource to be represented by the node.
+        description: An account of the artist. 
+        language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
 
     Returns:
-        The string for the mutation for creating the artist.
+        The string for the mutation for creating the object.
     Raises:
         Assertion error if the input language is not one of the supported languages. 
     """
@@ -36,20 +38,61 @@ def mutation_create(name: str, publisher: str, contributor: str, creator: str, s
             }
     if coverage:
         args["coverage"] = coverage
+    if date:
+        args["date"] = date
+    if disambiguatingDescription:
+        args["disambiguatingDescription"] = disambiguatingDescription
+    if relation:
+        args["relation"] = relation
+    if _type:
+        args["type"] = _type
+    if _searchScore:
+        args["_searchScore"] = _searchScore
+    if additionalType:
+        args["additionalType"] = additionalType
+    if alternateName:
+        args["alternateName"] = alternateName
+    if image:
+        args["image"] = image
+    if sameAs:
+        args["sameAs"] = sameAs
+    if url:
+        args["url"] = url
+    if additionalName:
+        args["additionalName"] = additionalName
+    if award:
+        args["award"] = award
+    if birthDate:
+        args["birthDate"] = birthDate
+    if deathDate:
+        args["deathDate"] = deathDate
+    if familyName:
+        args["familyName"] = familyName
+    if gender:
+        args["gender"] = gender
+    if honorificPrefix:
+        args["honorificPrefix"] = honorificPrefix
+    if honorificSuffix:
+        args["honorificSuffix"] = honorificSuffix
+    if jobTitle:
+        args["jobTitle"] = jobTitle
+    if knowsLanguage:
+        args["knowsLanguage"] = knowsLanguage
 
     create_mutation = mutation_string.format(parameters=make_parameters(**args))
     return MUTATION.format(mutation=create_mutation)
 
 def mutation_update(identifier: str, mutation_string: str, name = None, publisher = None, contributor = None, creator = None, source = None, description = None, language = None):
-    """Returns a mutation for creating a digital document object
+    """Returns a mutation for updating an object.
     Arguments:
-        str artist_name: The name of the digital document
-        str publisher: The person, organization or service responsible for making the artist inofrmation available
-        str contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
-        str creator: The person, organization or service who created the thing the web resource is about.
-        srt sourcer: The URL of the web resource to be represented by the node.
-        str description: An account of the artist. 
-        str language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
+        identifier: The unique identifier of the object.
+        name (optional): The name of the object.
+        publisher (optional): The person, organization or service responsible for making the artist inofrmation available
+        contributor (optional): A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
+        creator (optional): The person, organization or service who created the thing the web resource is about.
+        sourcer (optional): The URL of the web resource to be represented by the node.
+        description (optional): An account of the artist. 
+        language (optional): The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
 
 
     Returns:
@@ -79,8 +122,18 @@ def mutation_update(identifier: str, mutation_string: str, name = None, publishe
     create_mutation = mutation_string.format(parameters=make_parameters(**args))
     return MUTATION.format(mutation=create_mutation)
 
-# def main():
-#   print(mutation_update("aiaiaia", UPDATE_PERSON, publisher = "booboo"))
+def mutation_delete(identifier: str, mutation_string: str):
+    """Returns a mutation for deleting an object
+    Arguments:
+        identifier: The unique identifier of the object.
+    Returns:
+        The string for the mutation for creating the artist.
+    Raises:
+        Assertion error if the input language is not one of the supported languages. 
+    """
 
-# if __name__ == '__main__':
-#     main()
+    
+    args = {"identifier": identifier}
+
+    delete_mutation = mutation_string.format(parameters=make_parameters(**args))
+    return MUTATION.format(mutation=delete_mutation)
