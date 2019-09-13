@@ -1,14 +1,8 @@
-# from cequery import StringConstant, make_parameters
-# from cequery import wikipedia
-# from cequery.person import get_wikidata_url
+# Generate GraphQL queries for mutations pertaining to musical compositions and works related objects.
 
 from . import StringConstant, make_parameters, MUTATION
-from .templates import mutation_create
+from .templates import mutation_create, mutation_update, mutation_delete
 
-MUTATION = '''mutation {{
-  {mutation}
-}}
-'''
 
 CREATE_MUSIC_COMPOSITION = '''
 CreateMusicComposition(
@@ -27,6 +21,15 @@ UpdateMusicComposition(
   identifier
   name
   relation
+}}
+'''
+
+DELETE_MUSIC_COMPOSITION = '''
+DeleteMusicComposition(
+  {parameters}
+) {{
+  identifier
+  name
 }}
 '''
 
@@ -90,39 +93,6 @@ def get_composer_rel(mb_work):
     return None
 
 
-def transform_musicbrainz_work(mb_work):
-    """Transform a musicbrainz artist to a CreatePerson mutation for the CE"""
-
-    # possible languages: en,es,ca,nl,de,fr
-
-    wikidata_url = get_wikidata_url(mb_artist)
-    description = ""
-    if wikidata_url:
-        description = wikipedia.get_description_for_wikidata(wikidata_url)
-
-    artist = get_composer_rel(mb_work)
-    if not artist:
-        print("unknown artist")
-        artist = {"name": "Unknown"}
-
-    work_name = mb_work["name"]
-    args = {
-        "title": work_name,
-        "name": work_name,
-        "publisher": "https://musicbrainz.org",
-        "contributor": "https://musicbrainz.org",
-        "creator": artist,
-        "source": "https://musicbrainz.org/work/{}".format(mb_work["id"]),
-        "subject": "artist",
-        "description": description,
-        "format": "text/html",  # a work doesn't have a mimetype, use the mimetype of the source (musicbrainz page)
-        # TODO: do works have a languange?
-        "language": StringConstant("en"),
-            }
-    create_music_composition = CREATE_MUSIC_COMPOSITION.format(parameters=make_parameters(**args))
-    return MUTATION.format(mutation=create_music_composition)
-
-
 def transform_data_update_composition(identifier, composition):
     """Transform a work from a data file to a UpdateMusicComposition mutation for the CE"""
 
@@ -164,13 +134,13 @@ def _transform_data_create_composition(composition):
 def mutation_create_composition(composition_name: str, publisher: str, contributor: str, creator: str, source: str, description: str, subject: str, language: str):
     """Returns a mutation for creating a digital document object
     Arguments:
-        str comosition_name: The name of the comnposition.
-        str publisher: The person, organization or service responsible for making the artist inofrmation available.
-        str contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
-        str creator: The person, organization or service who created the thing the web resource is about.
-        srt sourcer: The URL of the web resource to be represented by the node.
-        str description: An account of the artist. 
-        str language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr.
+        comosition_name: The name of the comnposition.
+        publisher: The person, organization or service responsible for making the artist inofrmation available.
+        contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
+        creator: The person, organization or service who created the thing the web resource is about.
+        sourcer: The URL of the web resource to be represented by the node.
+        description: An account of the artist. 
+        language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr.
 
 
     Returns:
@@ -180,7 +150,7 @@ def mutation_create_composition(composition_name: str, publisher: str, contribut
     """
     return mutation_create(composition_name, publisher, contributor, creator, source, description, language, subject, CREATE_MUSIC_COMPOSITION)
 
-def mutation_update_document(identifier:str, composition_name=None, publisher=None, contributor=None, creator=None, source=None, description=None, language=None):
+def mutation_update_composition(identifier:str, composition_name=None, publisher=None, contributor=None, creator=None, source=None, description=None, language=None):
     """Returns a mutation for updating a person object
     Arguments:
         identifier: The unique identifier of the composition.
@@ -198,3 +168,13 @@ def mutation_update_document(identifier:str, composition_name=None, publisher=No
     """
 
     return mutation_update(identifier, UPDATE_MUSIC_COMPOSITION, composition_name, publisher, contributor, creator, source, description, language)
+
+def mutation_delete_composition(identifier: str):
+    """Returns a mutation for deleting a person object based on the identifier.
+    Arguments:
+        identifier: The unique identifier of the artist.
+    Returns:
+        The string for the mutation for deleting the artist based on the identifier.
+    """
+
+    return mutation_delete(identifier, DELETE_MUSIC_COMPOSITION)

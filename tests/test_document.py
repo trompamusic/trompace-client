@@ -30,7 +30,6 @@ class TestDocument(unittest.TestCase):
     def test_query(self):
         created_document = mutation_create_document("A Document", "https://www.cpdl.org", "https://www.cpdl.org", "https://www.cpdl.org/A_Document", "https://www.upf.edu", "This is a document", "Document", "en")
         query_output = submit_query(created_document)
-        # import pdb;pdb.set_trace()
         self.assertEqual(query_output['data']['CreateDigitalDocument']['name'], "A Document")
         created_update = mutation_update_document(query_output['data']['CreateDigitalDocument']['identifier'], publisher="Https://www.cpdl.org")
         query_output_update = submit_query(created_update)
