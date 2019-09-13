@@ -95,7 +95,7 @@ DeleteDigitalDocument(
 def mutation_create_document(document_name: str, publisher: str, contributor: str, creator: str, source: str, description: str, subject:str, language: str):
     """Returns a mutation for creating a digital document object
     Arguments:
-        artist_name: The name of the digital document.
+        document_name: The name of the digital document.
         publisher: The person, organization or service responsible for making the artist inofrmation available.
         contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
         creator: The person, organization or service who created the thing the web resource is about.
@@ -105,14 +105,14 @@ def mutation_create_document(document_name: str, publisher: str, contributor: st
 
 
     Returns:
-        The string for the mutation for creating the artist.
+        The string for the mutation for creating the document object.
     Raises:
         Assertion error if the input language is not one of the supported languages. 
     """
     return mutation_create(document_name, publisher, contributor, creator, source, description, language, subject, CREATE_DIGITAL_DOCUMENT)
 
 def mutation_update_document(identifier:str, document_name=None, publisher=None, contributor=None, creator=None, source=None, description=None, language=None):
-    """Returns a mutation for updating a person object
+    """Returns a mutation for updating a digital document object.
     Arguments:
         identifier: The unique identifier of the digital document.
         document_name (optional): The name of the digital document.
@@ -131,11 +131,11 @@ def mutation_update_document(identifier:str, document_name=None, publisher=None,
     return mutation_update(identifier, UPDATE_DIGITAL_DOCUMENT, document_name, publisher, contributor, creator, source, description, language)
 
 def mutation_delete_document(identifier: str):
-    """Returns a mutation for deleting a person object based on the identifier.
+    """Returns a mutation for deleting a digital document object based on the identifier.
     Arguments:
-        identifier: The unique identifier of the artist.
+        identifier: The unique identifier of the digital document object.
     Returns:
-        The string for the mutation for deleting the artist based on the identifier.
+        The string for the mutation for deleting the digital document object based on the identifier.
     """
 
     return mutation_delete(identifier, DELETE_DIGITAL_DOCUMENT)

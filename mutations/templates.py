@@ -82,7 +82,9 @@ def mutation_create(name: str, publisher: str, contributor: str, creator: str, s
     create_mutation = mutation_string.format(parameters=make_parameters(**args))
     return MUTATION.format(mutation=create_mutation)
 
-def mutation_update(identifier: str, mutation_string: str, name = None, publisher = None, contributor = None, creator = None, source = None, description = None, language = None):
+def mutation_update(identifier: str, mutation_string: str, name = None, publisher = None, contributor = None, creator = None, source = None, description = None, language = None, coverage=None, date=None,
+    disambiguatingDescription=None, relation=None, _type=None, _searchScore=None, additionalType=None, alternateName=None, image=None, sameAs=None, url=None, additionalName=None,
+    award=None, birthDate=None, deathDate=None, familyName=None, gender=None, givenName=None, honorificPrefix=None, honorificSuffix=None, jobTitle=None, knowsLanguage=None):
     """Returns a mutation for updating an object.
     Arguments:
         identifier: The unique identifier of the object.
@@ -107,18 +109,59 @@ def mutation_update(identifier: str, mutation_string: str, name = None, publishe
     
     args = {"identifier": identifier}
     if name:
-      args["title"] = name
-      args["name"] = name
+        args["title"] = name
+        args["name"] = name
     if publisher:
-      args["publisher"] = publisher
+        args["publisher"] = publisher
     if contributor:
-      args["contributor"] = contributor
+        args["contributor"] = contributor
     if creator:
-      args["creator"] = creator
+        args["creator"] = creator
     if source:
-      args["source"] = source
-
-
+        args["source"] = source
+    if coverage:
+        args["coverage"] = coverage
+    if date:
+        args["date"] = date
+    if disambiguatingDescription:
+        args["disambiguatingDescription"] = disambiguatingDescription
+    if relation:
+        args["relation"] = relation
+    if _type:
+        args["type"] = _type
+    if _searchScore:
+        args["_searchScore"] = _searchScore
+    if additionalType:
+        args["additionalType"] = additionalType
+    if alternateName:
+        args["alternateName"] = alternateName
+    if image:
+        args["image"] = image
+    if sameAs:
+        args["sameAs"] = sameAs
+    if url:
+        args["url"] = url
+    if additionalName:
+        args["additionalName"] = additionalName
+    if award:
+        args["award"] = award
+    if birthDate:
+        args["birthDate"] = birthDate
+    if deathDate:
+        args["deathDate"] = deathDate
+    if familyName:
+        args["familyName"] = familyName
+    if gender:
+        args["gender"] = gender
+    if honorificPrefix:
+        args["honorificPrefix"] = honorificPrefix
+    if honorificSuffix:
+        args["honorificSuffix"] = honorificSuffix
+    if jobTitle:
+        args["jobTitle"] = jobTitle
+    if knowsLanguage:
+        args["knowsLanguage"] = knowsLanguage
+        
     create_mutation = mutation_string.format(parameters=make_parameters(**args))
     return MUTATION.format(mutation=create_mutation)
 
@@ -132,7 +175,6 @@ def mutation_delete(identifier: str, mutation_string: str):
         Assertion error if the input language is not one of the supported languages. 
     """
 
-    
     args = {"identifier": identifier}
 
     delete_mutation = mutation_string.format(parameters=make_parameters(**args))

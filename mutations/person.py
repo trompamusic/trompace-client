@@ -43,6 +43,28 @@ def mutation_create_artist(artist_name: str, publisher: str, contributor: str, c
         sourcer: The URL of the web resource to be represented by the node.
         description: An account of the artist. 
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
+        coverage (optional): The spatial or temporal topic of the resource, the spatial applicability of the resource, or the jurisdiction under which the resource is relevant.
+        date (optional): A point in time associated with an event in the lifecycle of the resource. Must be in ‘YYYY’, ‘YYYY-MM’ or ‘YYYY-MM-DD’ format.
+        disambiguatingDescription (optional): An alternate description of the artist, particularlly to distinguish from other similar artists. 
+        relation (optional): A related resource. Any web resource can be used as a relation.
+        _type (optional): The RDF type URI of the node.
+        _searchScore (optional): Unknown, ask Alastair.
+        additionalType (optional): An additional type for the node.
+        alternateName (optional): Alternate name of the artist.
+        image (optional): An image associated with the artist.
+        sameAs (optional): A schema.org property, defined as the URL of a reference Web page that unambiguously indicates the item's identity.
+        url (optional): An additional URL for the artist. 
+        additionalName (optional): An additional name for the artist.
+        award (optional): Awards won the artist?
+        birthDate (optional): The birth date of the artist, currently accepts string, but needs to be chenged to date format.
+        deathDate (optional): The date of death of the artist, currently accepts string, but needs to be chenged to date format.
+        familyName (optional); The family name of the artist. 
+        gender (optinal): The artists gender. 
+        honorificPrefix (optional): The artist's prefix.
+        honorificSuffix (optional): The artist's suffix.
+        jobTitle (optional): The artist's job title.
+        knowsLanguage (optional): The language known by the artist. 
+
 
 
     Returns:
@@ -55,7 +77,9 @@ def mutation_create_artist(artist_name: str, publisher: str, contributor: str, c
     disambiguatingDescription, relation, _type, _searchScore, additionalType, alternateName, image, sameAs, url, additionalName,
     award, birthDate, deathDate, familyName, gender, givenName, honorificPrefix, honorificSuffix, jobTitle, knowsLanguage)
 
-def mutation_update_artist(identifier: str, artist_name=None, publisher=None, contributor=None, creator=None, source=None, description=None, language=None):
+def mutation_update_artist(identifier: str, artist_name=None, publisher=None, contributor=None, creator=None, source=None, description=None, language=None, coverage=None, date=None,
+    disambiguatingDescription=None, relation=None, _type=None, _searchScore=None, additionalType=None, alternateName=None, image=None, sameAs=None, url=None, additionalName=None,
+    award=None, birthDate=None, deathDate=None, familyName=None, gender=None, givenName=None, honorificPrefix=None, honorificSuffix=None, jobTitle=None, knowsLanguage=None):
     """Returns a mutation for updating a person object
     Arguments:
         identifier: The unique identifier of the artist
@@ -66,7 +90,27 @@ def mutation_update_artist(identifier: str, artist_name=None, publisher=None, co
         sourcer (optional): The URL of the web resource to be represented by the node.
         description (optional): An account of the artist. 
         language (optional): The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr.
-
+        coverage (optional): The spatial or temporal topic of the resource, the spatial applicability of the resource, or the jurisdiction under which the resource is relevant.
+        date (optional): A point in time associated with an event in the lifecycle of the resource. Must be in ‘YYYY’, ‘YYYY-MM’ or ‘YYYY-MM-DD’ format.
+        disambiguatingDescription (optional): An alternate description of the artist, particularlly to distinguish from other similar artists. 
+        relation (optional): A related resource. Any web resource can be used as a relation.
+        _type (optional): The RDF type URI of the node.
+        _searchScore (optional): Unknown, ask Alastair.
+        additionalType (optional): An additional type for the node.
+        alternateName (optional): Alternate name of the artist.
+        image (optional): An image associated with the artist.
+        sameAs (optional): A schema.org property, defined as the URL of a reference Web page that unambiguously indicates the item's identity.
+        url (optional): An additional URL for the artist. 
+        additionalName (optional): An additional name for the artist.
+        award (optional): Awards won the artist?
+        birthDate (optional): The birth date of the artist, currently accepts string, but needs to be chenged to date format.
+        deathDate (optional): The date of death of the artist, currently accepts string, but needs to be chenged to date format.
+        familyName (optional); The family name of the artist. 
+        gender (optinal): The artists gender. 
+        honorificPrefix (optional): The artist's prefix.
+        honorificSuffix (optional): The artist's suffix.
+        jobTitle (optional): The artist's job title.
+        knowsLanguage (optional): The language known by the artist. 
 
     Returns:
         The string for the mutation for updating the artist.
