@@ -1,14 +1,14 @@
 # Generate GraphQL queries for mutations pertaining to digital document objects.
 
 from . import StringConstant, make_parameters, MUTATION
-from .templates import mutation_create, mutation_delete, mutation_update
+from .templates import mutation_create, mutation_delete, mutation_update, mutation_link
 
 
 # We say that 2 different scores of the same thing are a broad match
 ADD_DIGITAL_DOCUMENT_BROAD_MATCH = '''
 AddDigitalDocumentBroadMatch(
-  from: {{identifier: "{from_document_id}" }}
-  to: {{identifier: "{to_document_id}" }}
+  from: {{identifier: "{identifier_1}" }}
+  to: {{identifier: "{identifier_2}" }}
 ) {{
   from {{
     identifier
@@ -21,8 +21,8 @@ AddDigitalDocumentBroadMatch(
 
 REMOVE_DIGITAL_DOCUMENT_BROAD_MATCH = '''
 RemoveDigitalDocumentBroadMatch(
-  from: {{identifier: "{from_document_id}" }}
-  to: {{identifier: "{to_document_id}" }}
+  from: {{identifier: "{identifier_1}" }}
+  to: {{identifier: "{identifier_2}" }}
 ) {{
   from {{
     identifier
@@ -35,8 +35,8 @@ RemoveDigitalDocumentBroadMatch(
 
 ADD_DIGITAL_DOCUMENT_SUBJECT_OF_COMPOSITION = '''
 AddThingInterfaceCreativeWorkInterface(
-    from: {{identifier: "{document_id}" type:DigitalDocument}}
-    to: {{identifier: "{composition_id}" type:MusicComposition}}
+    from: {{identifier: "{identifier_1}" type:DigitalDocument}}
+    to: {{identifier: "{identifier_2}" type:MusicComposition}}
     field: subjectOf
 ) {{
     from {{
@@ -50,8 +50,8 @@ AddThingInterfaceCreativeWorkInterface(
 
 REMOVE_DIGITAL_DOCUMENT_SUBJECT_OF_COMPOSITION = '''
 RemoveThingInterfaceCreativeWorkInterface(
-    from: {{identifier: "{document_id}" type:DigitalDocument}}
-    to: {{identifier: "{composition_id}" type:MusicComposition}}
+    from: {{identifier: "{identifier_1}" type:DigitalDocument}}
+    to: {{identifier: "{identifier_2}" type:MusicComposition}}
     field: subjectOf
 ) {{
     from {{
@@ -139,3 +139,47 @@ def mutation_delete_document(identifier: str):
     """
 
     return mutation_delete(identifier, DELETE_DIGITAL_DOCUMENT)
+
+def mutation_add_broad_match_document(from_identifier: str, to_identifier: str):
+    """Returns a mutation for creating a broad match between two digital document objects.
+    Arguments:
+        from_identifier: The unique identifier of the digital document object from which to create the broad match.
+        to_identifier: The unique identifier of the digital document object to which the broad match should be created.
+    Returns:
+        The string for the mutation for creating the broad match between the two documents.
+    """
+
+    return mutation_link(from_identifier, to_identifier, ADD_DIGITAL_DOCUMENT_BROAD_MATCH)
+
+def mutation_remove_broad_match_document(from_identifier: str, to_identifier: str):
+    """Returns a mutation for removing a broad match between two digital document objects.
+    Arguments:
+        from_identifier: The unique identifier of the digital document object from which to remove the broad match.
+        to_identifier: The unique identifier of the digital document object to which the broad match should be removed.
+    Returns:
+        The string for the mutation for removing the broad match between the two documents.
+    """
+
+    return mutation_link(from_identifier, to_identifier, REMOVE_DIGITAL_DOCUMENT_BROAD_MATCH)
+
+def mutation_add_digital_document_subject_of_composition(document_id: str, composition_id: str):
+    """Returns a mutation for adding a digital document as a subject of a composition.
+    Arguments:
+        document_id: The unique identifier of the digital document object.
+        composition_id: The unique identifier of the composition object.
+    Returns:
+        The string for the mutation for adding the document as a subject of the composition.
+    """
+
+    return mutation_link(document_id, composition_id, ADD_DIGITAL_DOCUMENT_SUBJECT_OF_COMPOSITION)
+
+def mutation_remove_digital_document_subject_of_composition(document_id: str, composition_id: str):
+    """Returns a mutation for removing a digital document as a subject of a composition.
+    Arguments:
+        document_id: The unique identifier of the digital document object.
+        composition_id: The unique identifier of the composition object.
+    Returns:
+        The string for the mutation for removing the document as a subject of the composition.
+    """
+
+    return mutation_link(document_id, composition_id, REMOVE_DIGITAL_DOCUMENT_SUBJECT_OF_COMPOSITION)

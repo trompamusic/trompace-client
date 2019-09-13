@@ -161,7 +161,7 @@ def mutation_update(identifier: str, mutation_string: str, name = None, publishe
         args["jobTitle"] = jobTitle
     if knowsLanguage:
         args["knowsLanguage"] = knowsLanguage
-        
+
     create_mutation = mutation_string.format(parameters=make_parameters(**args))
     return MUTATION.format(mutation=create_mutation)
 
@@ -179,3 +179,15 @@ def mutation_delete(identifier: str, mutation_string: str):
 
     delete_mutation = mutation_string.format(parameters=make_parameters(**args))
     return MUTATION.format(mutation=delete_mutation)
+
+def mutation_link(identifier_1: str, identifier_2: str, mutation_string: str):
+    """Returns a mutation for linking two objects based on their identifiers. 
+    Arguments:
+        identifier_1: The unique identifier of the first object.
+        identifier_2: The unique identifier of the second object.
+    Returns:
+        The string for the mutation for the link.
+    """
+
+    broad_match_mutation = mutation_string.format(identifier_1=identifier_1, identifier_2=identifier_2)
+    return MUTATION.format(mutation=broad_match_mutation)
