@@ -1,7 +1,7 @@
 # Generate GraphQL queries for mutations pertaining to musical compositions and works related objects.
 
 from . import StringConstant, make_parameters, MUTATION
-from .templates import mutation_create, mutation_update, mutation_delete
+from .templates import mutation_create, mutation_update, mutation_delete, mutation_link
 
 
 CREATE_MUSIC_COMPOSITION = '''
@@ -35,8 +35,8 @@ DeleteMusicComposition(
 
 ADD_COMPOSITION_AUTHOR = '''
 AddCreativeWorkInterfaceLegalPerson(
-  from: {{identifier: "{composition_id}" type:MusicComposition}}
-  to: {{identifier: "{composer_id}" type: Person}}
+  from: {{identifier: "{identifier_1}" type:MusicComposition}}
+  to: {{identifier: "{identifier_2}" type: Person}}
   field: author 
 )
 {{
@@ -55,8 +55,8 @@ AddCreativeWorkInterfaceLegalPerson(
 
 REMOVE_COMPOSITION_AUTHOR = '''
 RemoveCreativeWorkInterfaceLegalPerson(
-  from: {{identifier: "{composition_id}" type:MusicComposition}}
-  to: {{identifier: "{composer_id}" type: Person}}
+  from: {{identifier: "{identifier_1}" type:MusicComposition}}
+  to: {{identifier: "{identifier_2}" type: Person}}
   field: author 
 )
 {{
@@ -74,61 +74,6 @@ RemoveCreativeWorkInterfaceLegalPerson(
 '''
 
 
-def get_query_add_composition_author(composition_id, composer_id):
-    query = ADD_COMPOSITION_AUTHOR.format(composition_id=composition_id, composer_id=composer_id)
-    return MUTATION.format(mutation=query)
-
-
-def get_query_remove_composition_author(composition_id, composer_id):
-    query = REMOVE_COMPOSITION_AUTHOR.format(composition_id=composition_id, composer_id=composer_id)
-    return MUTATION.format(mutation=query)
-
-
-def get_composer_rel(mb_work):
-    # The relation type for artist-url relation type
-    composer_rel_type = "d59d99ea-23d4-4a80-b066-edca32ee158f"
-    for l in mb_artist.get("artist-relation-list", []):
-        if l["type-id"] == composer_rel_type:
-            return l["artist"]
-    return None
-
-
-def transform_data_update_composition(identifier, composition):
-    """Transform a work from a data file to a UpdateMusicComposition mutation for the CE"""
-
-    # required params: contributor, creator, description, format, language, source,
-    # subject, title, name, identifer
-
-    args = _transform_data_create_composition(composition)
-    args["identifier"] = identifier
-    update_music_composition = UPDATE_MUSIC_COMPOSITION.format(parameters=make_parameters(**args))
-    return MUTATION.format(mutation=update_music_composition)
-
-
-def _transform_data_create_composition(composition):
-    """Transform a work from a data file to a CreateMusicComposition mutation for the CE"""
-
-    # required params: contributor, creator, description, format, language, source,
-    # subject, title, name
-
-    desc = composition.get("Description",
-                           "Composition {} by {}".format(composition["Title"], composition["Creator"]["Name"]))
-
-    args = {
-        "title": composition["Title"],
-        "name": composition["Title"],
-        "contributor": composition["Contributor"],
-        "creator": composition["Creator"]["Name"],
-        "description": desc,
-        "source": composition["Source"],
-        # "publisher": composition["Publisher"],
-        "subject": composition["Subject"],
-        # The format of the source page
-        "format": "text/html",
-        # The language of the source page
-        "language": StringConstant(composition["Language"]),
-            }
-    return args
 
 
 def mutation_create_composition(composition_name: str, publisher: str, contributor: str, creator: str, source: str, description: str, subject: str, language: str):
@@ -178,3 +123,25 @@ def mutation_delete_composition(identifier: str):
     """
 
     return mutation_delete(identifier, DELETE_MUSIC_COMPOSITION)
+
+def mutation_add_composition_author(composition_id: str, composer_id: str):
+    """Returns a mutation for adding an artist object as the composer of a composition.
+    Arguments:
+        composition_id: The unique identifier of the composition object.
+        composer_id: The unique identifier of the artist object for the composer of the composition.
+    Returns:
+        The string for the mutation for adding the artist object as the composer of the composition.
+    """
+
+    return mutation_link(composition_id, composer_id, ADD_COMPOSITION_AUTHOR)
+
+def mutation_remove_composition_author(composition_id: str, composer_id: str):
+    """Returns a mutation for removing an artist object as the composer of a composition.
+    Arguments:
+        composition_id: The unique identifier of the composition object.
+        composer_id: The unique identifier of the artist object for the composer of the composition.
+    Returns:
+        The string for the mutation for removing the artist object as the composer of the composition.
+    """
+
+    return mutation_link(composition_id, composer_id, REMOVE_COMPOSITION_AUTHOR)
