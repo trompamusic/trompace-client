@@ -15,6 +15,8 @@ class StringConstant:
 
 
 def make_parameters(**kwargs):
+    """Convert mutation query parameters from dictionary to string format.
+    """
     encoder = json.JSONEncoder()
     parts = []
     for k, v in kwargs.items():
