@@ -2,8 +2,7 @@
 import os
 import unittest
 
-from connection import submit_query
-from mutations.person import mutation_create_artist, mutation_update_artist, mutation_delete_artist
+from trompace.mutations.person import mutation_create_artist, mutation_update_artist, mutation_delete_artist
 from tests import util
 
 

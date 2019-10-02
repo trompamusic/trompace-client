@@ -2,8 +2,7 @@
 import os
 import unittest
 
-from connection import submit_query
-from mutations.document import mutation_create_document, mutation_update_document, mutation_delete_document, \
+from trompace.mutations.document import mutation_create_document, mutation_update_document, mutation_delete_document, \
     mutation_add_broad_match_document, mutation_remove_broad_match_document, \
     mutation_add_digital_document_subject_of_composition, mutation_remove_digital_document_subject_of_composition
 from tests import util

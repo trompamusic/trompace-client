@@ -2,8 +2,7 @@
 import os
 import unittest
 
-from connection import submit_query
-from mutations.work import mutation_create_composition, mutation_update_composition, mutation_delete_composition, \
+from trompace.mutations.work import mutation_create_composition, mutation_update_composition, mutation_delete_composition, \
     mutation_add_composition_author, mutation_remove_composition_author
 from tests import util
 
