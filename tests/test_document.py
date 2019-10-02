@@ -63,19 +63,3 @@ class TestDocument(unittest.TestCase):
         created_match = mutation_remove_digital_document_subject_of_composition("ff562d2e-2265-4f61-b340-561c92e797e9",
                                                                                 "59ce8093-5e0e-4d59-bfa6-805edb11e396")
         self.assertEqual(created_match, expected)
-
-    def test_query(self):
-        created_document = mutation_create_document("A Document", "https://www.cpdl.org", "https://www.cpdl.org",
-                                                    "https://www.cpdl.org/A_Document", "https://www.upf.edu",
-                                                    "This is a document", "Document", "en")
-        query_output = submit_query(created_document)
-        self.assertEqual(query_output['data']['CreateDigitalDocument']['name'], "A Document")
-        created_update = mutation_update_document(query_output['data']['CreateDigitalDocument']['identifier'],
-                                                  publisher="Https://www.cpdl.org")
-        query_output_update = submit_query(created_update)
-        self.assertEqual(query_output_update['data']['UpdateDigitalDocument']['identifier'],
-                         query_output['data']['CreateDigitalDocument']['identifier'])
-        created_delete = mutation_delete_document(query_output['data']['CreateDigitalDocument']['identifier'])
-        query_output_delete = submit_query(created_delete)
-        self.assertEqual(query_output_delete['data']['DeleteDigitalDocument']['identifier'],
-                         query_output['data']['CreateDigitalDocument']['identifier'])

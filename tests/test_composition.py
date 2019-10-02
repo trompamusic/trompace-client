@@ -49,20 +49,3 @@ class TestComposition(unittest.TestCase):
         created_remove_composer = mutation_remove_composition_author('2eeca6dd-c62c-490e-beb0-2e3899fca74f',
                                                                      '59ce8093-5e0e-4d59-bfa6-805edb11e396')
         self.assertEqual(created_remove_composer, expected)
-
-    def test_query(self):
-        created_composition = mutation_create_composition("A Musical Composition", "https://www.cpdl.org",
-                                                          "https://www.cpdl.org", "https://www.cpdl.org/A_Composition",
-                                                          "https://www.upf.edu", "This is a musical composition",
-                                                          "Composition", "en")
-        query_output = submit_query(created_composition)
-        self.assertEqual(query_output['data']['CreateMusicComposition']['name'], "A Musical Composition")
-        created_update = mutation_update_composition(query_output['data']['CreateMusicComposition']['identifier'],
-                                                     publisher="Https://www.cpdl.org")
-        query_output_update = submit_query(created_update)
-        self.assertEqual(query_output_update['data']['UpdateMusicComposition']['identifier'],
-                         query_output['data']['CreateMusicComposition']['identifier'])
-        created_delete = mutation_delete_composition(query_output['data']['CreateMusicComposition']['identifier'])
-        query_output_delete = submit_query(created_delete)
-        self.assertEqual(query_output_delete['data']['DeleteMusicComposition']['identifier'],
-                         query_output['data']['CreateMusicComposition']['identifier'])
