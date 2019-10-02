@@ -1,12 +1,13 @@
 name = "mutations"
 
-
 import json
+
 
 class StringConstant:
     """Some values in GraphQL are constants, not strings, and so they shouldn't
     be encoded or have quotes put around them. Use this to represent a constant
     and it won't be quoted in the query"""
+
     def __init__(self, value):
         self.value = value
 

@@ -3,9 +3,12 @@
 from . import StringConstant, make_parameters, MUTATION
 
 
-def mutation_create(name: str, publisher: str, contributor: str, creator: str, source: str, description: str, language: str, subject:str, mutation_string: str, coverage=None, date=None,
-    disambiguatingDescription=None, relation=None, _type=None, _searchScore=None, additionalType=None, alternateName=None, image=None, sameAs=None, url=None, additionalName=None,
-    award=None, birthDate=None, deathDate=None, familyName=None, gender=None, givenName=None, honorificPrefix=None, honorificSuffix=None, jobTitle=None, knowsLanguage=None):
+def mutation_create(name: str, publisher: str, contributor: str, creator: str, source: str, description: str,
+                    language: str, subject: str, mutation_string: str, coverage=None, date=None,
+                    disambiguatingDescription=None, relation=None, _type=None, _searchScore=None, additionalType=None,
+                    alternateName=None, image=None, sameAs=None, url=None, additionalName=None,
+                    award=None, birthDate=None, deathDate=None, familyName=None, gender=None, givenName=None,
+                    honorificPrefix=None, honorificSuffix=None, jobTitle=None, knowsLanguage=None):
     """Returns a mutation for creating an object.
     Arguments:
         name: The name of the object.
@@ -13,17 +16,17 @@ def mutation_create(name: str, publisher: str, contributor: str, creator: str, s
         contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
         creator: The person, organization or service who created the thing the web resource is about.
         sourcer: The URL of the web resource to be represented by the node.
-        description: An account of the artist. 
+        description: An account of the artist.
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
 
     Returns:
         The string for the mutation for creating the object.
     Raises:
-        Assertion error if the input language is not one of the supported languages. 
+        Assertion error if the input language is not one of the supported languages.
     """
 
-    assert language.lower() in ["en","es","ca","nl","de","fr"], "Language {} not supported".format(language)
-    
+    assert language.lower() in ["en", "es", "ca", "nl", "de", "fr"], "Language {} not supported".format(language)
+
     args = {
         "title": name,
         "name": name,
@@ -35,7 +38,7 @@ def mutation_create(name: str, publisher: str, contributor: str, creator: str, s
         "description": description,
         "format": "text/html",  # an artist doesn't have a mimetype, use the mimetype of the source (musicbrainz page)
         "language": StringConstant(language.lower()),
-            }
+    }
     if coverage:
         args["coverage"] = coverage
     if date:
@@ -82,9 +85,13 @@ def mutation_create(name: str, publisher: str, contributor: str, creator: str, s
     create_mutation = mutation_string.format(parameters=make_parameters(**args))
     return MUTATION.format(mutation=create_mutation)
 
-def mutation_update(identifier: str, mutation_string: str, name = None, publisher = None, contributor = None, creator = None, source = None, description = None, language = None, coverage=None, date=None,
-    disambiguatingDescription=None, relation=None, _type=None, _searchScore=None, additionalType=None, alternateName=None, image=None, sameAs=None, url=None, additionalName=None,
-    award=None, birthDate=None, deathDate=None, familyName=None, gender=None, givenName=None, honorificPrefix=None, honorificSuffix=None, jobTitle=None, knowsLanguage=None):
+
+def mutation_update(identifier: str, mutation_string: str, name=None, publisher=None, contributor=None, creator=None,
+                    source=None, description=None, language=None, coverage=None, date=None,
+                    disambiguatingDescription=None, relation=None, _type=None, _searchScore=None, additionalType=None,
+                    alternateName=None, image=None, sameAs=None, url=None, additionalName=None,
+                    award=None, birthDate=None, deathDate=None, familyName=None, gender=None, givenName=None,
+                    honorificPrefix=None, honorificSuffix=None, jobTitle=None, knowsLanguage=None):
     """Returns a mutation for updating an object.
     Arguments:
         identifier: The unique identifier of the object.
@@ -93,20 +100,19 @@ def mutation_update(identifier: str, mutation_string: str, name = None, publishe
         contributor (optional): A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
         creator (optional): The person, organization or service who created the thing the web resource is about.
         sourcer (optional): The URL of the web resource to be represented by the node.
-        description (optional): An account of the artist. 
+        description (optional): An account of the artist.
         language (optional): The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
 
 
     Returns:
         The string for the mutation for creating the artist.
     Raises:
-        Assertion error if the input language is not one of the supported languages. 
+        Assertion error if the input language is not one of the supported languages.
     """
 
     if language:
+        assert language.lower() in ["en", "es", "ca", "nl", "de", "fr"], "Language {} not supported".format(language)
 
-      assert language.lower() in ["en","es","ca","nl","de","fr"], "Language {} not supported".format(language)
-    
     args = {"identifier": identifier}
     if name:
         args["title"] = name
@@ -165,6 +171,7 @@ def mutation_update(identifier: str, mutation_string: str, name = None, publishe
     create_mutation = mutation_string.format(parameters=make_parameters(**args))
     return MUTATION.format(mutation=create_mutation)
 
+
 def mutation_delete(identifier: str, mutation_string: str):
     """Returns a mutation for deleting an object
     Arguments:
@@ -172,7 +179,7 @@ def mutation_delete(identifier: str, mutation_string: str):
     Returns:
         The string for the mutation for creating the artist.
     Raises:
-        Assertion error if the input language is not one of the supported languages. 
+        Assertion error if the input language is not one of the supported languages.
     """
 
     args = {"identifier": identifier}
@@ -180,8 +187,9 @@ def mutation_delete(identifier: str, mutation_string: str):
     delete_mutation = mutation_string.format(parameters=make_parameters(**args))
     return MUTATION.format(mutation=delete_mutation)
 
+
 def mutation_link(identifier_1: str, identifier_2: str, mutation_string: str):
-    """Returns a mutation for linking two objects based on their identifiers. 
+    """Returns a mutation for linking two objects based on their identifiers.
     Arguments:
         identifier_1: The unique identifier of the first object.
         identifier_2: The unique identifier of the second object.

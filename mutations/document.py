@@ -1,8 +1,6 @@
 # Generate GraphQL queries for mutations pertaining to digital document objects.
 
-from . import StringConstant, make_parameters, MUTATION
 from .templates import mutation_create, mutation_delete, mutation_update, mutation_link
-
 
 # We say that 2 different scores of the same thing are a broad match
 ADD_DIGITAL_DOCUMENT_BROAD_MATCH = '''
@@ -92,7 +90,8 @@ DeleteDigitalDocument(
 '''
 
 
-def mutation_create_document(document_name: str, publisher: str, contributor: str, creator: str, source: str, description: str, subject:str, language: str):
+def mutation_create_document(document_name: str, publisher: str, contributor: str, creator: str, source: str,
+                             description: str, subject: str, language: str):
     """Returns a mutation for creating a digital document object
     Arguments:
         document_name: The name of the digital document.
@@ -100,18 +99,21 @@ def mutation_create_document(document_name: str, publisher: str, contributor: st
         contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
         creator: The person, organization or service who created the thing the web resource is about.
         sourcer: The URL of the web resource to be represented by the node.
-        description: An account of the artist. 
+        description: An account of the artist.
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
 
 
     Returns:
         The string for the mutation for creating the document object.
     Raises:
-        Assertion error if the input language is not one of the supported languages. 
+        Assertion error if the input language is not one of the supported languages.
     """
-    return mutation_create(document_name, publisher, contributor, creator, source, description, language, subject, CREATE_DIGITAL_DOCUMENT)
+    return mutation_create(document_name, publisher, contributor, creator, source, description, language, subject,
+                           CREATE_DIGITAL_DOCUMENT)
 
-def mutation_update_document(identifier:str, document_name=None, publisher=None, contributor=None, creator=None, source=None, description=None, language=None):
+
+def mutation_update_document(identifier: str, document_name=None, publisher=None, contributor=None, creator=None,
+                             source=None, description=None, language=None):
     """Returns a mutation for updating a digital document object.
     Arguments:
         identifier: The unique identifier of the digital document.
@@ -120,15 +122,17 @@ def mutation_update_document(identifier:str, document_name=None, publisher=None,
         contributor (optional): A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
         creator (optional): The person, organization or service who created the document that the web resource is about.
         sourcer (optional): The URL of the web resource to be represented by the node.
-        description (optional): An account of the artist. 
+        description (optional): An account of the artist.
         language (optional): The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr.
     Returns:
         The string for the mutation for creating the artist.
     Raises:
-        Assertion error if the input language is not one of the supported languages. 
+        Assertion error if the input language is not one of the supported languages.
     """
 
-    return mutation_update(identifier, UPDATE_DIGITAL_DOCUMENT, document_name, publisher, contributor, creator, source, description, language)
+    return mutation_update(identifier, UPDATE_DIGITAL_DOCUMENT, document_name, publisher, contributor, creator, source,
+                           description, language)
+
 
 def mutation_delete_document(identifier: str):
     """Returns a mutation for deleting a digital document object based on the identifier.
@@ -139,6 +143,7 @@ def mutation_delete_document(identifier: str):
     """
 
     return mutation_delete(identifier, DELETE_DIGITAL_DOCUMENT)
+
 
 def mutation_add_broad_match_document(from_identifier: str, to_identifier: str):
     """Returns a mutation for creating a broad match between two digital document objects.
@@ -151,6 +156,7 @@ def mutation_add_broad_match_document(from_identifier: str, to_identifier: str):
 
     return mutation_link(from_identifier, to_identifier, ADD_DIGITAL_DOCUMENT_BROAD_MATCH)
 
+
 def mutation_remove_broad_match_document(from_identifier: str, to_identifier: str):
     """Returns a mutation for removing a broad match between two digital document objects.
     Arguments:
@@ -162,6 +168,7 @@ def mutation_remove_broad_match_document(from_identifier: str, to_identifier: st
 
     return mutation_link(from_identifier, to_identifier, REMOVE_DIGITAL_DOCUMENT_BROAD_MATCH)
 
+
 def mutation_add_digital_document_subject_of_composition(document_id: str, composition_id: str):
     """Returns a mutation for adding a digital document as a subject of a composition.
     Arguments:
@@ -172,6 +179,7 @@ def mutation_add_digital_document_subject_of_composition(document_id: str, compo
     """
 
     return mutation_link(document_id, composition_id, ADD_DIGITAL_DOCUMENT_SUBJECT_OF_COMPOSITION)
+
 
 def mutation_remove_digital_document_subject_of_composition(document_id: str, composition_id: str):
     """Returns a mutation for removing a digital document as a subject of a composition.

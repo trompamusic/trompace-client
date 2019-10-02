@@ -1,8 +1,6 @@
 # Generate GraphQL queries for mutations pertaining to musical compositions and works related objects.
 
-from . import StringConstant, make_parameters, MUTATION
 from .templates import mutation_create, mutation_update, mutation_delete, mutation_link
-
 
 CREATE_MUSIC_COMPOSITION = '''
 CreateMusicComposition(
@@ -74,9 +72,8 @@ RemoveCreativeWorkInterfaceLegalPerson(
 '''
 
 
-
-
-def mutation_create_composition(composition_name: str, publisher: str, contributor: str, creator: str, source: str, description: str, subject: str, language: str):
+def mutation_create_composition(composition_name: str, publisher: str, contributor: str, creator: str, source: str,
+                                description: str, subject: str, language: str):
     """Returns a mutation for creating a digital document object
     Arguments:
         comosition_name: The name of the comnposition.
@@ -84,18 +81,21 @@ def mutation_create_composition(composition_name: str, publisher: str, contribut
         contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
         creator: The person, organization or service who created the thing the web resource is about.
         sourcer: The URL of the web resource to be represented by the node.
-        description: An account of the artist. 
+        description: An account of the artist.
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr.
 
 
     Returns:
         The string for the mutation for creating the artist.
     Raises:
-        Assertion error if the input language is not one of the supported languages. 
+        Assertion error if the input language is not one of the supported languages.
     """
-    return mutation_create(composition_name, publisher, contributor, creator, source, description, language, subject, CREATE_MUSIC_COMPOSITION)
+    return mutation_create(composition_name, publisher, contributor, creator, source, description, language, subject,
+                           CREATE_MUSIC_COMPOSITION)
 
-def mutation_update_composition(identifier:str, composition_name=None, publisher=None, contributor=None, creator=None, source=None, description=None, language=None):
+
+def mutation_update_composition(identifier: str, composition_name=None, publisher=None, contributor=None, creator=None,
+                                source=None, description=None, language=None):
     """Returns a mutation for updating a person object
     Arguments:
         identifier: The unique identifier of the composition.
@@ -104,15 +104,17 @@ def mutation_update_composition(identifier:str, composition_name=None, publisher
         contributor (optional): A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
         creator (optional): The person, organization or service who created the composition that the web resource is about.
         sourcer (optional): The URL of the web resource to be represented by the node.
-        description (optional): An account of the artist. 
+        description (optional): An account of the artist.
         language (optional): The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr.
     Returns:
         The string for the mutation for creating the artist.
     Raises:
-        Assertion error if the input language is not one of the supported languages. 
+        Assertion error if the input language is not one of the supported languages.
     """
 
-    return mutation_update(identifier, UPDATE_MUSIC_COMPOSITION, composition_name, publisher, contributor, creator, source, description, language)
+    return mutation_update(identifier, UPDATE_MUSIC_COMPOSITION, composition_name, publisher, contributor, creator,
+                           source, description, language)
+
 
 def mutation_delete_composition(identifier: str):
     """Returns a mutation for deleting a person object based on the identifier.
@@ -124,6 +126,7 @@ def mutation_delete_composition(identifier: str):
 
     return mutation_delete(identifier, DELETE_MUSIC_COMPOSITION)
 
+
 def mutation_add_composition_author(composition_id: str, composer_id: str):
     """Returns a mutation for adding an artist object as the composer of a composition.
     Arguments:
@@ -134,6 +137,7 @@ def mutation_add_composition_author(composition_id: str, composer_id: str):
     """
 
     return mutation_link(composition_id, composer_id, ADD_COMPOSITION_AUTHOR)
+
 
 def mutation_remove_composition_author(composition_id: str, composer_id: str):
     """Returns a mutation for removing an artist object as the composer of a composition.
