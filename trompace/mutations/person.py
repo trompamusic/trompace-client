@@ -1,6 +1,7 @@
 # Generate GraphQL queries for mutations pertaining to persons/artists objects.
 
 from .templates import mutation_create, mutation_update, mutation_delete
+from . import StringConstant
 
 CREATE_PERSON = '''
 CreatePerson(
@@ -76,12 +77,64 @@ def mutation_create_artist(artist_name: str, publisher: str, contributor: str, c
         Assertion error if the input language is not one of the supported languages.
     """
 
-    return mutation_create(artist_name, publisher, contributor, creator, source, description, language, "artist",
-                           CREATE_PERSON, coverage, date,
-                           disambiguatingDescription, relation, _type, _searchScore, additionalType, alternateName,
-                           image, sameAs, url, additionalName,
-                           award, birthDate, deathDate, familyName, gender, givenName, honorificPrefix, honorificSuffix,
-                           jobTitle, knowsLanguage)
+    assert language.lower() in ["en", "es", "ca", "nl", "de", "fr"], "Language {} not supported".format(language)
+
+    args = {
+        "title": artist_name,
+        "name": artist_name,
+        "publisher": publisher,
+        "contributor": contributor,
+        "creator": creator,
+        "source": source,
+        "subject": "artist",
+        "description": description,
+        "format": "text/html",  # an artist doesn't have a mimetype, use the mimetype of the source (musicbrainz page)
+        "language": StringConstant(language.lower()),
+    }
+    if coverage:
+        args["coverage"] = coverage
+    if date:
+        args["date"] = date
+    if disambiguatingDescription:
+        args["disambiguatingDescription"] = disambiguatingDescription
+    if relation:
+        args["relation"] = relation
+    if _type:
+        args["type"] = _type
+    if _searchScore:
+        args["_searchScore"] = _searchScore
+    if additionalType:
+        args["additionalType"] = additionalType
+    if alternateName:
+        args["alternateName"] = alternateName
+    if image:
+        args["image"] = image
+    if sameAs:
+        args["sameAs"] = sameAs
+    if url:
+        args["url"] = url
+    if additionalName:
+        args["additionalName"] = additionalName
+    if award:
+        args["award"] = award
+    if birthDate:
+        args["birthDate"] = birthDate
+    if deathDate:
+        args["deathDate"] = deathDate
+    if familyName:
+        args["familyName"] = familyName
+    if gender:
+        args["gender"] = gender
+    if honorificPrefix:
+        args["honorificPrefix"] = honorificPrefix
+    if honorificSuffix:
+        args["honorificSuffix"] = honorificSuffix
+    if jobTitle:
+        args["jobTitle"] = jobTitle
+    if knowsLanguage:
+        args["knowsLanguage"] = knowsLanguage
+
+    return mutation_create(args, CREATE_PERSON)
 
 
 def mutation_update_artist(identifier: str, artist_name=None, publisher=None, contributor=None, creator=None,

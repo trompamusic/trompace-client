@@ -13,6 +13,15 @@ class StringConstant:
 
     def __str__(self):
         return self.value
+    def __repr__(self):
+        return self.value
+
+def bool_to_str(in_bool):
+    if in_bool:
+        return StringConstant('true')
+    else:
+        return StringConstant('false')
+
 
 
 def make_parameters(**kwargs):

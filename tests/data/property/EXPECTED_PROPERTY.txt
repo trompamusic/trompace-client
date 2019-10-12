@@ -1,0 +1,13 @@
+
+mutation {
+  
+CreateProperty(
+title: "DigitalDocument"
+name: "DigitalDocument"
+description: "Select a MusicXML file to be converted."
+rangeIncludes: [DigitalDocument]
+) {
+  identifier
+}
+
+}

@@ -1,6 +1,7 @@
 # Generate GraphQL queries for mutations pertaining to musical compositions and works related objects.
 
 from .templates import mutation_create, mutation_update, mutation_delete, mutation_link
+from . import StringConstant
 
 CREATE_MUSIC_COMPOSITION = '''
 CreateMusicComposition(
@@ -90,8 +91,21 @@ def mutation_create_composition(composition_name: str, publisher: str, contribut
     Raises:
         Assertion error if the input language is not one of the supported languages.
     """
-    return mutation_create(composition_name, publisher, contributor, creator, source, description, language, subject,
-                           CREATE_MUSIC_COMPOSITION)
+    assert language.lower() in ["en", "es", "ca", "nl", "de", "fr"], "Language {} not supported".format(language)
+
+    args = {
+        "title": composition_name,
+        "name": composition_name,
+        "publisher": publisher,
+        "contributor": contributor,
+        "creator": creator,
+        "source": source,
+        "subject": subject,
+        "description": description,
+        "format": "text/html",  # an artist doesn't have a mimetype, use the mimetype of the source (musicbrainz page)
+        "language": StringConstant(language.lower()),
+    }
+    return mutation_create(args, CREATE_MUSIC_COMPOSITION)
 
 
 def mutation_update_composition(identifier: str, composition_name=None, publisher=None, contributor=None, creator=None,

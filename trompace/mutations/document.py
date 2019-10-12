@@ -1,6 +1,7 @@
 # Generate GraphQL queries for mutations pertaining to digital document objects.
 
 from .templates import mutation_create, mutation_delete, mutation_update, mutation_link
+from . import StringConstant
 
 # We say that 2 different scores of the same thing are a broad match
 ADD_DIGITAL_DOCUMENT_BROAD_MATCH = '''
@@ -108,8 +109,21 @@ def mutation_create_document(document_name: str, publisher: str, contributor: st
     Raises:
         Assertion error if the input language is not one of the supported languages.
     """
-    return mutation_create(document_name, publisher, contributor, creator, source, description, language, subject,
-                           CREATE_DIGITAL_DOCUMENT)
+    assert language.lower() in ["en", "es", "ca", "nl", "de", "fr"], "Language {} not supported".format(language)
+    
+    args = {
+        "title": document_name,
+        "name": document_name,
+        "publisher": publisher,
+        "contributor": contributor,
+        "creator": creator,
+        "source": source,
+        "subject": subject,
+        "description": description,
+        "format": "text/html",  # an artist doesn't have a mimetype, use the mimetype of the source (musicbrainz page)
+        "language": StringConstant(language.lower()),
+    }
+    return mutation_create(args, CREATE_DIGITAL_DOCUMENT)
 
 
 def mutation_update_document(identifier: str, document_name=None, publisher=None, contributor=None, creator=None,
