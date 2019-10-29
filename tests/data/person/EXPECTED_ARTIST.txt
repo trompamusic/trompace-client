@@ -1,20 +1,17 @@
-
 mutation {
-  
-CreatePerson(
-title: "A. J. Fynn"
-name: "A. J. Fynn"
-publisher: "https://www.cpdl.org"
-contributor: "https://www.cpdl.org"
-creator: "https://www.upf.edu"
-source: "https://www.cpdl.org/wiki/index.php/A._J._Fynn"
-subject: "artist"
-description: "Born circa 1860Died circa 1920A. J. Fynn was an early 20th Century scholar in literature and anthropology, specializing in the American West and Native American culture. His most notable musical composition was \u201cWhere The Columbines Grow\u201d, which was adopted as the official state song of the US State of Colorado in 1915.View the Wikipedia article on A. J. Fynn."
-format: "text/html"
-language: en
-) {
-  identifier
-  name
-}
-
+  CreatePerson(
+        title: "A. J. Fynn"
+        name: "A. J. Fynn"
+        publisher: "https://www.cpdl.org"
+        contributor: "https://www.cpdl.org"
+        creator: "https://www.upf.edu"
+        source: "https://www.cpdl.org/wiki/index.php/A._J._Fynn"
+        subject: "artist"
+        description: "Born circa 1860Died circa 1920A. J. Fynn was an early 20th Century scholar in literature and anthropology, specializing in the American West and Native American culture. His most notable musical composition was \u201cWhere The Columbines Grow\u201d, which was adopted as the official state song of the US State of Colorado in 1915.View the Wikipedia article on A. J. Fynn."
+        format: "text/html"
+        language: en
+    ) {
+      identifier
+      name
+    }
 }

@@ -3,74 +3,64 @@
 from .templates import mutation_create, mutation_update, mutation_delete, mutation_link
 from . import StringConstant
 
-CREATE_MUSIC_COMPOSITION = '''
-CreateMusicComposition(
-  {parameters}
-) {{
-  identifier
-  name
-  relation
-}}
-'''
+CREATE_MUSIC_COMPOSITION = '''CreateMusicComposition(
+        {parameters}
+    ) {{
+      identifier
+      name
+      relation
+  }}'''
 
-UPDATE_MUSIC_COMPOSITION = '''
-UpdateMusicComposition(
-  {parameters}
-) {{
-  identifier
-  name
-  relation
-}}
-'''
+UPDATE_MUSIC_COMPOSITION = '''UpdateMusicComposition(
+        {parameters}
+    ) {{
+      identifier
+      name
+      relation
+  }}'''
 
-DELETE_MUSIC_COMPOSITION = '''
-DeleteMusicComposition(
-  {parameters}
-) {{
-  identifier
-  name
-}}
-'''
+DELETE_MUSIC_COMPOSITION = '''DeleteMusicComposition(
+    {parameters}
+    ) {{
+      identifier
+      name
+  }}'''
 
-ADD_COMPOSITION_AUTHOR = '''
-AddCreativeWorkInterfaceLegalPerson(
+ADD_COMPOSITION_AUTHOR = '''AddCreativeWorkInterfaceLegalPerson(
   from: {{identifier: "{identifier_1}" type:MusicComposition}}
   to: {{identifier: "{identifier_2}" type: Person}}
   field: author 
-)
-{{
-    from {{
-        ... on CreativeWork {{
-            identifier, contributor
+  )
+  {{
+      from {{
+          ... on CreativeWork {{
+              identifier, contributor
+      }}
     }}
-  }}
-  to {{
-        ... on Person {{
-            identifier, contributor
+    to {{
+          ... on Person {{
+              identifier, contributor
+      }}
     }}
-  }}
-}}
-'''
+  }}'''
 
-REMOVE_COMPOSITION_AUTHOR = '''
-RemoveCreativeWorkInterfaceLegalPerson(
+REMOVE_COMPOSITION_AUTHOR = '''RemoveCreativeWorkInterfaceLegalPerson(
   from: {{identifier: "{identifier_1}" type:MusicComposition}}
   to: {{identifier: "{identifier_2}" type: Person}}
   field: author 
-)
-{{
-    from {{
-        ... on CreativeWork {{
-            identifier, contributor
+  )
+  {{
+      from {{
+          ... on CreativeWork {{
+              identifier, contributor
+      }}
     }}
-  }}
-  to {{
-        ... on Person {{
-            identifier, contributor
+    to {{
+          ... on Person {{
+              identifier, contributor
+      }}
     }}
-  }}
-}}
-'''
+  }}'''
 
 
 def mutation_create_composition(composition_name: str, publisher: str, contributor: str, creator: str, source: str,

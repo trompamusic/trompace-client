@@ -1,4 +1,4 @@
-# Tests for mutations pertaining to person/artists objects.
+# Tests for mutations pertaining to properties.
 import os
 import unittest
 
@@ -22,7 +22,6 @@ class TestProperty(unittest.TestCase):
         expected = util.read_file(self.data_dir, "EXPECTED_PROPERTYVALUESPECIFICATION.txt")
 
         created_propertyvaluespecification= mutation_create_propertyvaluespecification("Result name", "What name would you like to give.", "", 100, 4, False, "resultName", "String", True)
-        print(created_propertyvaluespecification)
         self.assertEqual(created_propertyvaluespecification, expected)
 
 
@@ -31,5 +30,4 @@ class TestProperty(unittest.TestCase):
 
         created_match = mutation_add_controlaction_propertyvaluepsecification("ff562d2e-2265-4f61-b340-561c92e797e9",
                                                                              "59ce8093-5e0e-4d59-bfa6-805edb11e396")
-        print(created_match)
         self.assertEqual(created_match, expected)

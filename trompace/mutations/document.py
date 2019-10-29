@@ -4,91 +4,77 @@ from .templates import mutation_create, mutation_delete, mutation_update, mutati
 from . import StringConstant
 
 # We say that 2 different scores of the same thing are a broad match
-ADD_DIGITAL_DOCUMENT_BROAD_MATCH = '''
-AddDigitalDocumentBroadMatch(
-  from: {{identifier: "{identifier_1}" }}
-  to: {{identifier: "{identifier_2}" }}
-) {{
-  from {{
-    identifier
-  }}
-  to {{
-    identifier
-  }}
-}}
-'''
+ADD_DIGITAL_DOCUMENT_BROAD_MATCH = '''AddDigitalDocumentBroadMatch(
+    from: {{identifier: "{identifier_1}" }}
+    to: {{identifier: "{identifier_2}" }}
+  ) {{
+    from {{
+      identifier
+    }}
+    to {{
+      identifier
+    }}
+  }}'''
 
-REMOVE_DIGITAL_DOCUMENT_BROAD_MATCH = '''
-RemoveDigitalDocumentBroadMatch(
-  from: {{identifier: "{identifier_1}" }}
-  to: {{identifier: "{identifier_2}" }}
-) {{
-  from {{
-    identifier
-  }}
-  to {{
-    identifier
-  }}
-}}
-'''
+REMOVE_DIGITAL_DOCUMENT_BROAD_MATCH = '''RemoveDigitalDocumentBroadMatch(
+    from: {{identifier: "{identifier_1}" }}
+    to: {{identifier: "{identifier_2}" }}
+  ) {{
+    from {{
+      identifier
+    }}
+    to {{
+      identifier
+    }}
+  }}'''
 
-ADD_DIGITAL_DOCUMENT_SUBJECT_OF_COMPOSITION = '''
-AddThingInterfaceCreativeWorkInterface(
+ADD_DIGITAL_DOCUMENT_SUBJECT_OF_COMPOSITION = '''AddThingInterfaceCreativeWorkInterface(
     from: {{identifier: "{identifier_1}" type:DigitalDocument}}
     to: {{identifier: "{identifier_2}" type:MusicComposition}}
     field: subjectOf
-) {{
-    from {{
-      __typename
-    }}
-    to {{
-      __typename
-    }}
-}}
-'''
+  ) {{
+      from {{
+        __typename
+      }}
+      to {{
+        __typename
+      }}
+  }}'''
 
-REMOVE_DIGITAL_DOCUMENT_SUBJECT_OF_COMPOSITION = '''
-RemoveThingInterfaceCreativeWorkInterface(
+REMOVE_DIGITAL_DOCUMENT_SUBJECT_OF_COMPOSITION = '''RemoveThingInterfaceCreativeWorkInterface(
     from: {{identifier: "{identifier_1}" type:DigitalDocument}}
     to: {{identifier: "{identifier_2}" type:MusicComposition}}
     field: subjectOf
-) {{
-    from {{
-      __typename
-    }}
-    to {{
-      __typename
-    }}
-}}
-'''
+  ) {{
+      from {{
+        __typename
+      }}
+      to {{
+        __typename
+      }}
+  }}'''
 
-CREATE_DIGITAL_DOCUMENT = '''
-CreateDigitalDocument(
-  {parameters}
+CREATE_DIGITAL_DOCUMENT = '''CreateDigitalDocument(
+        {parameters}
+  ) {{
+    identifier
+    relation
+    name
+  }}'''
+
+UPDATE_DIGITAL_DOCUMENT = '''UpdateDigitalDocument(
+        {parameters}
 ) {{
   identifier
   relation
-  name
-}}
-'''
+}}'''
 
-UPDATE_DIGITAL_DOCUMENT = '''
-UpdateDigitalDocument(
-  {parameters}
-) {{
-  identifier
-  relation
-}}
-'''
-
-DELETE_DIGITAL_DOCUMENT = '''
-DeleteDigitalDocument(
-  {parameters}
-) {{
-  identifier
-  name
-}}
-'''
+DELETE_DIGITAL_DOCUMENT = '''DeleteDigitalDocument(
+    {parameters}
+  ) {{
+    identifier
+    name
+  }}'''
 
 
 def mutation_create_document(document_name: str, publisher: str, contributor: str, creator: str, source: str,

@@ -3,32 +3,26 @@
 from .templates import mutation_create, mutation_update, mutation_delete
 from . import StringConstant
 
-CREATE_PERSON = '''
-CreatePerson(
-{parameters}
-) {{
-  identifier
-  name
-}}
-'''
+CREATE_PERSON = '''CreatePerson(
+        {parameters}
+    ) {{
+      identifier
+      name
+    }}'''
 
-UPDATE_PERSON = '''
-UpdatePerson(
-  {parameters}
-) {{
-  identifier
-  relation
-}}
-'''
+UPDATE_PERSON = '''UpdatePerson(
+      {parameters}
+    ) {{
+      identifier
+      relation
+    }}'''
 
-DELETE_PERSON = '''
-DeletePerson(
-  {parameters}
-) {{
-  identifier
-  name
-}}
-'''
+DELETE_PERSON = '''DeletePerson(
+      {parameters}
+    ) {{
+      identifier
+      name
+    }}'''
 
 
 def mutation_create_artist(artist_name: str, publisher: str, contributor: str, creator: str, source: str,

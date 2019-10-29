@@ -1,21 +1,17 @@
-
 mutation {
-  
-AddThingInterfacePotentialAction(
-  from: {identifier: "ff562d2e-2265-4f61-b340-561c92e797e9"}
-  to: {identifier: "59ce8093-5e0e-4d59-bfa6-805edb11e396"}
-)
-{
-    from {
-    ... on EntryPoint{
-            identifier
+  AddThingInterfacePotentialAction(
+        from: {identifier: "ff562d2e-2265-4f61-b340-561c92e797e9"}
+        to: {identifier: "59ce8093-5e0e-4d59-bfa6-805edb11e396"}
+        ){
+        from {
+        ... on EntryPoint{
+                identifier
+        }
+      }
+        to {
+            ... on ControlAction{
+                    identifier
+        }
+      }
     }
-  }
-  to {
-    ... on ControlAction{
-            identifier
-    }
-  }
-}
-
 }

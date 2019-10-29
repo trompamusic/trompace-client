@@ -1,4 +1,4 @@
-# Tests for mutations pertaining to person/artists objects.
+# Tests for mutations pertaining to control action objects.
 import os
 import unittest
 
@@ -15,9 +15,8 @@ class TestControlAction(unittest.TestCase):
     def test_create(self):
         expected = util.read_file(self.data_dir, "EXPECTED_CONTROLACTION.txt")
 
-        created_application = mutation_create_controlaction("Verovio MusicXML Converter", "MusicXML to MEI conversion", "accepted")
-        print(created_application)
-        self.assertEqual(created_application, expected)
+        created_control_action = mutation_create_controlaction("Verovio MusicXML Converter", "MusicXML to MEI conversion", "accepted")
+        self.assertEqual(created_control_action, expected)
 
 
     def test_add_entrypoint_controlaction(self):

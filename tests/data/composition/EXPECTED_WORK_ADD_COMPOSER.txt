@@ -1,22 +1,19 @@
-
 mutation {
-  
-AddCreativeWorkInterfaceLegalPerson(
+  AddCreativeWorkInterfaceLegalPerson(
   from: {identifier: "2eeca6dd-c62c-490e-beb0-2e3899fca74f" type:MusicComposition}
   to: {identifier: "59ce8093-5e0e-4d59-bfa6-805edb11e396" type: Person}
   field: author 
-)
-{
-    from {
-        ... on CreativeWork {
-            identifier, contributor
+  )
+  {
+      from {
+          ... on CreativeWork {
+              identifier, contributor
+      }
+    }
+    to {
+          ... on Person {
+              identifier, contributor
+      }
     }
   }
-  to {
-        ... on Person {
-            identifier, contributor
-    }
-  }
-}
-
 }

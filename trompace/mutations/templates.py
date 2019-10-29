@@ -33,7 +33,7 @@ def mutation_update(identifier: str, mutation_string: str, name=None, publisher=
         publisher (optional): The person, organization or service responsible for making the artist inofrmation available
         contributor (optional): A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
         creator (optional): The person, organization or service who created the thing the web resource is about.
-        sourcer (optional): The URL of the web resource to be represented by the node.
+        source (optional): The URL of the web resource to be represented by the node.
         description (optional): An account of the artist.
         language (optional): The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
 

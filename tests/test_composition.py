@@ -47,4 +47,5 @@ class TestComposition(unittest.TestCase):
 
         created_remove_composer = mutation_remove_composition_author('2eeca6dd-c62c-490e-beb0-2e3899fca74f',
                                                                      '59ce8093-5e0e-4d59-bfa6-805edb11e396')
+        print(created_remove_composer)
         self.assertEqual(created_remove_composer, expected)

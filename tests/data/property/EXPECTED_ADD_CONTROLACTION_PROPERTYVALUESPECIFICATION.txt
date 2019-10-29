@@ -1,22 +1,18 @@
-
 mutation {
-  
-AddActionInterfaceThingInterfacee(
-  from: {identifier: "ff562d2e-2265-4f61-b340-561c92e797e9"}
-  to: {identifier: "59ce8093-5e0e-4d59-bfa6-805edb11e396"}
-  field: object
-)
-{
-    from {
-        --typename
-  }
-  to {
-       --typename 
-       ... on PropertyValueSpecification{  
-        identifier
-        name
+  AddActionInterfaceThingInterface(
+    from: {identifier: "ff562d2e-2265-4f61-b340-561c92e797e9"}
+    to: {identifier: "59ce8093-5e0e-4d59-bfa6-805edb11e396"}
+    field: object
+    ){
+        from {
+            --typename
+      }
+      to {
+           --typename 
+           ... on PropertyValueSpecification{  
+            identifier
+            name
+        }
+      }
     }
-  }
-}
-
 }

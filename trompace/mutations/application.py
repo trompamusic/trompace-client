@@ -3,32 +3,26 @@
 from .templates import mutation_create, mutation_update, mutation_delete, mutation_link
 from . import StringConstant
 
-CREATE_APPLICATION = '''
-CreateSoftwareApplication(
-{parameters}
-) {{
-  identifier
-}}
-'''
+CREATE_APPLICATION = '''CreateSoftwareApplication(
+        {parameters}
+        ) {{
+          identifier
+        }}'''
 
 
-ADD_ENTRYPOINT_APPLICATION = '''
-AddEntryPointEntryActionApplication(
-  from: {{identifier: "{identifier_1}"}}
-  to: {{identifier: "{identifier_2}"}}
-)
-{{
-    from {{
-            identifier
-            name
-  }}
-  to {{
-            identifier
-            name
-
-  }}
-}}
-'''
+ADD_ENTRYPOINT_APPLICATION = '''AddEntryPointActionApplication(
+        from: {{identifier: "{identifier_1}"}}
+        to: {{identifier: "{identifier_2}"}}
+        ){{
+        from {{
+                identifier
+                name
+        }}
+        to {{
+                identifier
+                name
+        }}
+    }}'''
 
 
 
@@ -39,7 +33,8 @@ def mutation_create_application(application_name: str, contributor: str, creator
         application_name: The name of the software application.
         contributor: A person, an organization, or a service responsible for adding the software application. This can be either a name or a base URL.
         creator: The person, organization or service responsible for adding the software application.
-        sourcer: The URL of the web resource to be represented by the node.
+        source: The URL of the web resource to be represented by the node.
+        subject: The subject associated with the application.
         description: An account of the software application.
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
     Returns:
@@ -57,7 +52,7 @@ def mutation_create_application(application_name: str, contributor: str, creator
         "source": source,
         "subject": subject,
         "description": description,
-        "format": "html",  # an artist doesn't have a mimetype, use the mimetype of the source (musicbrainz page)
+        "format": "html",
         "language": StringConstant(language.lower()),
     }
     return mutation_create(args, CREATE_APPLICATION)

@@ -1,14 +1,11 @@
-
 mutation {
-  
-CreateControlAction(
-name: "Verovio MusicXML Converter"
-description: "MusicXML to MEI conversion"
-actionStatus: accepted
-) {
-  identifier
-  description
-  actionStatus
-}
-
+  CreateControlAction(
+        name: "Verovio MusicXML Converter"
+        description: "MusicXML to MEI conversion"
+        actionStatus: accepted
+    ) {
+      identifier
+      description
+      actionStatus
+    }
 }

@@ -1,18 +1,15 @@
-
 mutation {
-  
-CreateSoftwareApplication(
-title: "Verovio MusicXML Converter"
-name: "Verovio MusicXML Converter"
-contributor: "https://www.verovio.org"
-creator: "Verovio"
-source: "https://github.com/rism-ch/verovio"
-subject: "Music notation engraving library for MEI with MusicXML,Humdrum support, toolkits, JavaScript, Python"
-description: "Verovio supports conversion from MusicXML to MEI. When converting from this web interface, the resulting MEI data will be displayed directly in the MEI-Viewer. The MEI file can be saved through the MEI  button that will be displayed on the top right."
-format: "html"
-language: en
-) {
-  identifier
-}
-
+  CreateSoftwareApplication(
+        title: "Verovio MusicXML Converter"
+        name: "Verovio MusicXML Converter"
+        contributor: "https://www.verovio.org"
+        creator: "Verovio"
+        source: "https://github.com/rism-ch/verovio"
+        subject: "Music notation engraving library for MEI with MusicXML,Humdrum support, toolkits, JavaScript, Python"
+        description: "Verovio supports conversion from MusicXML to MEI. When converting from this web interface, the resulting MEI data will be displayed directly in the MEI-Viewer. The MEI file can be saved through the MEI  button that will be displayed on the top right."
+        format: "html"
+        language: en
+        ) {
+          identifier
+        }
 }

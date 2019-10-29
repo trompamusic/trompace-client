@@ -1,4 +1,4 @@
-# Tests for mutations pertaining to person/artists objects.
+# Tests for mutations pertaining to software applications.
 import os
 import unittest
 
@@ -18,7 +18,6 @@ class TestApplication(unittest.TestCase):
         created_application = mutation_create_application("Verovio MusicXML Converter", "https://www.verovio.org", "Verovio",
                                                 "https://github.com/rism-ch/verovio","Music notation engraving library for MEI with MusicXML,Humdrum support, toolkits, JavaScript, Python",
                                                 "Verovio supports conversion from MusicXML to MEI. When converting from this web interface, the resulting MEI data will be displayed directly in the MEI-Viewer. The MEI file can be saved through the MEI  button that will be displayed on the top right.","en", identifier="ffb473fe-b345-4f10-8fee-424ef13f6686")
-        print(created_application)
         self.assertEqual(created_application, expected)
 
     def test_add_entrypoint_application(self):
@@ -26,6 +25,4 @@ class TestApplication(unittest.TestCase):
 
         created_add_entrypoint = mutation_add_entrypoint_application('2eeca6dd-c62c-490e-beb0-2e3899fca74f',
                                                                '59ce8093-5e0e-4d59-bfa6-805edb11e396')
-        print(created_add_entrypoint)
-
         self.assertEqual(created_add_entrypoint, expected)

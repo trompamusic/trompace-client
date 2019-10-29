@@ -35,11 +35,9 @@ def make_parameters(**kwargs):
         else:
             value = encoder.encode(v)
         parts.append("{}: {}".format(k, value))
-    return "\n".join(parts)
+    return "\n        ".join(parts)
 
 
-MUTATION = '''
-mutation {{
+MUTATION = '''mutation {{
   {mutation}
-}}
-'''
+}}'''

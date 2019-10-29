@@ -1,13 +1,10 @@
-
 mutation {
-  
-CreateProperty(
-title: "DigitalDocument"
-name: "DigitalDocument"
-description: "Select a MusicXML file to be converted."
-rangeIncludes: [DigitalDocument]
-) {
-  identifier
-}
-
+  CreateProperty(
+        title: "MusicXML file"
+        name: "targetFile"
+        description: "Select a MusicXML file to be converted."
+        rangeIncludes: [DigitalDocument]
+        ) {
+      identifier
+    }
 }
