@@ -4,7 +4,5 @@ mutation {
         publisher: "Https://www.cpdl.org"
     ) {
       identifier
-      name
-      relation
   }
 }

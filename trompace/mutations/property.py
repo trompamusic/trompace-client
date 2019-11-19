@@ -1,7 +1,7 @@
 # Generate GraphQL queries for mutations pertaining to properties..
 
 from .templates import mutation_create, mutation_update, mutation_delete, mutation_link
-from . import StringConstant, bool_to_str
+from . import StringConstant, bool_to_str, ListConstant
 
 
 CREATE_PROPERTY = '''CreateProperty(
@@ -22,13 +22,12 @@ ADD_CONTROLACTION_PROPERTYVALUESPECIFICATION  = '''AddActionInterfaceThingInterf
     field: object
     ){{
         from {{
-            --typename
+            __typename
       }}
       to {{
-           --typename 
+           __typename 
            ... on PropertyValueSpecification{{  
             identifier
-            name
         }}
       }}
     }}'''
@@ -45,11 +44,12 @@ def mutation_create_property(title: str, name: str, description: str, rangeInclu
         The string for the mutation for creating the property.
 
     """
+    # import pdb;pdb.set_trace()
     args = {
         "title": title,
         "name": name,
         "description": description,
-        "rangeIncludes" : StringConstant(str([StringConstant(x) for x in rangeIncludes]))
+        "rangeIncludes" : str(ListConstant(rangeIncludes))
     }
     return mutation_create(args, CREATE_PROPERTY)
 

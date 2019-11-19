@@ -16,18 +16,16 @@ ADD_ENTRYPOINT_APPLICATION = '''AddEntryPointActionApplication(
         ){{
         from {{
                 identifier
-                name
         }}
         to {{
                 identifier
-                name
         }}
     }}'''
 
 
 
 def mutation_create_application(application_name: str, contributor: str, creator: str, source: str, subject:str,
-                           description: str, language: str, identifier=None):
+                           description: str, language: str, formatin = "html/text", identifier=None):
     """Returns a mutation for creating a software application object
     Arguments:
         application_name: The name of the software application.
@@ -43,6 +41,7 @@ def mutation_create_application(application_name: str, contributor: str, creator
         Assertion error if the input language is not one of the supported languages.
     """
     assert language.lower() in ["en", "es", "ca", "nl", "de", "fr"], "Language {} not supported".format(language)
+    assert "/" in formatin, "Please provide a valid mimetype for format"
 
     args = {
         "title": application_name,
@@ -52,7 +51,7 @@ def mutation_create_application(application_name: str, contributor: str, creator
         "source": source,
         "subject": subject,
         "description": description,
-        "format": "html",
+        "format": formatin,
         "language": StringConstant(language.lower()),
     }
     return mutation_create(args, CREATE_APPLICATION)

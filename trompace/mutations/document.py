@@ -58,27 +58,23 @@ CREATE_DIGITAL_DOCUMENT = '''CreateDigitalDocument(
         {parameters}
   ) {{
     identifier
-    relation
-    name
   }}'''
 
 UPDATE_DIGITAL_DOCUMENT = '''UpdateDigitalDocument(
         {parameters}
 ) {{
   identifier
-  relation
 }}'''
 
 DELETE_DIGITAL_DOCUMENT = '''DeleteDigitalDocument(
     {parameters}
   ) {{
     identifier
-    name
   }}'''
 
 
 def mutation_create_document(document_name: str, publisher: str, contributor: str, creator: str, source: str,
-                             description: str, subject: str, language: str):
+                             description: str, subject: str, language: str, formatin="text/html"):
     """Returns a mutation for creating a digital document object
     Arguments:
         document_name: The name of the digital document.
@@ -96,6 +92,7 @@ def mutation_create_document(document_name: str, publisher: str, contributor: st
         Assertion error if the input language is not one of the supported languages.
     """
     assert language.lower() in ["en", "es", "ca", "nl", "de", "fr"], "Language {} not supported".format(language)
+    assert "/" in formatin, "Please provide a valid mimetype for format"
     
     args = {
         "title": document_name,
@@ -106,7 +103,7 @@ def mutation_create_document(document_name: str, publisher: str, contributor: st
         "source": source,
         "subject": subject,
         "description": description,
-        "format": "text/html",  # an artist doesn't have a mimetype, use the mimetype of the source (musicbrainz page)
+        "format": formatin,
         "language": StringConstant(language.lower()),
     }
     return mutation_create(args, CREATE_DIGITAL_DOCUMENT)

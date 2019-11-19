@@ -16,6 +16,19 @@ class StringConstant:
     def __repr__(self):
         return self.value
 
+class ListConstant:
+    """Some values in GraphQL are constants, not strings, and so they shouldn't
+    be encoded or have quotes put around them. Use this to represent a  list of 
+    constants and it won't be quoted in the query"""
+
+    def __init__(self, values):
+        self.values = StringConstant(str([StringConstant(x) for x in values]))
+
+    def __str__(self):
+        return str(self.values)
+    def __repr__(self):
+        return str(self.values)
+
 def bool_to_str(in_bool):
     if in_bool:
         return StringConstant('true')

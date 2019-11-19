@@ -7,23 +7,18 @@ CREATE_MUSIC_COMPOSITION = '''CreateMusicComposition(
         {parameters}
     ) {{
       identifier
-      name
-      relation
   }}'''
 
 UPDATE_MUSIC_COMPOSITION = '''UpdateMusicComposition(
         {parameters}
     ) {{
       identifier
-      name
-      relation
   }}'''
 
 DELETE_MUSIC_COMPOSITION = '''DeleteMusicComposition(
     {parameters}
     ) {{
       identifier
-      name
   }}'''
 
 ADD_COMPOSITION_AUTHOR = '''AddCreativeWorkInterfaceLegalPerson(
@@ -34,12 +29,12 @@ ADD_COMPOSITION_AUTHOR = '''AddCreativeWorkInterfaceLegalPerson(
   {{
       from {{
           ... on CreativeWork {{
-              identifier, contributor
+              identifier
       }}
     }}
     to {{
           ... on Person {{
-              identifier, contributor
+              identifier
       }}
     }}
   }}'''
@@ -52,19 +47,19 @@ REMOVE_COMPOSITION_AUTHOR = '''RemoveCreativeWorkInterfaceLegalPerson(
   {{
       from {{
           ... on CreativeWork {{
-              identifier, contributor
+              identifier
       }}
     }}
     to {{
           ... on Person {{
-              identifier, contributor
+              identifier
       }}
     }}
   }}'''
 
 
 def mutation_create_composition(composition_name: str, publisher: str, contributor: str, creator: str, source: str,
-                                description: str, subject: str, language: str):
+                                description: str, subject: str, language: str, formatin="text/html"):
     """Returns a mutation for creating a digital document object
     Arguments:
         comosition_name: The name of the comnposition.
@@ -82,6 +77,7 @@ def mutation_create_composition(composition_name: str, publisher: str, contribut
         Assertion error if the input language is not one of the supported languages.
     """
     assert language.lower() in ["en", "es", "ca", "nl", "de", "fr"], "Language {} not supported".format(language)
+    assert "/" in formatin, "Please provide a valid mimetype for format"
 
     args = {
         "title": composition_name,
@@ -92,7 +88,7 @@ def mutation_create_composition(composition_name: str, publisher: str, contribut
         "source": source,
         "subject": subject,
         "description": description,
-        "format": "text/html",  # an artist doesn't have a mimetype, use the mimetype of the source (musicbrainz page)
+        "format": formatin,
         "language": StringConstant(language.lower()),
     }
     return mutation_create(args, CREATE_MUSIC_COMPOSITION)

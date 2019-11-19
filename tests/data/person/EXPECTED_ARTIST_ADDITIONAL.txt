@@ -15,6 +15,5 @@ mutation {
         deathDate: "1920"
     ) {
       identifier
-      name
     }
 }

@@ -5,11 +5,9 @@ mutation {
         ){
         from {
                 identifier
-                name
         }
         to {
                 identifier
-                name
         }
     }
 }

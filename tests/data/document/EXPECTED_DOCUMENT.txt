@@ -12,7 +12,5 @@ mutation {
         language: en
   ) {
     identifier
-    relation
-    name
   }
 }

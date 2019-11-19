@@ -5,13 +5,12 @@ mutation {
     field: object
     ){
         from {
-            --typename
+            __typename
       }
       to {
-           --typename 
+           __typename 
            ... on PropertyValueSpecification{  
             identifier
-            name
         }
       }
     }

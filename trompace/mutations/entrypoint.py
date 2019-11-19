@@ -12,7 +12,7 @@ CREATE_ENTRYPOINT = '''CreateEntryPoint(
 
 
 def mutation_create_entry_point(name: str, contributor: str, subject:str,
-                           description: str, creator: str, source:str, language: str, actionPlatform:str, contentType:list, encodingType: list, identifier=None):
+                           description: str, creator: str, source:str, language: str, actionPlatform:str, contentType:list, encodingType: list, formatin="html/text", identifier=None):
     """Returns a mutation for creating an entry point object
     Arguments:
         name: The name of the entry point.
@@ -31,6 +31,9 @@ def mutation_create_entry_point(name: str, contributor: str, subject:str,
     TODO:
         Assert that content type and encoding type are mimetypes
     """
+    assert "/" in formatin, "Please provide a valid mimetype for format"
+    assert all("/" in x for x in contentType), "Please provide a valid mimetype for contentType"
+    assert all("/" in x for x in encodingType), "Please provide a valid mimetype for encodingType"
     args = {
         "title": name,
         "name": name,
@@ -39,7 +42,7 @@ def mutation_create_entry_point(name: str, contributor: str, subject:str,
         "source": source,
         "subject": subject,
         "description": description,
-        "format": "html",
+        "format": formatin,
         "language": StringConstant(language.lower()),
         "actionPlatform": actionPlatform,
         "contentType": contentType, 

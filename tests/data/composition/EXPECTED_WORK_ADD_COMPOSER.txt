@@ -7,12 +7,12 @@ mutation {
   {
       from {
           ... on CreativeWork {
-              identifier, contributor
+              identifier
       }
     }
     to {
           ... on Person {
-              identifier, contributor
+              identifier
       }
     }
   }

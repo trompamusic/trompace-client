@@ -12,6 +12,5 @@ mutation {
         language: en
     ) {
       identifier
-      name
     }
 }

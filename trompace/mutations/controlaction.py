@@ -8,8 +8,6 @@ CREATE_CONTROLACTION = '''CreateControlAction(
         {parameters}
     ) {{
       identifier
-      description
-      actionStatus
     }}'''
 
 

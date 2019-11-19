@@ -7,26 +7,23 @@ CREATE_PERSON = '''CreatePerson(
         {parameters}
     ) {{
       identifier
-      name
     }}'''
 
 UPDATE_PERSON = '''UpdatePerson(
       {parameters}
     ) {{
       identifier
-      relation
     }}'''
 
 DELETE_PERSON = '''DeletePerson(
       {parameters}
     ) {{
       identifier
-      name
     }}'''
 
 
 def mutation_create_artist(artist_name: str, publisher: str, contributor: str, creator: str, source: str,
-                           description: str, language: str, coverage=None, date=None,
+                           description: str, language: str, formatin = "text/html", coverage=None, date=None,
                            disambiguatingDescription=None, relation=None, _type=None, _searchScore=None,
                            additionalType=None, alternateName=None, image=None, sameAs=None, url=None,
                            additionalName=None,
@@ -72,6 +69,7 @@ def mutation_create_artist(artist_name: str, publisher: str, contributor: str, c
     """
 
     assert language.lower() in ["en", "es", "ca", "nl", "de", "fr"], "Language {} not supported".format(language)
+    assert "/" in formatin, "Please provide a valid mimetype for format"
 
     args = {
         "title": artist_name,
@@ -82,7 +80,7 @@ def mutation_create_artist(artist_name: str, publisher: str, contributor: str, c
         "source": source,
         "subject": "artist",
         "description": description,
-        "format": "text/html",  # an artist doesn't have a mimetype, use the mimetype of the source (musicbrainz page)
+        "format": formatin, 
         "language": StringConstant(language.lower()),
     }
     if coverage:
