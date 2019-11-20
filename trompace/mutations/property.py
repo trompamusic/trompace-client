@@ -1,7 +1,7 @@
 # Generate GraphQL queries for mutations pertaining to properties..
 
 from .templates import mutation_create, mutation_update, mutation_delete, mutation_link
-from . import StringConstant, bool_to_str, ListConstant
+from . import StringConstant, BoolConstant, ListConstant
 
 
 CREATE_PROPERTY = '''CreateProperty(
@@ -49,7 +49,7 @@ def mutation_create_property(title: str, name: str, description: str, rangeInclu
         "title": title,
         "name": name,
         "description": description,
-        "rangeIncludes" : str(ListConstant(rangeIncludes))
+        "rangeIncludes" : ListConstant(rangeIncludes)
     }
     return mutation_create(args, CREATE_PROPERTY)
 
@@ -81,10 +81,10 @@ def mutation_create_propertyvaluespecification(name: str, description: str, defa
         "defaultValue" : defaultValue,
         "valueMaxLength": valueMaxLength,
         "valueMinLength": valueMinLength,
-        "multipleValues": bool_to_str(multipleValues),
+        "multipleValues": BoolConstant(multipleValues),
         "valueName": valueName,
         "valuePattern": StringConstant(valuePattern),
-        "valueRequired": bool_to_str(valueRequired)
+        "valueRequired": BoolConstant(valueRequired)
     }
     return mutation_create(args, CREATE_PROPERTYVALUESPECIFICATION)
 

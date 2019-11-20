@@ -22,14 +22,12 @@ class ListConstant:
     constants and it won't be quoted in the query"""
 
     def __init__(self, values):
-        self.values = StringConstant(str([StringConstant(x) for x in values]))
+        self.values = [StringConstant(x) for x in values]
 
-    def __str__(self):
-        return str(self.values)
-    def __repr__(self):
-        return str(self.values)
 
-def bool_to_str(in_bool):
+
+def BoolConstant(in_bool:bool):
+    """ Converts a boolean value to a constant string value."""
     if in_bool:
         return StringConstant('true')
     else:
@@ -45,6 +43,8 @@ def make_parameters(**kwargs):
     for k, v in kwargs.items():
         if isinstance(v, StringConstant):
             value = v.value
+        elif isinstance(v, ListConstant):
+            value = v.values
         else:
             value = encoder.encode(v)
         parts.append("{}: {}".format(k, value))
@@ -54,3 +54,5 @@ def make_parameters(**kwargs):
 MUTATION = '''mutation {{
   {mutation}
 }}'''
+
+
