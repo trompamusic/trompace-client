@@ -25,7 +25,7 @@ ADD_ENTRYPOINT_APPLICATION = '''AddEntryPointActionApplication(
 
 
 def mutation_create_application(application_name: str, contributor: str, creator: str, source: str, subject:str,
-                           description: str, language: str, formatin = "html/text", identifier=None):
+                           description: str, language: str, formatin = "html", identifier=None):
     """Returns a mutation for creating a software application object
     Arguments:
         application_name: The name of the software application.
@@ -41,7 +41,7 @@ def mutation_create_application(application_name: str, contributor: str, creator
         Assertion error if the input language is not one of the supported languages.
     """
     assert language.lower() in ["en", "es", "ca", "nl", "de", "fr"], "Language {} not supported".format(language)
-    assert "/" in formatin, "Please provide a valid mimetype for format"
+    # assert "/" in formatin, "Please provide a valid mimetype for format"
 
     args = {
         "title": application_name,
@@ -54,6 +54,8 @@ def mutation_create_application(application_name: str, contributor: str, creator
         "format": formatin,
         "language": StringConstant(language.lower()),
     }
+    if identifier:
+        args["identifier"] = identifier
     return mutation_create(args, CREATE_APPLICATION)
 
 
@@ -67,6 +69,6 @@ def mutation_add_entrypoint_application(application_id: str, entrypoint_id: str)
         The string for the mutation for creating a relation between an application and an entry point.
     """
 
-    return mutation_link(application_id, entrypoint_id, ADD_ENTRYPOINT_APPLICATION)
+    return mutation_link(entrypoint_id, application_id, ADD_ENTRYPOINT_APPLICATION)
 
 

@@ -26,3 +26,6 @@ class TestApplication(unittest.TestCase):
         created_add_entrypoint = mutation_add_entrypoint_application('2eeca6dd-c62c-490e-beb0-2e3899fca74f',
                                                                '59ce8093-5e0e-4d59-bfa6-805edb11e396')
         self.assertEqual(created_add_entrypoint, expected)
+
+
+# self.assertEqual(query_output['data']['CreatePerson']['name'], "A. J. Fynn")

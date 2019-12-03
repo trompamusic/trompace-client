@@ -17,8 +17,8 @@ CREATE_PROPERTYVALUESPECIFICATION = '''CreatePropertyValueSpecification(
     }}'''
 
 ADD_CONTROLACTION_PROPERTYVALUESPECIFICATION  = '''AddActionInterfaceThingInterface(
-    from: {{identifier: "{identifier_1}"}}
-    to: {{identifier: "{identifier_2}"}}
+    from: {{identifier: "{identifier_1}", type: ControlAction}}
+    to: {{identifier: "{identifier_2}", type: PropertyValueSpecification}}
     field: object
     ){{
         from {{
@@ -32,6 +32,21 @@ ADD_CONTROLACTION_PROPERTYVALUESPECIFICATION  = '''AddActionInterfaceThingInterf
       }}
     }}'''
 
+ADD_CONTROLACTION_PROPERTY  = '''AddActionInterfaceThingInterface(
+    from: {{identifier: "{identifier_1}", type: ControlAction}}
+    to: {{identifier: "{identifier_2}", type: Property}}
+    field: object
+    ){{
+        from {{
+            __typename
+      }}
+      to {{
+           __typename 
+           ... on Property{{  
+            identifier
+        }}
+      }}
+    }}'''
 
 def mutation_create_property(title: str, name: str, description: str, rangeIncludes: list):
     """Returns a mutation for creating a property
@@ -99,3 +114,13 @@ def mutation_add_controlaction_propertyvaluepsecification(controlaction_id: str,
 
     return mutation_link(controlaction_id, propertyvaluespecification_id, ADD_CONTROLACTION_PROPERTYVALUESPECIFICATION)
 
+def mutation_add_controlaction_property(controlaction_id: str, property_id: str):
+    """Returns a mutation for adding a control action to a property value specification.
+    Arguments:
+        controlaction_id: The unique identifier of the control action.
+        property_id: The unique identifier of the property.
+    Returns:
+        The string for the mutation foradding a control action to a property.
+    """
+
+    return mutation_link(controlaction_id, property_id, ADD_CONTROLACTION_PROPERTY)

@@ -12,8 +12,8 @@ CREATE_CONTROLACTION = '''CreateControlAction(
 
 
 ADD_ENTRYPOINT_CONTROLACTION = '''AddThingInterfacePotentialAction(
-        from: {{identifier: "{identifier_1}"}}
-        to: {{identifier: "{identifier_2}"}}
+        from: {{identifier: "{identifier_1}", type:EntryPoint}}
+        to: {{identifier: "{identifier_2}", type: ControlAction}}
         ){{
         from {{
         ... on EntryPoint{{
@@ -28,7 +28,7 @@ ADD_ENTRYPOINT_CONTROLACTION = '''AddThingInterfacePotentialAction(
     }}'''
 
 
-def mutation_create_controlaction(name: str, description: str, actionStatus: str):
+def mutation_create_controlaction(name: str, description: str, actionStatus: str, identifier=None):
     """Returns a mutation for creating a control action object
     Arguments:
         name: The name of the cvontrol action.
@@ -44,6 +44,8 @@ def mutation_create_controlaction(name: str, description: str, actionStatus: str
         "description": description,
         "actionStatus" : StringConstant(actionStatus.lower())
     }
+    if identifier:
+        args["identifier"] = identifier
     return mutation_create(args, CREATE_CONTROLACTION)
 
 def mutation_add_entrypoint_controlaction(entrypoint_id: str, controlaction_id: str):
