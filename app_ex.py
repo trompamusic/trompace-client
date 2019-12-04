@@ -9,7 +9,7 @@ from trompace.mutations.controlaction import mutation_create_controlaction, muta
 from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, mutation_add_controlaction_propertyvaluepsecification, mutation_add_controlaction_property
 from trompace.subscriptions.controlaction import subscription_controlaction
 from application.connection import submit_query
-from application.application import create_application
+from application.application import create_application, get_control_all_actions, get_control_action_id, subscribe_controlaction
 
 INIT_STR = """{"type":"connection_init","payload":{}}"""
 
@@ -38,15 +38,7 @@ pq_1 = """query{
 }
 """
 
-# def get_sub_dict(query):
-#     payload = {"variables":{},
-#     "extensions": {},
-#     # "operationName":StringConstant("null").value,
-#     "query": query}
-#     message = {"id":"1",
-#     "type":"start",
-#     "payload": payload}
-#     return json.dumps(message)
+
 
 # async def main():
 #     created_application = mutation_create_application("Verovio MusicXML Converter", "https://www.verovio.org", "Verovio",
@@ -161,12 +153,17 @@ async def main():
         value_name, value_description, defaultValue, valueMaxLength, valueMinLength , multipleValues,
         valueName, valuePattern, valueRequired, language, contributor, creator)
 
+    await subscribe_controlaction(created_ep_id)
+    
+
+    # await get_control_all_actions()
+    # await get_control_action_id("8e5f0994-a962-4e57-854d-b5621c6fee3c")
+
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main())
     # subs = subscription_controlaction(32)
     # query = get_sub_dict(subs)
-    import pdb;pdb.set_trace()
 
 
 

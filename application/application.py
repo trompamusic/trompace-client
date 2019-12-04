@@ -1,11 +1,121 @@
 # Generate GraphQL queries to setup a software application, entrypoint and the associated control action, property and propoerty value specification.
+import asyncio
+import websockets
+import json
+import numpy as np
+
 
 from trompace.mutations.application import mutation_create_application, mutation_add_entrypoint_application
 from trompace.mutations.entrypoint import mutation_create_entry_point
-from trompace.mutations.controlaction import mutation_create_controlaction, mutation_add_entrypoint_controlaction
+from trompace.mutations.controlaction import mutation_create_controlaction, mutation_add_entrypoint_controlaction, mutation_modify_controlaction
 from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, mutation_add_controlaction_propertyvaluepsecification, mutation_add_controlaction_property
 from trompace.subscriptions.controlaction import subscription_controlaction
-from .connection import submit_query
+from trompace.mutations.document import mutation_create_document, mutation_add_digital_document_controlaction
+from .connection import submit_query, download_file
+from trompace.subscriptions.controlaction import subscription_controlaction
+
+
+from essentia.streaming import VectorInput, FrameCutter, Chromagram
+from essentia import Pool, run
+from essentia.standard import MonoLoader
+
+def chroma(filename, fs=44100, frame_size=32768):
+    audio = MonoLoader(filename=filename)()
+    hop_size = frame_size // 2
+    vectorinput = VectorInput(audio)
+    framecutter = FrameCutter(frameSize=frame_size, hopSize=hop_size)
+    chromagram = Chromagram(sampleRate=fs)
+    pool = Pool()
+    vectorinput.data >> framecutter.signal
+    framecutter.frame >> chromagram.frame
+    chromagram.chromagram >> (pool, 'chromagram')
+    run(vectorinput)
+    return pool['chromagram']
+
+def print_dict(dicty):
+    if isinstance(dicty,dict):
+        for keys in dicty.keys():
+            print("{}: ".format(keys), end ="\n ")
+            print_dict(dicty[keys])
+    else:
+        print(dicty)
+def get_sub_dict(query):
+    payload = {"variables":{},
+    "extensions": {},
+    # "operationName":StringConstant("null").value,
+    "query": query}
+    message = {"id":"1",
+    "type":"start",
+    "payload": payload}
+    return json.dumps(message)
+
+INIT_STR = """{"type":"connection_init","payload":{}}"""
+
+QUERY_ENTRYPOINT = """query{
+  EntryPoint {
+    identifier
+    title
+    description
+    contentType
+    subject
+    potentialAction {
+      __typename
+      ... on ControlAction {
+        identifier
+        name
+        object {
+          __typename
+          ... on Property {
+            identifier
+            title
+            description
+            rangeIncludes
+            __typename
+          }
+          ... on PropertyValueSpecification {
+            identifier
+            title
+            valueName
+            valueRequired
+            valuePattern
+            description
+            defaultValue
+            minValue
+            maxValue
+            stepValue
+            __typename
+          }
+        }
+        __typename
+      }
+    }
+    __typename
+  }
+}
+"""
+QUERY_CONTROLACTION_ID = """
+    query {{
+        ControlAction(identifier: "{identifier}") {{
+            actionStatus
+            identifier
+            object {{
+                ... on PropertyValue {{
+                    value
+                    name
+                    nodeValue {{
+                        ... on DigitalDocument {{
+                            format
+                            source
+                        }}
+                    }}
+                }}
+            }}
+        }}
+    }}
+"""
+async def dummy_function(inputs):
+    return inputs
+
 
 async def create_application(application_name: str, subject: str, description: str, source:str, formatin: str, actionStatus: str, actionPlatform:str, contentType:list,\
  encodingType: list,property_title: str, property_name: str, property_description: str, rangeIncludes: list,\
@@ -86,19 +196,97 @@ async def create_application(application_name: str, subject: str, description: s
     return created_app_id, created_ep_id, created_ca_id, created_property_id, created_propertyvaluespec_id
 
 
+async def subscribe_controlaction(entrypoint_id):
+    """
+    Sends a subscribtion request for the control action pertaining to the input control_id. 
+    Establishes a websockets connection with the GraphQl database and waits for calls to the application linked to the control action
+    Arguments:
+        entrypoint_id: the identifier for the entry point linked to the control action to subscribe to. 
+    TODO:
+        set uri in the config file instead of hardcoded here.
+        I
+    """
+    uri = "ws://127.0.0.1:4000/graphql"
+    is_ok = False
+    subs = subscription_controlaction(entrypoint_id)
+    async with websockets.connect(uri, subprotocols=['graphql-ws']) as websocket:
+        await websocket.send(INIT_STR)
+        async for message in websocket:
+            if message == """{"type":"connection_ack"}""":
+                is_ok = True
+                print("Ack recieved")
+                await websocket.send(get_sub_dict(subs))
+            elif is_ok:
+                print("Message recieved, processesing")
+                control_id = json.loads(message)["payload"]["data"]["ControlActionRequest"]["identifier"]
+                await handle_control_action(control_id)
+                break
+            if not is_ok:
+                raise Exception("don't have an ack yet")
 
 
+async def handle_control_action(identifier):
+    """
+    A function to handle a control action request, for now, just a plceholder, needs to be adapted to fit any function
+    """
+
+    input_url, output_name = await get_control_action_id(identifier)
+    query_modify_ca = mutation_modify_controlaction(identifier, "running")
+    resp = await submit_query(query_modify_ca)
+    await download_file(input_url, "./"+input_url.split("/")[-1])
+    print("Downloaded File")
+    #This part should be changed
+
+    chroma_output = chroma("./"+input_url.split("/")[-1])
+    np.save("./"+output_name, chroma_output)
+
+    create_doc_query = mutation_create_document(output_name, "UPF", "IPF", "www.upf.edu", "./"+output_name,
+                             "output of test algorithm", "test subject", "en")
+    resp = await submit_query(create_doc_query)
+    created_doc_id = resp['data']['CreateDigitalDocument']['identifier']
+
+    query_add_doc = mutation_add_digital_document_controlaction(created_doc_id, identifier)
+
+    resp = await submit_query(query_add_doc)
+
+    print(resp)
+
+    query_modify_ca = mutation_modify_controlaction(identifier, "complete")
+    resp = await submit_query(query_modify_ca)
+    print(resp)
 
 
+async def get_control_all_actions():
+    """
+    Submits a query to get all control actions, entry points and associated property and property value specifications.
+    """
+    resp = await submit_query(QUERY_ENTRYPOINT)
+
+    entry_point_ids = {y: {"Id": x['identifier'], "Description": x['description'], x['potentialAction'][0]['__typename']+"_id": x['potentialAction'][0]['identifier']\
+    , x['potentialAction'][0]['__typename']+"_name": x['potentialAction'][0]['name']\
+        , x['potentialAction'][0]['__typename']+"_properties": {z['__typename']+'_id': z['identifier'] for z in x['potentialAction'][0]['object']}}\
+        for y,x in enumerate(resp['data']['EntryPoint'])}
+
+    print("Found the following actions: ")
+
+    print_dict(entry_point_ids)
 
 
-if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
-    # subs = subscription_controlaction(32)
-    # query = get_sub_dict(subs)
-    import pdb;pdb.set_trace()
+async def get_control_action_id(control_id):
+    """
+    Get document from control action id
+    """
+    query_ca = QUERY_CONTROLACTION_ID.format(identifier=control_id)
+    resp = await submit_query(query_ca)
+    ob = resp['data']['ControlAction'][0]['object']
 
+    if isinstance(ob[0]['nodeValue'], dict):
+        input_url = ob[0]['nodeValue']['source']
+        output_name = ob[1]['value']
+    else:
+        input_url = ob[1]['nodeValue']['source']
+        output_name = ob[0]['value']
+    return input_url, output_name
 
 
 

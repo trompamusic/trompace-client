@@ -98,7 +98,7 @@ RequestControlAction(
     nodeIdentifier:"{doc_id}",
     nodeType:DigitalDocument}}],
   propertyValueObject: [{{potentialActionPropertyValueSpecificationIdentifier:"{propertyvalue_id}",
-    value:"Track",
+    value:"{output_name}",
     valuePattern:String}}]
   }}) {{
     identifier
@@ -184,7 +184,7 @@ async def main():
 
 	request_query = q1.format(entrypoint_id=entry_point_ids[entry_id]["Id"], controlaction_id=entry_point_ids[entry_id]['ControlAction_id'],\
 	 property_id=entry_point_ids[entry_id]['ControlAction_properties']['Property_id'],\
-	 propertyvalue_id=entry_point_ids[entry_id]['ControlAction_properties']['PropertyValueSpecification_id'], doc_id = data_ids[data_id]["Id"])
+	 propertyvalue_id=entry_point_ids[entry_id]['ControlAction_properties']['PropertyValueSpecification_id'], doc_id = data_ids[data_id]["Id"], output_name="File_Name.ogg")
 
 	resp_1 = await submit_query(request_query)
 

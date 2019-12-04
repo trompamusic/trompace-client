@@ -1,6 +1,7 @@
 import aiohttp
 import asyncio
 import requests
+import aiofiles
 # from trompace.mutations.application import mutation_create_application, mutation_add_entrypoint_application
 
 
@@ -19,3 +20,10 @@ async def submit_query(querystr: str):
 
 
 
+async def download_file(url, file_link):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as resp:
+            if resp.status == 200:
+                f = await aiofiles.open(file_link, mode='wb')
+                await f.write(await resp.read())
+                await f.close()
