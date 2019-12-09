@@ -3,6 +3,7 @@ import os
 import unittest
 
 from tests import util
+from trompace.mutations import StringConstant
 from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, \
     mutation_add_controlaction_propertyvaluespecification
 
@@ -17,7 +18,7 @@ class TestProperty(unittest.TestCase):
         expected = util.read_file(self.data_dir, "EXPECTED_PROPERTY.txt")
 
         created_property = mutation_create_property("MusicXML file", "targetFile",
-                                                    "Select a MusicXML file to be converted.", ["DigitalDocument"])
+                                                    "Select a MusicXML file to be converted.", [StringConstant("DigitalDocument")])
         self.assertEqual(created_property, expected)
 
     def test_create_propertyvaluespecification(self):

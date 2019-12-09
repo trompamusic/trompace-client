@@ -1,4 +1,5 @@
 # Generate GraphQL queries for mutations pertaining to entry points.
+from typing import List
 
 from .templates import mutation_create, mutation_update, mutation_delete
 from . import StringConstant
@@ -12,7 +13,7 @@ CREATE_ENTRYPOINT = '''CreateEntryPoint(
 
 
 def mutation_create_entry_point(name: str, contributor: str, subject:str,
-                           description: str, creator: str, source:str, language: str, actionPlatform:str, contentType:list, encodingType: list, formatin="html", identifier=None):
+                           description: str, creator: str, source:str, language: str, actionPlatform:str, contentType: List, encodingType: list, formatin="html", identifier=None):
     """Returns a mutation for creating an entry point object
     Arguments:
         name: The name of the entry point.
@@ -45,7 +46,7 @@ def mutation_create_entry_point(name: str, contributor: str, subject:str,
         "format": formatin,
         "language": StringConstant(language.lower()),
         "actionPlatform": actionPlatform,
-        "contentType": contentType, 
+        "contentType": contentType,
         "encodingType": encodingType
     }
     if identifier:

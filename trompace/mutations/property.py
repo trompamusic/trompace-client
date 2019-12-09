@@ -1,7 +1,8 @@
 # Generate GraphQL queries for mutations pertaining to properties..
+from typing import List
 
 from .templates import mutation_create, mutation_update, mutation_delete, mutation_link
-from . import StringConstant, BoolConstant, ListConstant
+from . import StringConstant
 
 
 CREATE_PROPERTY = '''CreateProperty(
@@ -48,7 +49,7 @@ ADD_CONTROLACTION_PROPERTY  = '''AddActionInterfaceThingInterface(
       }}
     }}'''
 
-def mutation_create_property(title: str, name: str, description: str, rangeIncludes: list):
+def mutation_create_property(title: str, name: str, description: str, rangeIncludes: List[StringConstant]):
     """Returns a mutation for creating a property
     Arguments:
         title: The title of the property
@@ -64,7 +65,7 @@ def mutation_create_property(title: str, name: str, description: str, rangeInclu
         "title": title,
         "name": name,
         "description": description,
-        "rangeIncludes" : ListConstant(rangeIncludes)
+        "rangeIncludes": rangeIncludes
     }
     return mutation_create(args, CREATE_PROPERTY)
 
@@ -93,13 +94,13 @@ def mutation_create_propertyvaluespecification(name: str, description: str, defa
         "name": name,
         "title": name,
         "description": description,
-        "defaultValue" : defaultValue,
+        "defaultValue": defaultValue,
         "valueMaxLength": valueMaxLength,
         "valueMinLength": valueMinLength,
-        "multipleValues": BoolConstant(multipleValues),
+        "multipleValues": multipleValues,
         "valueName": valueName,
         "valuePattern": StringConstant(valuePattern),
-        "valueRequired": BoolConstant(valueRequired)
+        "valueRequired": valueRequired
     }
     return mutation_create(args, CREATE_PROPERTYVALUESPECIFICATION)
 
