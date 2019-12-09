@@ -8,7 +8,7 @@ import numpy as np
 from trompace.mutations.application import mutation_create_application, mutation_add_entrypoint_application
 from trompace.mutations.entrypoint import mutation_create_entry_point
 from trompace.mutations.controlaction import mutation_create_controlaction, mutation_add_entrypoint_controlaction, mutation_modify_controlaction
-from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, mutation_add_controlaction_propertyvaluepsecification, mutation_add_controlaction_property
+from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, mutation_add_controlaction_propertyvaluespecification, mutation_add_controlaction_property
 from trompace.subscriptions.controlaction import subscription_controlaction
 from trompace.mutations.document import mutation_create_document, mutation_add_digital_document_controlaction
 from .connection import submit_query, download_file
@@ -127,9 +127,9 @@ async def create_application(application_name: str, subject: str, description: s
     Arguments:
         application_name: The name of the application, will be re-used for the control action and entry point for now.
         source: The URL of the web resource to be represented by the node.
-        description: A description of the application, will be re-used for the control action and entry point for now. 
+        description: A description of the application, will be re-used for the control action and entry point for now.
         formatin: The format of the input files to be used for the application.
-        subject: The subject associated with the application, will be re-used for control action and entry point for now. 
+        subject: The subject associated with the application, will be re-used for control action and entry point for now.
         actionStatus: The default actionStatus for a newly instantiated ControlAction ‘job'.
         actionPlatform: The action platform.
         contentType: The content type associated with the entry point, should be a mimetype.
@@ -146,7 +146,7 @@ async def create_application(application_name: str, subject: str, description: s
         multipleValues: A boolean that states if multiple values are accepted or not.
         valueName: The name of the value.
         valuePattern: The format of the value.
-        valueRequired: A boolean stating if the value is required or not. 
+        valueRequired: A boolean stating if the value is required or not.
 
         contributor: A person, an organization, or a service responsible for adding the software application. This can be either a name or a base URL.
         creator: The person, organization or service responsible for adding the software application.
@@ -188,7 +188,7 @@ async def create_application(application_name: str, subject: str, description: s
 
     resp = await submit_query(create_propertyvaluespecification_query)
     created_propertyvaluespec_id = resp['data']['CreatePropertyValueSpecification']['identifier']
-    add_propertyvalue_controlaction_query= mutation_add_controlaction_propertyvaluepsecification(created_ca_id, created_propertyvaluespec_id)
+    add_propertyvalue_controlaction_query= mutation_add_controlaction_propertyvaluespecification(created_ca_id, created_propertyvaluespec_id)
     resp = await submit_query(add_propertyvalue_controlaction_query)
 
     print(resp)
@@ -198,10 +198,10 @@ async def create_application(application_name: str, subject: str, description: s
 
 async def subscribe_controlaction(entrypoint_id):
     """
-    Sends a subscribtion request for the control action pertaining to the input control_id. 
+    Sends a subscribtion request for the control action pertaining to the input control_id.
     Establishes a websockets connection with the GraphQl database and waits for calls to the application linked to the control action
     Arguments:
-        entrypoint_id: the identifier for the entry point linked to the control action to subscribe to. 
+        entrypoint_id: the identifier for the entry point linked to the control action to subscribe to.
     TODO:
         set uri in the config file instead of hardcoded here.
         I

@@ -59,7 +59,6 @@ def mutation_create_application(application_name: str, contributor: str, creator
     return mutation_create(args, CREATE_APPLICATION)
 
 
-
 def mutation_add_entrypoint_application(application_id: str, entrypoint_id: str):
     """Returns a mutation for adding an entry point to an application..
     Arguments:

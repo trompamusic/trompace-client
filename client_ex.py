@@ -7,7 +7,7 @@ from trompace.mutations import StringConstant
 from trompace.mutations.application import mutation_create_application, mutation_add_entrypoint_application
 from trompace.mutations.entrypoint import mutation_create_entry_point
 from trompace.mutations.controlaction import mutation_create_controlaction, mutation_add_entrypoint_controlaction
-from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, mutation_add_controlaction_propertyvaluepsecification, mutation_add_controlaction_property
+from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, mutation_add_controlaction_propertyvaluespecification, mutation_add_controlaction_property
 from trompace.subscriptions.controlaction import subscription_controlaction
 from application.connection import submit_query
 
@@ -166,9 +166,9 @@ async def main():
 	# 	print("    Description: {}".format(data_ids[ids]["Description"]))
 	data_id = int(input("Select an id between {} and {} ".format("0", len(data_ids)-1)))
 	assert data_id>=0 and data_id<len(data_ids)
-	resp_p1 = await submit_query(pq_1) 
+	resp_p1 = await submit_query(pq_1)
 	control_action_ids = [x['identifier'] for x in resp_p1['data']['ControlAction']]
-	resp_p2 = await submit_query(pq_2) 
+	resp_p2 = await submit_query(pq_2)
 
 	entry_point_ids = {y: {"Id": x['identifier'], "Description": x['description'], x['potentialAction'][0]['__typename']+"_id": x['potentialAction'][0]['identifier']\
 	, x['potentialAction'][0]['__typename']+"_name": x['potentialAction'][0]['name']\
@@ -200,7 +200,7 @@ async def main():
 	print("Results:")
 
 	print_dict(act_status)
-	
+
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()

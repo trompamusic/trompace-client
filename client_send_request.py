@@ -8,7 +8,7 @@ from trompace.mutations import StringConstant
 from trompace.mutations.application import mutation_create_application, mutation_add_entrypoint_application
 from trompace.mutations.entrypoint import mutation_create_entry_point
 from trompace.mutations.controlaction import mutation_create_controlaction, mutation_add_entrypoint_controlaction
-from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, mutation_add_controlaction_propertyvaluepsecification, mutation_add_controlaction_property
+from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, mutation_add_controlaction_propertyvaluespecification, mutation_add_controlaction_property
 from trompace.subscriptions.controlaction import subscription_controlaction_client
 from application.connection import submit_query
 
@@ -91,10 +91,10 @@ def get_sub_dict(query):
 
 async def subscribe_controlaction(controlaction_id):
     """
-    Sends a subscribtion request for the control action pertaining to the input control_id. 
+    Sends a subscribtion request for the control action pertaining to the input control_id.
     Establishes a websockets connection with the GraphQl database and waits for calls to the application linked to the control action
     Arguments:
-        entrypoint_id: the identifier for the entry point linked to the control action to subscribe to. 
+        entrypoint_id: the identifier for the entry point linked to the control action to subscribe to.
     TODO:
         set uri in the config file instead of hardcoded here.
         I
@@ -138,7 +138,7 @@ async def main(entrypoint_id, control_id, property_id, propertyvalue_id, doc_id,
 
     print_dict(act_status)
 
-    
+
 if __name__ == '__main__':
     if len(sys.argv)<2 or sys.argv[1] == '-help' or sys.argv[1] == '--help' or sys.argv[1] == '--h' or sys.argv[1] == '-h':
         print("%s --help or -h or --h or -help to see this menu" % sys.argv[0])

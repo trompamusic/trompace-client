@@ -1,6 +1,5 @@
 requests
 pytest
-json
 asyncio
 aiohttp
 websockets
