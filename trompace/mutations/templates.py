@@ -4,6 +4,9 @@ from . import StringConstant, make_parameters, MUTATION
 
 
 # To be added EntryPoint, ControlAction, PropertyValueSpecification and Property
+from .exceptions import UnsupportedLanguageException
+from ..constants import SUPPORTED_LANGUAGES
+
 
 def mutation_create(args, mutation_string: str):
     """Returns a mutation for creating an object.
@@ -41,11 +44,11 @@ def mutation_update(identifier: str, mutation_string: str, name=None, publisher=
     Returns:
         The string for the mutation for creating the artist.
     Raises:
-        Assertion error if the input language is not one of the supported languages.
+        UnsupportedLanguageException if the input language is not one of the supported languages.
     """
 
-    if language:
-        assert language.lower() in ["en", "es", "ca", "nl", "de", "fr"], "Language {} not supported".format(language)
+    if language and language not in SUPPORTED_LANGUAGES:
+        raise UnsupportedLanguageException(language)
 
     args = {"identifier": identifier}
     if name:

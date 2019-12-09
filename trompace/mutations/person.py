@@ -1,7 +1,8 @@
 # Generate GraphQL queries for mutations pertaining to persons/artists objects.
-
+from .exceptions import UnsupportedLanguageException
 from .templates import mutation_create, mutation_update, mutation_delete
 from . import StringConstant
+from ..constants import SUPPORTED_LANGUAGES
 
 CREATE_PERSON = '''CreatePerson(
         {parameters}
@@ -65,10 +66,12 @@ def mutation_create_artist(artist_name: str, publisher: str, contributor: str, c
     Returns:
         The string for the mutation for creating the artist.
     Raises:
-        Assertion error if the input language is not one of the supported languages.
+        UnsupportedLanguageException if the input language is not one of the supported languages.
     """
 
-    assert language.lower() in ["en", "es", "ca", "nl", "de", "fr"], "Language {} not supported".format(language)
+    if language not in SUPPORTED_LANGUAGES:
+        raise UnsupportedLanguageException(language)
+
     assert "/" in formatin, "Please provide a valid mimetype for format"
 
     args = {
@@ -80,7 +83,7 @@ def mutation_create_artist(artist_name: str, publisher: str, contributor: str, c
         "source": source,
         "subject": "artist",
         "description": description,
-        "format": formatin, 
+        "format": formatin,
         "language": StringConstant(language.lower()),
     }
     if coverage:

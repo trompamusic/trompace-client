@@ -1,9 +1,11 @@
 # Generate GraphQL queries for mutations pertaining to digital document objects.
-
+from .exceptions import UnsupportedLanguageException
 from .templates import mutation_create, mutation_delete, mutation_update, mutation_link
 from . import StringConstant
 
 # We say that 2 different scores of the same thing are a broad match
+from ..constants import SUPPORTED_LANGUAGES
+
 ADD_DIGITAL_DOCUMENT_BROAD_MATCH = '''AddDigitalDocumentBroadMatch(
     from: {{identifier: "{identifier_1}" }}
     to: {{identifier: "{identifier_2}" }}
@@ -102,11 +104,13 @@ def mutation_create_document(document_name: str, publisher: str, contributor: st
     Returns:
         The string for the mutation for creating the document object.
     Raises:
-        Assertion error if the input language is not one of the supported languages.
+        UnsupportedLanguageException if the input language is not one of the supported languages.
     """
-    assert language.lower() in ["en", "es", "ca", "nl", "de", "fr"], "Language {} not supported".format(language)
+    if language not in SUPPORTED_LANGUAGES:
+        raise UnsupportedLanguageException(language)
+
     assert "/" in formatin, "Please provide a valid mimetype for format"
-    
+
     args = {
         "title": document_name,
         "name": document_name,

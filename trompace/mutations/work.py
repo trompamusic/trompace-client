@@ -1,7 +1,8 @@
 # Generate GraphQL queries for mutations pertaining to musical compositions and works related objects.
-
+from .exceptions import UnsupportedLanguageException
 from .templates import mutation_create, mutation_update, mutation_delete, mutation_link
 from . import StringConstant
+from ..constants import SUPPORTED_LANGUAGES
 
 CREATE_MUSIC_COMPOSITION = '''CreateMusicComposition(
         {parameters}
@@ -74,9 +75,11 @@ def mutation_create_composition(composition_name: str, publisher: str, contribut
     Returns:
         The string for the mutation for creating the artist.
     Raises:
-        Assertion error if the input language is not one of the supported languages.
+        UnsupportedLanguageException if the input language is not one of the supported languages.
     """
-    assert language.lower() in ["en", "es", "ca", "nl", "de", "fr"], "Language {} not supported".format(language)
+    if language not in SUPPORTED_LANGUAGES:
+        raise UnsupportedLanguageException(language)
+
     assert "/" in formatin, "Please provide a valid mimetype for format"
 
     args = {
