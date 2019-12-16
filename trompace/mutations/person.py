@@ -1,5 +1,5 @@
 # Generate GraphQL queries for mutations pertaining to persons/artists objects.
-from .exceptions import UnsupportedLanguageException
+from trompace.exceptions import UnsupportedLanguageException
 from .templates import mutation_create, mutation_update, mutation_delete
 from . import StringConstant
 from ..constants import SUPPORTED_LANGUAGES

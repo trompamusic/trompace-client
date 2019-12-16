@@ -1,5 +1,5 @@
 # Generate GraphQL queries for mutations pertaining to musical compositions and works related objects.
-from .exceptions import UnsupportedLanguageException
+from trompace.exceptions import UnsupportedLanguageException
 from .templates import mutation_create, mutation_update, mutation_delete, mutation_link
 from . import StringConstant
 from ..constants import SUPPORTED_LANGUAGES

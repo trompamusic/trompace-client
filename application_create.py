@@ -1,49 +1,59 @@
+# Create the applications with the specifications in the config file
+
 import asyncio
 import websockets
 import json
+import configparser
 
 from trompace.mutations import StringConstant
 from trompace.mutations.application import mutation_create_application, mutation_add_entrypoint_application
 from trompace.mutations.entrypoint import mutation_create_entry_point
 from trompace.mutations.controlaction import mutation_create_controlaction, mutation_add_entrypoint_controlaction
-from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, mutation_add_controlaction_propertyvaluespecification, mutation_add_controlaction_property
+from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification,\
+ mutation_add_controlaction_propertyvaluespecification, mutation_add_controlaction_property
 from trompace.subscriptions.controlaction import subscription_controlaction
-from application.connection import submit_query
-from application.application import create_application, get_control_all_actions, get_control_action_id
+from trompace.connection import submit_query
+from trompace.application.application import create_application_CE
 
 async def main():
-    application_name = "UPF magic doer"
-    subject = "This app can do magic"
-    description = "Wow, we can do magic now"
-    source = "www.upf.org/magic"
-    formatin = "wav"
-    actionStatus = "accepted"
-    actionPlatform = "The magic platform"
-    contentType = ["json"]
-    encodingType = ["text"]
-    property_name = "Magic input"
-    property_title = "Targetfile"
-    property_description = "This is a magical input"
-    rangeIncludes = ["DigitalDocument"]
-    value_name = "Name of the output file"
-    value_description = "How would you like to name the output"
-    defaultValue = ""
-    valueMaxLength = 100
-    valueMinLength = 0
-    multipleValues = False
-    valueName = "outputName"
-    valuePattern = "String"
-    valueRequired = True
-    contributor = "UPF"
-    creator = "www.upf.edu"
-    language = "en"
+    await create_application()
 
-    created_app_id, created_ep_id, created_ca_id, created_property_id, created_propertyvaluespec_id = await create_application(application_name, subject, description, source, formatin, actionStatus, actionPlatform, contentType,\
-        encodingType,property_title, property_name, property_description, rangeIncludes,
-        value_name, value_description, defaultValue, valueMaxLength, valueMinLength , multipleValues,
-        valueName, valuePattern, valueRequired, language, contributor, creator)
 
-    print(created_ep_id)
+async def create_application(app_config_file='app_config.ini'):
+    """
+    Creates an application in the contributor environment based on the settings in the app_config_file. 
+    Checks if the 
+    Arguments:
+    app_config_file: The path to the config file for the application. 
+    ToDo:
+    Query CE to check if the app id already exists.
+    """
+
+    config = configparser.ConfigParser()
+    config.read(app_config_file)
+    app = config['app']
+
+
+    application_name = app['application_name']
+    subject = app['subject']
+    description = app['description']
+    source = app['source']
+    formatin = app['formatin']
+    contributor = app['contributor']
+    creator = app['creator']
+    language = app['language']
+
+    ce_id = app['ce_id']
+    if ce_id == '':
+        print("App ce_id not found, creating new application")
+        created_app_id = await create_application_CE(application_name, subject, description, source, formatin,\
+        language, contributor, creator)
+        config['app']['ce_id'] = created_app_id
+        with open(app_config_file, 'w') as configfile: 
+            config.write(configfile)
+    else:
+        # Todo, check if the id exists in the CE.
+        print("App already exists, the id is {}".format(ce_id))
 
 
 if __name__ == "__main__":

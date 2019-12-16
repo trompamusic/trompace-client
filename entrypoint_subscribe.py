@@ -9,11 +9,11 @@ from trompace.mutations.entrypoint import mutation_create_entry_point
 from trompace.mutations.controlaction import mutation_create_controlaction, mutation_add_entrypoint_controlaction
 from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, mutation_add_controlaction_propertyvaluespecification, mutation_add_controlaction_property
 from trompace.subscriptions.controlaction import subscription_controlaction
-from application.connection import submit_query
-from application.application import subscribe_controlaction
+from trompace.connection import submit_query
+from trompace.application.application import subscribe_controlaction
 
 
-async def main(created_ep_id):
+async def main():
     await subscribe_controlaction(created_ep_id)
 
 

@@ -1,5 +1,5 @@
 # Generate GraphQL queries for mutations pertaining to digital document objects.
-from .exceptions import UnsupportedLanguageException
+from trompace.exceptions import UnsupportedLanguageException
 from .templates import mutation_create, mutation_delete, mutation_update, mutation_link
 from . import StringConstant
 
