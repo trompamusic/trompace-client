@@ -5,6 +5,8 @@ import asyncio
 import requests
 import aiofiles
 
+from trompace.exceptions import QueryException
+
 config = configparser.ConfigParser()
 config.read('import.ini')
 

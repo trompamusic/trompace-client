@@ -6,6 +6,10 @@ class IDNotFoundException(Exception):
     def __init__(self, object):
         super().__init__("{} ID not found".format(object))
 
+class VaueNotFound(Exception):
+    def __init__(self, object):
+        super().__init__("{} value not found".format(object))
+
 class QueryException(Exception):
     def __init__(self, errors):
         error_str = "\n"

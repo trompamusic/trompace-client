@@ -2,30 +2,33 @@ import asyncio
 import websockets
 import json
 import sys
+import configparser
 
 
-from trompace.mutations import StringConstant
+from trompace.mutations import StringConstant, make_parameters
 from trompace.mutations.application import mutation_create_application, mutation_add_entrypoint_application
 from trompace.mutations.entrypoint import mutation_create_entry_point
 from trompace.mutations.controlaction import mutation_create_controlaction, mutation_add_entrypoint_controlaction
 from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, mutation_add_controlaction_propertyvaluespecification, mutation_add_controlaction_property
 from trompace.subscriptions.controlaction import subscription_controlaction_client
 from trompace.connection import submit_query
+from trompace.exceptions import VaueNotFound
 
 
 INIT_STR = """{"type":"connection_init","payload":{}}"""
 
+property_object = """  propertyObject: [{{potentialActionPropertyIdentifier:"{property_id}",
+    nodeIdentifier:"{doc_id}",
+    nodeType:DigitalDocument}}]"""
+
+property_value_object = """  propertyValueObject: [{{potentialActionPropertyValueSpecificationIdentifier:"{propertyvalue_id}",
+    value:"{output_name}",
+    valuePattern:String}}"""
+
 q1 = """mutation{{
 RequestControlAction(
   controlAction: {{
-  entryPointIdentifier: "{entrypoint_id}", 
-    potentialActionIdentifier: "{controlaction_id}",
-  propertyObject: [{{potentialActionPropertyIdentifier:"{property_id}",
-    nodeIdentifier:"{doc_id}",
-    nodeType:DigitalDocument}}],
-  propertyValueObject: [{{potentialActionPropertyValueSpecificationIdentifier:"{propertyvalue_id}",
-    value:"{output_name}",
-    valuePattern:String}}]
+{params}
   }}) {{
     identifier
         __typename
@@ -119,9 +122,54 @@ async def subscribe_controlaction(controlaction_id):
                 raise Exception("don't have an ack yet")
 
 
-async def main(entrypoint_id, control_id, property_id, propertyvalue_id, doc_id, output_name):
-    request_query = q1.format(entrypoint_id = entrypoint_id, controlaction_id=control_id, property_id=property_id, propertyvalue_id=propertyvalue_id, doc_id=doc_id, output_name=output_name)
-    resp_1 = await submit_query(request_query)
+async def request_controlaction(req_config_file='req_config1.ini'):
+    """
+    Request a control action based on the configurations in the req_config_file
+    Arguments:
+        req_config_file: The ini file with the configuration for the request to be sent. 
+    Raises:
+        ValueNotFound exception if one of the required values for the property or property value specifications is not set.
+    """
+    config = configparser.ConfigParser()
+    config.read(req_config_file)
+
+    entrypoint_id = config['EntryPoint']['ce_id']
+    controlaction_id = config['ControlAction']['ce_id']
+    num_props = int(config['ControlAction']['numprops'])
+    num_pvs = int(config['ControlAction']['numpvs'])
+    props = []
+    pvss = []
+    for i in range(num_props):
+        prop_dict = {}
+        prop = config['Property{}'.format(i+1)]
+        prop_dict['potentialActionPropertyIdentifier'] = prop['ce_id']
+        if prop['value'] == '':
+            raise VaueNotFound('potentialActionPropertyIdentifier{}'.format(1+1))
+        prop_dict['nodeIdentifier'] = prop['value']
+        prop_dict['nodeType'] = StringConstant(prop['rangeincludes'])
+        #TODO: Right now, assumes that only one value is given.
+        prop_params = make_parameters(**prop_dict)
+        props.append("{{{}}}".format(prop_params))
+
+    for i in range(num_pvs):
+        pvs_dict = {}
+        pvs = config['PropertyValueSpecification{}'.format(i+1)]
+        pvs_dict['potentialActionPropertyValueSpecificationIdentifier'] = pvs['ce_id']
+        if pvs['value'] =='' and pvs.getboolean('valuerequired'):
+            raise VaueNotFound('potentialActionPropertyValueSpecificationIdentifier{}'.format(1+1))
+        pvs_dict['value'] = pvs['value']
+        pvs_dict['valuePattern'] = StringConstant(pvs['valuepattern'])
+        pvs_params = make_parameters(**pvs_dict)
+        pvss.append("{{{}}}".format(pvs_params))
+    param_dict = {"entryPointIdentifier": entrypoint_id, "potentialActionIdentifier" : controlaction_id,\
+     "propertyObject": props, "propertyValueObject": pvss}
+    params = make_parameters(**param_dict)
+
+    params = params.replace("\\n", "\n").replace("\\","").replace("\"\"","\"").replace("\"{","{").replace("}\"","}")
+
+    query = q1.format(params=params)
+
+    resp_1 = await submit_query(query)
 
     output_id = resp_1['data']['RequestControlAction']['identifier']
 
@@ -129,29 +177,22 @@ async def main(entrypoint_id, control_id, property_id, propertyvalue_id, doc_id,
 
     status_query = q2.format(control_id=output_id)
 
+    act_status = 'accepted'
 
-    resp_2 = await submit_query(status_query)
+    while act_status == 'accepted' or act_status == 'running':
+        await asyncio.sleep(1)
 
-    act_status = {y :{"ID": x['identifier'], "Description": x['description'], 'actionStatus': x['actionStatus'], "Errors": x['error']} for y,x in enumerate(resp_2['data']['ControlAction'])}
+        resp_2 = await submit_query(status_query)
 
-    print("Results:")
+        act_status = resp_2['data']['ControlAction'][0]['actionStatus']
 
-    print_dict(act_status)
+        print("Action Status: {}".format(act_status))
+async def main(req_config_file='req_config1.ini'):
+    await request_controlaction(req_config_file)
+
+
 
 
 if __name__ == '__main__':
-    if len(sys.argv)<2 or sys.argv[1] == '-help' or sys.argv[1] == '--help' or sys.argv[1] == '--h' or sys.argv[1] == '-h':
-        print("%s --help or -h or --h or -help to see this menu" % sys.argv[0])
-        print("%s --e entrypoint_id control_id property_id propertyvalue_id doc_id output_name" % sys.argv[0])
-    elif sys.argv[1] == '-e' or sys.argv[1] == '--e' or sys.argv[1] == '--eval' or sys.argv[1] == '-eval':
-        if len(sys.argv)<3:
-            print("Please give a hdf5 file to evaluate")
-        else:
-            entrypoint_id = sys.argv[2]
-            control_id = sys.argv[3]
-            property_id = sys.argv[4]
-            propertyvalue_id = sys.argv[5]
-            doc_id = sys.argv[6]
-            output_name = sys.argv[7]
-            loop = asyncio.get_event_loop()
-            loop.run_until_complete(main(entrypoint_id, control_id, property_id, propertyvalue_id, doc_id, output_name))
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())
