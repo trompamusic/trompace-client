@@ -4,11 +4,11 @@ import aiohttp
 import asyncio
 import requests
 import aiofiles
+import trompace.config as config
 
 from trompace.exceptions import QueryException
 
-config = configparser.ConfigParser()
-config.read('import.ini')
+
 
 
 async def submit_query(querystr: str):
@@ -18,7 +18,7 @@ async def submit_query(querystr: str):
     querystr: The query to be submitted in string format. 
     """
     q = {"query": querystr}
-    server = config["import"]["server"]
+    server = config.server
     r = requests.post(server, json=q)
     try:
         r.raise_for_status()

@@ -15,14 +15,9 @@ from trompace.mutations.document import mutation_create_document, mutation_add_d
 from trompace.connection import submit_query, download_file
 from trompace.subscriptions.controlaction import subscription_controlaction
 from trompace.exceptions import QueryException
+import trompace.config as config
 
 
-from essentia.streaming import VectorInput, FrameCutter, Chromagram
-from essentia import Pool, run
-from essentia.standard import MonoLoader
-
-config = configparser.ConfigParser()
-config.read('import.ini')
 
 def get_sub_dict(query):
     payload = {"variables":{},
@@ -223,8 +218,11 @@ async def subscribe_controlaction(entrypoint_id, command_line, num_properties, n
     Establishes a websockets connection with the GraphQl database and waits for calls to the application linked to the control action
     Arguments:
         entrypoint_id: the identifier for the entry point linked to the control action to subscribe to.
+        command_line: The command line command for the application, must adhere to the standards proposed.
+        num_properties: The number of properties related to the control action.
+        num_propertyvalues: The number of property values related to the control action. 
     """
-    uri = config["import"]["uri"]
+    uri = config.uri
     is_ok = False
     subs = subscription_controlaction(entrypoint_id)
     async with websockets.connect(uri, subprotocols=['graphql-ws']) as websocket:
