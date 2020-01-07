@@ -24,26 +24,6 @@ from essentia.standard import MonoLoader
 config = configparser.ConfigParser()
 config.read('import.ini')
 
-def chroma(filename, fs=44100, frame_size=32768):
-    audio = MonoLoader(filename=filename)()
-    hop_size = frame_size // 2
-    vectorinput = VectorInput(audio)
-    framecutter = FrameCutter(frameSize=frame_size, hopSize=hop_size)
-    chromagram = Chromagram(sampleRate=fs)
-    pool = Pool()
-    vectorinput.data >> framecutter.signal
-    framecutter.frame >> chromagram.frame
-    chromagram.chromagram >> (pool, 'chromagram')
-    run(vectorinput)
-    return pool['chromagram']
-
-def print_dict(dicty):
-    if isinstance(dicty,dict):
-        for keys in dicty.keys():
-            print("{}: ".format(keys), end ="\n ")
-            print_dict(dicty[keys])
-    else:
-        print(dicty)
 def get_sub_dict(query):
     payload = {"variables":{},
     "extensions": {},
