@@ -13,8 +13,10 @@ class StringConstant:
 
     def __str__(self):
         return self.value
+
     def __repr__(self):
         return self.value
+
 
 class ListConstant:
     """Some values in GraphQL are constants, not strings, and so they shouldn't
@@ -25,14 +27,12 @@ class ListConstant:
         self.values = [StringConstant(x) for x in values]
 
 
-
-def BoolConstant(in_bool:bool):
+def BoolConstant(in_bool: bool):
     """ Converts a boolean value to a constant string value."""
     if in_bool:
         return StringConstant('true')
     else:
         return StringConstant('false')
-
 
 
 def make_parameters(**kwargs):
@@ -54,5 +54,3 @@ def make_parameters(**kwargs):
 SUBSCRIPTION = '''subscription {{
   {subscription}
 }}'''
-
-

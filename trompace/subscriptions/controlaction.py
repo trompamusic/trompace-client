@@ -3,20 +3,17 @@
 from .templates import subscription_create
 from . import StringConstant
 
-
 CONTROL_ACTION_SUBSCRIPTION = '''ControlActionRequest(
         {parameters}
     ) {{
       identifier
     }}'''
 
-
 CONTROL_ACTION_SUBSCRIPTION_CLIENT = '''ControlActionMutation(
         {parameters}
     ) {{
       identifier
     }}'''
-
 
 
 def subscription_controlaction(identifier: str):
@@ -51,4 +48,3 @@ def subscription_controlaction_client(identifier: str):
         "identifier": identifier,
     }
     return subscription_create(args, CONTROL_ACTION_SUBSCRIPTION_CLIENT)
-

@@ -8,25 +8,26 @@ import os
 
 from trompace.mutations.application import mutation_create_application, mutation_add_entrypoint_application
 from trompace.mutations.entrypoint import mutation_create_entry_point
-from trompace.mutations.controlaction import mutation_create_controlaction, mutation_add_entrypoint_controlaction, mutation_modify_controlaction
-from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, mutation_add_controlaction_propertyvaluespecification, mutation_add_controlaction_property
+from trompace.mutations.controlaction import mutation_create_controlaction, mutation_add_entrypoint_controlaction, \
+    mutation_modify_controlaction
+from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, \
+    mutation_add_controlaction_propertyvaluespecification, mutation_add_controlaction_property
 from trompace.subscriptions.controlaction import subscription_controlaction
 from trompace.mutations.document import mutation_create_document, mutation_add_digital_document_controlaction
 from trompace.connection import submit_query, download_file
-from trompace.subscriptions.controlaction import subscription_controlaction
 from trompace.exceptions import QueryException
 import trompace.config as config
 
 
-
 def get_sub_dict(query):
-    payload = {"variables":{},
-    "extensions": {},
-    "query": query}
-    message = {"id":"1",
-    "type":"start",
-    "payload": payload}
+    payload = {"variables": {},
+               "extensions": {},
+               "query": query}
+    message = {"id": "1",
+               "type": "start",
+               "payload": payload}
     return json.dumps(message)
+
 
 INIT_STR = """{"type":"connection_init","payload":{}}"""
 
@@ -92,11 +93,16 @@ QUERY_CONTROLACTION_ID = """
         }}
     }}
 """
+
+
 async def dummy_function(inputs):
     return inputs
 
-async def create_entrypointcontrolaction_CE(created_app_id, entrypoint_name, contributor, subject, description_ep, creator,\
-     source, language, actionPlatform, contentType, encodingType, formatin, control_name, description_ca, actionStatus):
+
+async def create_entrypointcontrolaction_CE(created_app_id, entrypoint_name, contributor, subject, description_ep,
+                                            creator, \
+                                            source, language, actionPlatform, contentType, encodingType, formatin,
+                                            control_name, description_ca, actionStatus):
     """
     Creates an entry point and control action in the contributor environment and linkss the two to the application. 
     Arguments:
@@ -119,8 +125,10 @@ async def create_entrypointcontrolaction_CE(created_app_id, entrypoint_name, con
 
     """
 
-    create_entrypoint_query = mutation_create_entry_point(entrypoint_name, contributor, subject, description_ep, creator,\
-     source, language, actionPlatform, contentType, encodingType, formatin)
+    create_entrypoint_query = mutation_create_entry_point(entrypoint_name, contributor, subject, description_ep,
+                                                          creator, \
+                                                          source, language, actionPlatform, contentType, encodingType,
+                                                          formatin)
     resp = await submit_query(create_entrypoint_query)
 
     created_ep_id = resp['data']['CreateEntryPoint']['identifier']
@@ -138,6 +146,7 @@ async def create_entrypointcontrolaction_CE(created_app_id, entrypoint_name, con
         raise QueryException(resp['errors'])
     return created_ep_id, created_ca_id
 
+
 async def create_property_CE(property_title, property_name, property_description, rangeIncludes, created_ca_id):
     """
     Creates a property in the contributor environment and links it to the control action.
@@ -153,7 +162,6 @@ async def create_property_CE(property_title, property_name, property_description
     create_property_query = mutation_create_property(property_title, property_name, property_description, rangeIncludes)
     resp = await submit_query(create_property_query)
 
-
     created_property_id = resp['data']['CreateProperty']['identifier']
     add_controlaction_property_query = mutation_add_controlaction_property(created_ca_id, created_property_id)
 
@@ -161,8 +169,10 @@ async def create_property_CE(property_title, property_name, property_description
 
     return created_property_id
 
-async def create_propertyvalue_CE(created_ca_id,value_name, value_description, defaultValue, valueMaxLength, valueMinLength\
-        , multipleValues, valueName, valuePattern, valueRequired ):
+
+async def create_propertyvalue_CE(created_ca_id, value_name, value_description, defaultValue, valueMaxLength,
+                                  valueMinLength \
+                                  , multipleValues, valueName, valuePattern, valueRequired):
     """
     Creates a property value specification in the controbutor environment and liks it to the control action. 
     Arguments:
@@ -178,19 +188,23 @@ async def create_propertyvalue_CE(created_ca_id,value_name, value_description, d
         valueRequired: A boolean stating if the value is required or not.
     """
 
-    create_propertyvaluespecification_query = mutation_create_propertyvaluespecification(value_name, value_description, defaultValue, valueMaxLength, valueMinLength\
-        , multipleValues, valueName, valuePattern, valueRequired)
+    create_propertyvaluespecification_query = mutation_create_propertyvaluespecification(value_name, value_description,
+                                                                                         defaultValue, valueMaxLength,
+                                                                                         valueMinLength \
+                                                                                         , multipleValues, valueName,
+                                                                                         valuePattern, valueRequired)
 
     resp = await submit_query(create_propertyvaluespecification_query)
 
     created_propertyvaluespec_id = resp['data']['CreatePropertyValueSpecification']['identifier']
-    add_propertyvalue_controlaction_query= mutation_add_controlaction_propertyvaluespecification(created_ca_id, created_propertyvaluespec_id)
+    add_propertyvalue_controlaction_query = mutation_add_controlaction_propertyvaluespecification(created_ca_id,
+                                                                                                  created_propertyvaluespec_id)
     resp = await submit_query(add_propertyvalue_controlaction_query)
     return created_propertyvaluespec_id
 
-async def create_application_CE(application_name: str, subject: str, description: str, source:str, formatin: str,\
-    language: str="en", contributor:str="UPF", creator:str= "www.upf.edu"):
 
+async def create_application_CE(application_name: str, subject: str, description: str, source: str, formatin: str, \
+                                language: str = "en", contributor: str = "UPF", creator: str = "www.upf.edu"):
     """
     Creates an application on the Contributor Environment and returns the identifier.
     Arguments:
@@ -205,7 +219,8 @@ async def create_application_CE(application_name: str, subject: str, description
 	    The identifiers for the created application.
 
     """
-    create_application_query = mutation_create_application(application_name, contributor, creator, source, subject, description, language, formatin)
+    create_application_query = mutation_create_application(application_name, contributor, creator, source, subject,
+                                                           description, language, formatin)
     resp = await submit_query(create_application_query)
 
     created_app_id = resp['data']['CreateSoftwareApplication']['identifier']
@@ -222,10 +237,11 @@ async def subscribe_controlaction(entrypoint_id, command_line, num_properties, n
         num_properties: The number of properties related to the control action.
         num_propertyvalues: The number of property values related to the control action. 
     """
-    uri = config.uri
+    websocket_port = config.websocket_port
+    print(websocket_port)
     is_ok = False
     subs = subscription_controlaction(entrypoint_id)
-    async with websockets.connect(uri, subprotocols=['graphql-ws']) as websocket:
+    async with websockets.connect(websocket_port, subprotocols=['graphql-ws']) as websocket:
         await websocket.send(INIT_STR)
         async for message in websocket:
             if message == """{"type":"connection_ack"}""":
@@ -258,12 +274,11 @@ async def handle_control_action(identifier, command_line, properties, property_v
 
     input_paths = []
 
-    format_dict = {"PropertyValue{}".format(x+1): property_values[y] for x,y in enumerate(property_values)}
-    i = 0
+    format_dict = {"PropertyValue{}".format(x + 1): property_values[y] for x, y in enumerate(property_values)}
 
-    for pro in properties:
+    for i, pro in enumerate(properties, 1):
         # TODO: Assert that the format of the file matches the required format. 
-        i+=1
+
         input_url = properties[pro]['source']
         out_path = "./{}".format(input_url.split("/")[-1])
 
@@ -274,11 +289,12 @@ async def handle_control_action(identifier, command_line, properties, property_v
         print("Downloaded File {}".format(out_path))
 
     os.system(command_line.format(**format_dict))
-    
-    #TODO: How to get the right output file name (possibly one of the property value specifications) and the right source path?
 
-    create_doc_query = mutation_create_document(property_values['outputName'], "UPF", "IPF", "www.upf.edu", "./dummy_path",
-                             "output of test algorithm", "test subject", "en")
+    # TODO: How to get the right output file name (possibly one of the property value specifications) and the right source path?
+
+    create_doc_query = mutation_create_document(property_values['outputName'], "UPF", "IPF", "www.upf.edu",
+                                                "./dummy_path",
+                                                "output of test algorithm", "test subject", "en")
     resp = await submit_query(create_doc_query)
     created_doc_id = resp['data']['CreateDigitalDocument']['identifier']
 
@@ -299,10 +315,12 @@ async def get_control_all_actions():
     """
     resp = await submit_query(QUERY_ENTRYPOINT)
 
-    entry_point_ids = {y: {"Id": x['identifier'], "Description": x['description'], x['potentialAction'][0]['__typename']+"_id": x['potentialAction'][0]['identifier']\
-    , x['potentialAction'][0]['__typename']+"_name": x['potentialAction'][0]['name']\
-        , x['potentialAction'][0]['__typename']+"_properties": {z['__typename']+'_id': z['identifier'] for z in x['potentialAction'][0]['object']}}\
-        for y,x in enumerate(resp['data']['EntryPoint'])}
+    entry_point_ids = {y: {"Id": x['identifier'], "Description": x['description'],
+                           x['potentialAction'][0]['__typename'] + "_id": x['potentialAction'][0]['identifier'] \
+        , x['potentialAction'][0]['__typename'] + "_name": x['potentialAction'][0]['name'] \
+        , x['potentialAction'][0]['__typename'] + "_properties": {z['__typename'] + '_id': z['identifier'] for z in
+                                                                  x['potentialAction'][0]['object']}} \
+                       for y, x in enumerate(resp['data']['EntryPoint'])}
 
     print("Found the following actions: ")
 
@@ -341,7 +359,3 @@ async def get_control_action_id(control_id, properties, property_values):
             raise VaueNotFound(pro)
 
     return op_pro, op_pvs
-
-
-
-

@@ -1,8 +1,9 @@
 # Generate GraphQL queries for mutations pertaining to entry points.
 from typing import List
-
+from trompace.exceptions import UnsupportedLanguageException, MimeTypeException
 from .templates import mutation_create, mutation_update, mutation_delete
 from . import StringConstant
+from ..constants import SUPPORTED_LANGUAGES
 
 CREATE_ENTRYPOINT = '''CreateEntryPoint(
         {parameters}
@@ -11,9 +12,9 @@ CREATE_ENTRYPOINT = '''CreateEntryPoint(
         }}'''
 
 
-
-def mutation_create_entry_point(name: str, contributor: str, subject:str,
-                           description: str, creator: str, source:str, language: str, actionPlatform:str, contentType: List, encodingType: list, formatin="html", identifier=None):
+def mutation_create_entry_point(name: str, contributor: str, subject: str,
+                                description: str, creator: str, source: str, language: str, actionPlatform: str,
+                                contentType: List, encodingType: list, formatin="text/html", identifier=None):
     """Returns a mutation for creating an entry point object
     Arguments:
         name: The name of the entry point.
@@ -29,12 +30,18 @@ def mutation_create_entry_point(name: str, contributor: str, subject:str,
         The string for the mutation for creating the artist.
     Raises:
         Assertion error if the input language is not one of the supported languages.
-    TODO:
-        Assert that content type and encoding type are mimetypes
     """
-    # assert "/" in formatin, "Please provide a valid mimetype for format"
-    # assert all("/" in x for x in contentType), "Please provide a valid mimetype for contentType"
-    # assert all("/" in x for x in encodingType), "Please provide a valid mimetype for encodingType"
+    if language not in SUPPORTED_LANGUAGES:
+        raise UnsupportedLanguageException(language)
+    if "/" not in formatin:
+        raise MimeTypeException(formatin)
+    if not all("/" in x for x in contentType):
+        missing_list = [x for x in contentType if "/" not in x]
+        raise MimeTypeException(missing_list)
+    if not all("/" in x for x in encodingType):
+        missing_list = [x for x in encodingType if "/" not in x]
+        raise MimeTypeException(missing_list)
+
     args = {
         "title": name,
         "name": name,
@@ -52,5 +59,3 @@ def mutation_create_entry_point(name: str, contributor: str, subject:str,
     if identifier:
         args["identifier"] = identifier
     return mutation_create(args, CREATE_ENTRYPOINT)
-
-

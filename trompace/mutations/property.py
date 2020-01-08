@@ -4,7 +4,6 @@ from typing import List
 from .templates import mutation_create, mutation_update, mutation_delete, mutation_link
 from . import StringConstant
 
-
 CREATE_PROPERTY = '''CreateProperty(
         {parameters}
         ) {{
@@ -17,7 +16,7 @@ CREATE_PROPERTYVALUESPECIFICATION = '''CreatePropertyValueSpecification(
       identifier
     }}'''
 
-ADD_CONTROLACTION_PROPERTYVALUESPECIFICATION  = '''AddActionInterfaceThingInterface(
+ADD_CONTROLACTION_PROPERTYVALUESPECIFICATION = '''AddActionInterfaceThingInterface(
     from: {{identifier: "{identifier_1}", type: ControlAction}}
     to: {{identifier: "{identifier_2}", type: PropertyValueSpecification}}
     field: object
@@ -33,7 +32,7 @@ ADD_CONTROLACTION_PROPERTYVALUESPECIFICATION  = '''AddActionInterfaceThingInterf
       }}
     }}'''
 
-ADD_CONTROLACTION_PROPERTY  = '''AddActionInterfaceThingInterface(
+ADD_CONTROLACTION_PROPERTY = '''AddActionInterfaceThingInterface(
     from: {{identifier: "{identifier_1}", type: ControlAction}}
     to: {{identifier: "{identifier_2}", type: Property}}
     field: object
@@ -48,6 +47,7 @@ ADD_CONTROLACTION_PROPERTY  = '''AddActionInterfaceThingInterface(
         }}
       }}
     }}'''
+
 
 def mutation_create_property(title: str, name: str, description: str, rangeIncludes: List[StringConstant]):
     """Returns a mutation for creating a property
@@ -69,8 +69,11 @@ def mutation_create_property(title: str, name: str, description: str, rangeInclu
     }
     return mutation_create(args, CREATE_PROPERTY)
 
-def mutation_create_propertyvaluespecification(name: str, description: str, defaultValue: str, valueMaxLength: int, valueMinLength: int
-    , multipleValues: bool, valueName: str, valuePattern: str, valueRequired: bool):
+
+def mutation_create_propertyvaluespecification(name: str, description: str, defaultValue: str, valueMaxLength: int,
+                                               valueMinLength: int
+                                               , multipleValues: bool, valueName: str, valuePattern: str,
+                                               valueRequired: bool):
     """Returns a mutation for creating a property value specification
     Each PropertyValueSpecification defines a scalar input parameter that the Component user should be prompted with when preparing
     the request for an algorithm process job. There are numerous properties that can be used to set requirements, type and limits for a scalar parameter.
@@ -104,6 +107,7 @@ def mutation_create_propertyvaluespecification(name: str, description: str, defa
     }
     return mutation_create(args, CREATE_PROPERTYVALUESPECIFICATION)
 
+
 def mutation_add_controlaction_propertyvaluespecification(controlaction_id: str, propertyvaluespecification_id: str):
     """Returns a mutation for adding a control action to a property value specification.
     Arguments:
@@ -114,6 +118,7 @@ def mutation_add_controlaction_propertyvaluespecification(controlaction_id: str,
     """
 
     return mutation_link(controlaction_id, propertyvaluespecification_id, ADD_CONTROLACTION_PROPERTYVALUESPECIFICATION)
+
 
 def mutation_add_controlaction_property(controlaction_id: str, property_id: str):
     """Returns a mutation for adding a control action to a property value specification.

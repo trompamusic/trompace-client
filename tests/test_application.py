@@ -15,7 +15,8 @@ class TestApplication(unittest.TestCase):
     def test_create(self):
         expected = util.read_file(self.data_dir, "EXPECTED_APPLICATION.txt")
 
-        created_application = mutation_create_application("Verovio MusicXML Converter", contributor="https://www.verovio.org",
+        created_application = mutation_create_application("Verovio MusicXML Converter",
+                                                          contributor="https://www.verovio.org",
                                                           creator="Verovio",
                                                           source="https://github.com/rism-ch/verovio",
                                                           subject="Music notation engraving library for MEI with MusicXML,Humdrum support, toolkits, JavaScript, Python",

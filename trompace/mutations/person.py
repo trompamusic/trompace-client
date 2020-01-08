@@ -1,5 +1,5 @@
 # Generate GraphQL queries for mutations pertaining to persons/artists objects.
-from trompace.exceptions import UnsupportedLanguageException
+from trompace.exceptions import UnsupportedLanguageException, MimeTypeException
 from .templates import mutation_create, mutation_update, mutation_delete
 from . import StringConstant
 from ..constants import SUPPORTED_LANGUAGES
@@ -24,7 +24,7 @@ DELETE_PERSON = '''DeletePerson(
 
 
 def mutation_create_artist(artist_name: str, publisher: str, contributor: str, creator: str, source: str,
-                           description: str, language: str, formatin = "text/html", coverage=None, date=None,
+                           description: str, language: str, formatin="text/html", coverage=None, date=None,
                            disambiguatingDescription=None, relation=None, _type=None, _searchScore=None,
                            additionalType=None, alternateName=None, image=None, sameAs=None, url=None,
                            additionalName=None,
@@ -72,7 +72,8 @@ def mutation_create_artist(artist_name: str, publisher: str, contributor: str, c
     if language not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
 
-    assert "/" in formatin, "Please provide a valid mimetype for format"
+    if "/" not in formatin:
+        raise MimeTypeException(formatin)
 
     args = {
         "title": artist_name,

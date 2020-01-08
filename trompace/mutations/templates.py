@@ -2,7 +2,6 @@
 
 from . import StringConstant, make_parameters, MUTATION
 
-
 # To be added EntryPoint, ControlAction, PropertyValueSpecification and Property
 from trompace.exceptions import UnsupportedLanguageException
 from ..constants import SUPPORTED_LANGUAGES

@@ -9,7 +9,8 @@ from trompace.mutations import StringConstant
 from trompace.mutations.application import mutation_create_application, mutation_add_entrypoint_application
 from trompace.mutations.entrypoint import mutation_create_entry_point
 from trompace.mutations.controlaction import mutation_create_controlaction, mutation_add_entrypoint_controlaction
-from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, mutation_add_controlaction_propertyvaluespecification, mutation_add_controlaction_property
+from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, \
+    mutation_add_controlaction_propertyvaluespecification, mutation_add_controlaction_property
 from trompace.subscriptions.controlaction import subscription_controlaction
 from trompace.connection import submit_query
 
@@ -63,13 +64,11 @@ async def main():
     i = 1
 
     for ep in resp_p2['data']['EntryPoint']:
-        
 
         ap_dict = {}
         ap_dict['ce_id'] = ep['identifier']
         ap_dict['title'] = ep['title']
         ap_dict['description'] = ep['description']
-
 
         for ca in ep['potentialAction']:
             parser = configparser.ConfigParser()
@@ -95,7 +94,8 @@ async def main():
                     pro_dict['title'] = obj['title']
                     pro_dict['value'] = ''
                     pro_dict['description'] = obj['description']
-                    pro_dict['rangeIncludes'] = str(obj['rangeIncludes']).replace('[','').replace(']','').replace('\'','')
+                    pro_dict['rangeIncludes'] = str(obj['rangeIncludes']).replace('[', '').replace(']', '').replace(
+                        '\'', '')
                     props.append(pro_dict)
             ca_dict['numprops'] = str(len(props))
             ca_dict['numpvs'] = str(len(pvs))
@@ -109,18 +109,18 @@ async def main():
                 parser.set('ControlAction', key, ca_dict[key])
 
             for j in range(len(props)):
-                parser.add_section('Property{}'.format(j+1))
+                parser.add_section('Property{}'.format(j + 1))
                 for key in props[j].keys():
-                    parser.set('Property{}'.format(j+1), key, props[j][key])
+                    parser.set('Property{}'.format(j + 1), key, props[j][key])
 
             for j in range(len(pvs)):
-                parser.add_section('PropertyValueSpecification{}'.format(j+1))
+                parser.add_section('PropertyValueSpecification{}'.format(j + 1))
                 for key in pvs[j].keys():
-                    parser.set('PropertyValueSpecification{}'.format(j+1), key, pvs[j][key])
-                    
+                    parser.set('PropertyValueSpecification{}'.format(j + 1), key, pvs[j][key])
+
             with open('req_config{}.ini'.format(i), 'w') as f:
                 parser.write(f)
-            i+=1
+            i += 1
 
 
 if __name__ == "__main__":

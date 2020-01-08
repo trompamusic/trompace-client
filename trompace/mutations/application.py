@@ -1,5 +1,5 @@
 # Generate GraphQL queries for mutations pertaining to software applications.
-from trompace.exceptions import UnsupportedLanguageException
+from trompace.exceptions import UnsupportedLanguageException, MimeTypeException
 from .templates import mutation_create, mutation_update, mutation_delete, mutation_link
 from . import StringConstant
 from ..constants import SUPPORTED_LANGUAGES
@@ -9,7 +9,6 @@ CREATE_APPLICATION = '''CreateSoftwareApplication(
         ) {{
           identifier
         }}'''
-
 
 ADD_ENTRYPOINT_APPLICATION = '''AddEntryPointActionApplication(
         from: {{identifier: "{identifier_1}"}}
@@ -24,9 +23,8 @@ ADD_ENTRYPOINT_APPLICATION = '''AddEntryPointActionApplication(
     }}'''
 
 
-
-def mutation_create_application(application_name: str, contributor: str, creator: str, source: str, subject:str,
-                           description: str, language: str, formatin = "html", identifier=None):
+def mutation_create_application(application_name: str, contributor: str, creator: str, source: str, subject: str,
+                                description: str, language: str, formatin="html/text", identifier=None):
     """Returns a mutation for creating a software application object
     Arguments:
         application_name: The name of the software application.
@@ -40,11 +38,13 @@ def mutation_create_application(application_name: str, contributor: str, creator
         The string for the mutation for creating the artist.
     Raises:
         UnsupportedLanguageException if the input language is not one of the supported languages.
+        MimeTypeException if the formatin is not a mimetype. 
     """
 
     if language not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
-    # assert "/" in formatin, "Please provide a valid mimetype for format"
+    if "/" not in formatin:
+        raise MimeTypeException(formatin)
 
     args = {
         "title": application_name,
@@ -72,5 +72,3 @@ def mutation_add_entrypoint_application(application_id: str, entrypoint_id: str)
     """
 
     return mutation_link(entrypoint_id, application_id, ADD_ENTRYPOINT_APPLICATION)
-
-

@@ -18,7 +18,8 @@ class TestProperty(unittest.TestCase):
         expected = util.read_file(self.data_dir, "EXPECTED_PROPERTY.txt")
 
         created_property = mutation_create_property("MusicXML file", "targetFile",
-                                                    "Select a MusicXML file to be converted.", [StringConstant("DigitalDocument")])
+                                                    "Select a MusicXML file to be converted.",
+                                                    [StringConstant("DigitalDocument")])
         self.assertEqual(created_property, expected)
 
     def test_create_propertyvaluespecification(self):

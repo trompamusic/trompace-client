@@ -1,5 +1,5 @@
 # Generate GraphQL queries for mutations pertaining to digital document objects.
-from trompace.exceptions import UnsupportedLanguageException
+from trompace.exceptions import UnsupportedLanguageException, MimeTypeException
 from .templates import mutation_create, mutation_delete, mutation_update, mutation_link
 from . import StringConstant
 
@@ -109,7 +109,8 @@ def mutation_create_document(document_name: str, publisher: str, contributor: st
     if language not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
 
-    assert "/" in formatin, "Please provide a valid mimetype for format"
+    if "/" not in formatin:
+        raise MimeTypeException(formatin)
 
     args = {
         "title": document_name,
@@ -124,8 +125,6 @@ def mutation_create_document(document_name: str, publisher: str, contributor: st
         "language": StringConstant(language.lower()),
     }
     return mutation_create(args, CREATE_DIGITAL_DOCUMENT)
-
-
 
 
 def mutation_update_document(identifier: str, document_name=None, publisher=None, contributor=None, creator=None,
@@ -196,6 +195,7 @@ def mutation_add_digital_document_subject_of_composition(document_id: str, compo
 
     return mutation_link(document_id, composition_id, ADD_DIGITAL_DOCUMENT_SUBJECT_OF_COMPOSITION)
 
+
 def mutation_add_digital_document_controlaction(document_id: str, controlaction_id: str):
     """Returns a mutation for adding a digital document as a subject of a composition.
     Arguments:
@@ -206,6 +206,7 @@ def mutation_add_digital_document_controlaction(document_id: str, controlaction_
     """
 
     return mutation_link(document_id, controlaction_id, ADD_DIGITAL_DOCUMENT_TO_CONTROL_ACTION_MUTATION)
+
 
 def mutation_remove_digital_document_subject_of_composition(document_id: str, composition_id: str):
     """Returns a mutation for removing a digital document as a subject of a composition.
