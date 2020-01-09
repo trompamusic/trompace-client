@@ -1,0 +1,16 @@
+mutation {
+  CreatePropertyValueSpecification(
+        name: "Result name"
+        title: "Result name"
+        description: "What name would you like to give."
+        defaultValue: ""
+        valueMaxLength: 100
+        valueMinLength: 4
+        multipleValues: false
+        valueName: "resultName"
+        valuePattern: String
+        valueRequired: true
+        ) {
+      identifier
+    }
+}

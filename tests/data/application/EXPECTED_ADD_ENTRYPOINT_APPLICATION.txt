@@ -1,0 +1,13 @@
+mutation {
+  AddEntryPointActionApplication(
+        from: {identifier: "59ce8093-5e0e-4d59-bfa6-805edb11e396"}
+        to: {identifier: "2eeca6dd-c62c-490e-beb0-2e3899fca74f"}
+        ){
+        from {
+                identifier
+        }
+        to {
+                identifier
+        }
+    }
+}

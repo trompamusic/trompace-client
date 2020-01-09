@@ -1,97 +1,95 @@
 # Generate GraphQL queries for mutations pertaining to digital document objects.
-
+from trompace.exceptions import UnsupportedLanguageException, MimeTypeException
 from .templates import mutation_create, mutation_delete, mutation_update, mutation_link
+from . import StringConstant
 
 # We say that 2 different scores of the same thing are a broad match
-ADD_DIGITAL_DOCUMENT_BROAD_MATCH = '''
-AddDigitalDocumentBroadMatch(
-  from: {{identifier: "{identifier_1}" }}
-  to: {{identifier: "{identifier_2}" }}
-) {{
-  from {{
-    identifier
-  }}
-  to {{
-    identifier
-  }}
-}}
-'''
+from ..constants import SUPPORTED_LANGUAGES
 
-REMOVE_DIGITAL_DOCUMENT_BROAD_MATCH = '''
-RemoveDigitalDocumentBroadMatch(
-  from: {{identifier: "{identifier_1}" }}
-  to: {{identifier: "{identifier_2}" }}
-) {{
-  from {{
-    identifier
-  }}
-  to {{
-    identifier
-  }}
-}}
-'''
+ADD_DIGITAL_DOCUMENT_BROAD_MATCH = '''AddDigitalDocumentBroadMatch(
+    from: {{identifier: "{identifier_1}" }}
+    to: {{identifier: "{identifier_2}" }}
+  ) {{
+    from {{
+      identifier
+    }}
+    to {{
+      identifier
+    }}
+  }}'''
 
-ADD_DIGITAL_DOCUMENT_SUBJECT_OF_COMPOSITION = '''
-AddThingInterfaceCreativeWorkInterface(
+REMOVE_DIGITAL_DOCUMENT_BROAD_MATCH = '''RemoveDigitalDocumentBroadMatch(
+    from: {{identifier: "{identifier_1}" }}
+    to: {{identifier: "{identifier_2}" }}
+  ) {{
+    from {{
+      identifier
+    }}
+    to {{
+      identifier
+    }}
+  }}'''
+
+ADD_DIGITAL_DOCUMENT_SUBJECT_OF_COMPOSITION = '''AddThingInterfaceCreativeWorkInterface(
     from: {{identifier: "{identifier_1}" type:DigitalDocument}}
     to: {{identifier: "{identifier_2}" type:MusicComposition}}
     field: subjectOf
-) {{
-    from {{
-      __typename
-    }}
-    to {{
-      __typename
-    }}
-}}
-'''
+  ) {{
+      from {{
+        __typename
+      }}
+      to {{
+        __typename
+      }}
+  }}'''
 
-REMOVE_DIGITAL_DOCUMENT_SUBJECT_OF_COMPOSITION = '''
-RemoveThingInterfaceCreativeWorkInterface(
+REMOVE_DIGITAL_DOCUMENT_SUBJECT_OF_COMPOSITION = '''RemoveThingInterfaceCreativeWorkInterface(
     from: {{identifier: "{identifier_1}" type:DigitalDocument}}
     to: {{identifier: "{identifier_2}" type:MusicComposition}}
     field: subjectOf
-) {{
-    from {{
-      __typename
-    }}
-    to {{
-      __typename
-    }}
-}}
-'''
+  ) {{
+      from {{
+        __typename
+      }}
+      to {{
+        __typename
+      }}
+  }}'''
 
-CREATE_DIGITAL_DOCUMENT = '''
-CreateDigitalDocument(
-  {parameters}
+CREATE_DIGITAL_DOCUMENT = '''CreateDigitalDocument(
+        {parameters}
+  ) {{
+    identifier
+  }}'''
+
+UPDATE_DIGITAL_DOCUMENT = '''UpdateDigitalDocument(
+        {parameters}
 ) {{
   identifier
-  relation
-  name
-}}
-'''
+}}'''
 
-UPDATE_DIGITAL_DOCUMENT = '''
-UpdateDigitalDocument(
-  {parameters}
-) {{
-  identifier
-  relation
-}}
-'''
+DELETE_DIGITAL_DOCUMENT = '''DeleteDigitalDocument(
+    {parameters}
+  ) {{
+    identifier
+  }}'''
 
-DELETE_DIGITAL_DOCUMENT = '''
-DeleteDigitalDocument(
-  {parameters}
-) {{
-  identifier
-  name
-}}
-'''
+ADD_DIGITAL_DOCUMENT_TO_CONTROL_ACTION_MUTATION = """AddActionInterfaceThingInterface (
+            from: {{identifier: "{identifier_2}", type: ControlAction}}
+            to: {{identifier: "{identifier_1}", type: DigitalDocument}}
+            field: result
+        ) {{
+            from {{
+                __typename
+            }}
+            to {{
+                __typename
+            }}
+        }}"""
 
 
 def mutation_create_document(document_name: str, publisher: str, contributor: str, creator: str, source: str,
-                             description: str, subject: str, language: str):
+                             description: str, subject: str, language: str, formatin="text/html"):
     """Returns a mutation for creating a digital document object
     Arguments:
         document_name: The name of the digital document.
@@ -106,10 +104,27 @@ def mutation_create_document(document_name: str, publisher: str, contributor: st
     Returns:
         The string for the mutation for creating the document object.
     Raises:
-        Assertion error if the input language is not one of the supported languages.
+        UnsupportedLanguageException if the input language is not one of the supported languages.
     """
-    return mutation_create(document_name, publisher, contributor, creator, source, description, language, subject,
-                           CREATE_DIGITAL_DOCUMENT)
+    if language not in SUPPORTED_LANGUAGES:
+        raise UnsupportedLanguageException(language)
+
+    if "/" not in formatin:
+        raise MimeTypeException(formatin)
+
+    args = {
+        "title": document_name,
+        "name": document_name,
+        "publisher": publisher,
+        "contributor": contributor,
+        "creator": creator,
+        "source": source,
+        "subject": subject,
+        "description": description,
+        "format": formatin,
+        "language": StringConstant(language.lower()),
+    }
+    return mutation_create(args, CREATE_DIGITAL_DOCUMENT)
 
 
 def mutation_update_document(identifier: str, document_name=None, publisher=None, contributor=None, creator=None,
@@ -179,6 +194,18 @@ def mutation_add_digital_document_subject_of_composition(document_id: str, compo
     """
 
     return mutation_link(document_id, composition_id, ADD_DIGITAL_DOCUMENT_SUBJECT_OF_COMPOSITION)
+
+
+def mutation_add_digital_document_controlaction(document_id: str, controlaction_id: str):
+    """Returns a mutation for adding a digital document as a subject of a composition.
+    Arguments:
+        document_id: The unique identifier of the digital document object.
+        composition_id: The unique identifier of the composition object.
+    Returns:
+        The string for the mutation for adding the document as a subject of the composition.
+    """
+
+    return mutation_link(document_id, controlaction_id, ADD_DIGITAL_DOCUMENT_TO_CONTROL_ACTION_MUTATION)
 
 
 def mutation_remove_digital_document_subject_of_composition(document_id: str, composition_id: str):

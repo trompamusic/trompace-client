@@ -1,79 +1,66 @@
 # Generate GraphQL queries for mutations pertaining to musical compositions and works related objects.
-
+from trompace.exceptions import UnsupportedLanguageException, MimeTypeException
 from .templates import mutation_create, mutation_update, mutation_delete, mutation_link
+from . import StringConstant
+from ..constants import SUPPORTED_LANGUAGES
 
-CREATE_MUSIC_COMPOSITION = '''
-CreateMusicComposition(
-  {parameters}
-) {{
-  identifier
-  name
-  relation
-}}
-'''
+CREATE_MUSIC_COMPOSITION = '''CreateMusicComposition(
+        {parameters}
+    ) {{
+      identifier
+  }}'''
 
-UPDATE_MUSIC_COMPOSITION = '''
-UpdateMusicComposition(
-  {parameters}
-) {{
-  identifier
-  name
-  relation
-}}
-'''
+UPDATE_MUSIC_COMPOSITION = '''UpdateMusicComposition(
+        {parameters}
+    ) {{
+      identifier
+  }}'''
 
-DELETE_MUSIC_COMPOSITION = '''
-DeleteMusicComposition(
-  {parameters}
-) {{
-  identifier
-  name
-}}
-'''
+DELETE_MUSIC_COMPOSITION = '''DeleteMusicComposition(
+    {parameters}
+    ) {{
+      identifier
+  }}'''
 
-ADD_COMPOSITION_AUTHOR = '''
-AddCreativeWorkInterfaceLegalPerson(
+ADD_COMPOSITION_AUTHOR = '''AddCreativeWorkInterfaceLegalPerson(
   from: {{identifier: "{identifier_1}" type:MusicComposition}}
   to: {{identifier: "{identifier_2}" type: Person}}
   field: author 
-)
-{{
-    from {{
-        ... on CreativeWork {{
-            identifier, contributor
+  )
+  {{
+      from {{
+          ... on CreativeWork {{
+              identifier
+      }}
     }}
-  }}
-  to {{
-        ... on Person {{
-            identifier, contributor
+    to {{
+          ... on Person {{
+              identifier
+      }}
     }}
-  }}
-}}
-'''
+  }}'''
 
-REMOVE_COMPOSITION_AUTHOR = '''
-RemoveCreativeWorkInterfaceLegalPerson(
+REMOVE_COMPOSITION_AUTHOR = '''RemoveCreativeWorkInterfaceLegalPerson(
   from: {{identifier: "{identifier_1}" type:MusicComposition}}
   to: {{identifier: "{identifier_2}" type: Person}}
   field: author 
-)
-{{
-    from {{
-        ... on CreativeWork {{
-            identifier, contributor
+  )
+  {{
+      from {{
+          ... on CreativeWork {{
+              identifier
+      }}
     }}
-  }}
-  to {{
-        ... on Person {{
-            identifier, contributor
+    to {{
+          ... on Person {{
+              identifier
+      }}
     }}
-  }}
-}}
-'''
+  }}'''
 
 
 def mutation_create_composition(composition_name: str, publisher: str, contributor: str, creator: str, source: str,
-                                description: str, subject: str, language: str):
+                                description: str, subject: str, language: str, formatin="text/html"):
     """Returns a mutation for creating a digital document object
     Arguments:
         comosition_name: The name of the comnposition.
@@ -88,10 +75,27 @@ def mutation_create_composition(composition_name: str, publisher: str, contribut
     Returns:
         The string for the mutation for creating the artist.
     Raises:
-        Assertion error if the input language is not one of the supported languages.
+        UnsupportedLanguageException if the input language is not one of the supported languages.
     """
-    return mutation_create(composition_name, publisher, contributor, creator, source, description, language, subject,
-                           CREATE_MUSIC_COMPOSITION)
+    if language not in SUPPORTED_LANGUAGES:
+        raise UnsupportedLanguageException(language)
+
+    if "/" not in formatin:
+        raise MimeTypeException(formatin)
+
+    args = {
+        "title": composition_name,
+        "name": composition_name,
+        "publisher": publisher,
+        "contributor": contributor,
+        "creator": creator,
+        "source": source,
+        "subject": subject,
+        "description": description,
+        "format": formatin,
+        "language": StringConstant(language.lower()),
+    }
+    return mutation_create(args, CREATE_MUSIC_COMPOSITION)
 
 
 def mutation_update_composition(identifier: str, composition_name=None, publisher=None, contributor=None, creator=None,

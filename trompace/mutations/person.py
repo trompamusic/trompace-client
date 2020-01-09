@@ -1,37 +1,30 @@
 # Generate GraphQL queries for mutations pertaining to persons/artists objects.
-
+from trompace.exceptions import UnsupportedLanguageException, MimeTypeException
 from .templates import mutation_create, mutation_update, mutation_delete
+from . import StringConstant
+from ..constants import SUPPORTED_LANGUAGES
 
-CREATE_PERSON = '''
-CreatePerson(
-{parameters}
-) {{
-  identifier
-  name
-}}
-'''
+CREATE_PERSON = '''CreatePerson(
+        {parameters}
+    ) {{
+      identifier
+    }}'''
 
-UPDATE_PERSON = '''
-UpdatePerson(
-  {parameters}
-) {{
-  identifier
-  relation
-}}
-'''
+UPDATE_PERSON = '''UpdatePerson(
+      {parameters}
+    ) {{
+      identifier
+    }}'''
 
-DELETE_PERSON = '''
-DeletePerson(
-  {parameters}
-) {{
-  identifier
-  name
-}}
-'''
+DELETE_PERSON = '''DeletePerson(
+      {parameters}
+    ) {{
+      identifier
+    }}'''
 
 
 def mutation_create_artist(artist_name: str, publisher: str, contributor: str, creator: str, source: str,
-                           description: str, language: str, coverage=None, date=None,
+                           description: str, language: str, formatin="text/html", coverage=None, date=None,
                            disambiguatingDescription=None, relation=None, _type=None, _searchScore=None,
                            additionalType=None, alternateName=None, image=None, sameAs=None, url=None,
                            additionalName=None,
@@ -73,15 +66,71 @@ def mutation_create_artist(artist_name: str, publisher: str, contributor: str, c
     Returns:
         The string for the mutation for creating the artist.
     Raises:
-        Assertion error if the input language is not one of the supported languages.
+        UnsupportedLanguageException if the input language is not one of the supported languages.
     """
 
-    return mutation_create(artist_name, publisher, contributor, creator, source, description, language, "artist",
-                           CREATE_PERSON, coverage, date,
-                           disambiguatingDescription, relation, _type, _searchScore, additionalType, alternateName,
-                           image, sameAs, url, additionalName,
-                           award, birthDate, deathDate, familyName, gender, givenName, honorificPrefix, honorificSuffix,
-                           jobTitle, knowsLanguage)
+    if language not in SUPPORTED_LANGUAGES:
+        raise UnsupportedLanguageException(language)
+
+    if "/" not in formatin:
+        raise MimeTypeException(formatin)
+
+    args = {
+        "title": artist_name,
+        "name": artist_name,
+        "publisher": publisher,
+        "contributor": contributor,
+        "creator": creator,
+        "source": source,
+        "subject": "artist",
+        "description": description,
+        "format": formatin,
+        "language": StringConstant(language.lower()),
+    }
+    if coverage:
+        args["coverage"] = coverage
+    if date:
+        args["date"] = date
+    if disambiguatingDescription:
+        args["disambiguatingDescription"] = disambiguatingDescription
+    if relation:
+        args["relation"] = relation
+    if _type:
+        args["type"] = _type
+    if _searchScore:
+        args["_searchScore"] = _searchScore
+    if additionalType:
+        args["additionalType"] = additionalType
+    if alternateName:
+        args["alternateName"] = alternateName
+    if image:
+        args["image"] = image
+    if sameAs:
+        args["sameAs"] = sameAs
+    if url:
+        args["url"] = url
+    if additionalName:
+        args["additionalName"] = additionalName
+    if award:
+        args["award"] = award
+    if birthDate:
+        args["birthDate"] = birthDate
+    if deathDate:
+        args["deathDate"] = deathDate
+    if familyName:
+        args["familyName"] = familyName
+    if gender:
+        args["gender"] = gender
+    if honorificPrefix:
+        args["honorificPrefix"] = honorificPrefix
+    if honorificSuffix:
+        args["honorificSuffix"] = honorificSuffix
+    if jobTitle:
+        args["jobTitle"] = jobTitle
+    if knowsLanguage:
+        args["knowsLanguage"] = knowsLanguage
+
+    return mutation_create(args, CREATE_PERSON)
 
 
 def mutation_update_artist(identifier: str, artist_name=None, publisher=None, contributor=None, creator=None,

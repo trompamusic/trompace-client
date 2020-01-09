@@ -1,2 +1,6 @@
 requests
 pytest
+asyncio
+aiohttp
+websockets
+aiofiles

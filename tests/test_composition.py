@@ -2,7 +2,8 @@
 import os
 import unittest
 
-from trompace.mutations.work import mutation_create_composition, mutation_update_composition, mutation_delete_composition, \
+from trompace.mutations.work import mutation_create_composition, mutation_update_composition, \
+    mutation_delete_composition, \
     mutation_add_composition_author, mutation_remove_composition_author
 from tests import util
 
@@ -47,4 +48,5 @@ class TestComposition(unittest.TestCase):
 
         created_remove_composer = mutation_remove_composition_author('2eeca6dd-c62c-490e-beb0-2e3899fca74f',
                                                                      '59ce8093-5e0e-4d59-bfa6-805edb11e396')
+        print(created_remove_composer)
         self.assertEqual(created_remove_composer, expected)

@@ -1,12 +1,8 @@
-
 mutation {
-  
-UpdatePerson(
-  identifier: "2eeca6dd-c62c-490e-beb0-2e3899fca74f"
-publisher: "Https://www.cpdl.org"
-) {
-  identifier
-  relation
-}
-
+  UpdatePerson(
+      identifier: "2eeca6dd-c62c-490e-beb0-2e3899fca74f"
+        publisher: "Https://www.cpdl.org"
+    ) {
+      identifier
+    }
 }
