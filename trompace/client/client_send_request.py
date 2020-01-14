@@ -1,18 +1,13 @@
 import asyncio
-import websockets
-import json
-import sys
 import configparser
+import json
 
-from trompace.mutations import StringConstant, make_parameters
-from trompace.mutations.application import mutation_create_application, mutation_add_entrypoint_application
-from trompace.mutations.entrypoint import mutation_create_entry_point
-from trompace.mutations.controlaction import mutation_create_controlaction, mutation_add_entrypoint_controlaction
-from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, \
-    mutation_add_controlaction_propertyvaluespecification, mutation_add_controlaction_property
-from trompace.subscriptions.controlaction import subscription_controlaction_client
+import websockets
+
 from trompace.connection import submit_query
 from trompace.exceptions import VaueNotFound
+from trompace.mutations import StringConstant, make_parameters
+from trompace.subscriptions.controlaction import subscription_controlaction_client
 
 INIT_STR = """{"type":"connection_init","payload":{}}"""
 
@@ -128,7 +123,7 @@ async def request_controlaction(req_config_file='req_config1.ini'):
     """
     Request a control action based on the configurations in the req_config_file
     Arguments:
-        req_config_file: The ini file with the configuration for the request to be sent. 
+        req_config_file: The ini file with the configuration for the request to be sent.
     Raises:
         ValueNotFound exception if one of the required values for the property or property value specifications is not set.
     """

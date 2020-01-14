@@ -1,6 +1,6 @@
 # Templates for generate GraphQL queries for mutations.
 
-from . import StringConstant, make_parameters, SUBSCRIPTION
+from . import make_parameters, SUBSCRIPTION
 
 
 # To be added EntryPoint, ControlAction, PropertyValueSpecification and Property

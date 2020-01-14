@@ -1,7 +1,6 @@
 # Generate GraphQL queries for mutations pertaining to control actions.
 
 from .templates import subscription_create
-from . import StringConstant
 
 CONTROL_ACTION_SUBSCRIPTION = '''ControlActionRequest(
         {parameters}

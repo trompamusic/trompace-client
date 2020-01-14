@@ -1,8 +1,8 @@
 # Generate GraphQL queries for mutations pertaining to properties..
 from typing import List
 
-from .templates import mutation_create, mutation_update, mutation_delete, mutation_link
 from . import StringConstant
+from .templates import mutation_create, mutation_link
 
 CREATE_PROPERTY = '''CreateProperty(
         {parameters}

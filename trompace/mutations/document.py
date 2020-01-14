@@ -1,8 +1,7 @@
 # Generate GraphQL queries for mutations pertaining to digital document objects.
 from trompace.exceptions import UnsupportedLanguageException, MimeTypeException
-from .templates import mutation_create, mutation_delete, mutation_update, mutation_link
 from . import StringConstant
-
+from .templates import mutation_create, mutation_delete, mutation_update, mutation_link
 # We say that 2 different scores of the same thing are a broad match
 from ..constants import SUPPORTED_LANGUAGES
 

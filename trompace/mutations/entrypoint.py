@@ -1,8 +1,9 @@
 # Generate GraphQL queries for mutations pertaining to entry points.
 from typing import List
+
 from trompace.exceptions import UnsupportedLanguageException, MimeTypeException
-from .templates import mutation_create, mutation_update, mutation_delete
 from . import StringConstant
+from .templates import mutation_create
 from ..constants import SUPPORTED_LANGUAGES
 
 CREATE_ENTRYPOINT = '''CreateEntryPoint(

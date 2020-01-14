@@ -1,25 +1,13 @@
 # Create the applications with the specifications in the config file
 
-import asyncio
-import websockets
-import json
-import configparser
 import argparse
+import asyncio
+import configparser
 
-from trompace.mutations import StringConstant
-from trompace.mutations.application import mutation_create_application, mutation_add_entrypoint_application
-from trompace.mutations.entrypoint import mutation_create_entry_point
-from trompace.mutations.controlaction import mutation_create_controlaction, mutation_add_entrypoint_controlaction
-from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, \
-    mutation_add_controlaction_propertyvaluespecification, mutation_add_controlaction_property
-from trompace.subscriptions.controlaction import subscription_controlaction
-from trompace.connection import submit_query
 from trompace.application.application import create_entrypointcontrolaction_CE, create_property_CE, \
     create_propertyvalue_CE, create_application_CE, subscribe_controlaction
 from trompace.exceptions import IDNotFoundException, ConfigRequirementException
 from trompace.mutations import StringConstant
-from trompace.subscriptions.controlaction import subscription_controlaction
-from trompace.connection import submit_query
 
 
 async def main(app_config_file, ep_config_file):
@@ -30,10 +18,10 @@ async def main(app_config_file, ep_config_file):
 
 async def create_application(app_config_file='app_config.ini'):
     """
-    Creates an application in the contributor environment based on the settings in the app_config_file. 
-    Checks if the 
+    Creates an application in the contributor environment based on the settings in the app_config_file.
+    Checks if the
     Arguments:
-    app_config_file: The path to the config file for the application. 
+    app_config_file: The path to the config file for the application.
     ToDo:
     Query CE to check if the app id already exists.
     """
@@ -70,11 +58,11 @@ async def create_application(app_config_file='app_config.ini'):
 
 async def create_entrypoint(app_config_file='./docs/app_config.ini', ep_config_file='./docs/ep_config.ini'):
     """
-    Creates an entry point in the contributor environment based on the settings in the app_config_file. 
+    Creates an entry point in the contributor environment based on the settings in the app_config_file.
     Checks if the application exists already and creates one if not.
     Arguments:
-    app_config_file: The path to the config file for the application. 
-    ep_config_file: The path to the config file for the entry point. 
+    app_config_file: The path to the config file for the application.
+    ep_config_file: The path to the config file for the entry point.
     ToDo:
     Query CE to check if the app id already exists.
     """

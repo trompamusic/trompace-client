@@ -1,7 +1,7 @@
 # Generate GraphQL queries for mutations pertaining to control actions.
 
-from .templates import mutation_create, mutation_update, mutation_delete, mutation_link
-from . import StringConstant, MUTATION
+from . import StringConstant
+from .templates import mutation_create, mutation_link
 
 CREATE_CONTROLACTION = '''CreateControlAction(
         {parameters}
@@ -69,10 +69,10 @@ def mutation_modify_controlaction(controlaction_id: str, status: str, error: str
     """Returns a mutation for modifying the status and errors of the control action
     Arguments:s
         controlaction_id: The unique identifier of the control action.
-        status: the status to update to. 
+        status: the status to update to.
         error: The erros to update to.
     Returns:
-        The string for the mutation for modifying a control action status. 
+        The string for the mutation for modifying a control action status.
     """
     args = {
         "identifier": controlaction_id,

@@ -1,11 +1,7 @@
-# Utility functions for sending queries and downloading files. 
-import configparser
-import aiohttp
-import asyncio
+# Utility functions for sending queries and downloading files.
 import requests
-import aiofiles
-import trompace.config as config
 
+import trompace.config as config
 from trompace.exceptions import QueryException
 
 
@@ -13,7 +9,7 @@ async def submit_query(querystr: str):
     """
     Sends a query to the server set in the import.ini config file
     Arguments:
-    querystr: The query to be submitted in string format. 
+    querystr: The query to be submitted in string format.
     """
     q = {"query": querystr}
     server = config.server_id

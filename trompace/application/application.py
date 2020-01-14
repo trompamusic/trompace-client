@@ -1,22 +1,20 @@
 # Generate GraphQL queries to setup a software application, entrypoint and the associated control action, property and propoerty value specification.
-import asyncio
-import websockets
 import json
-import numpy as np
-import configparser
 import os
 
+import websockets
+
+import trompace.config as config
+from trompace.connection import submit_query, download_file
+from trompace.exceptions import QueryException
 from trompace.mutations.application import mutation_create_application, mutation_add_entrypoint_application
-from trompace.mutations.entrypoint import mutation_create_entry_point
 from trompace.mutations.controlaction import mutation_create_controlaction, mutation_add_entrypoint_controlaction, \
     mutation_modify_controlaction
+from trompace.mutations.document import mutation_create_document, mutation_add_digital_document_controlaction
+from trompace.mutations.entrypoint import mutation_create_entry_point
 from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, \
     mutation_add_controlaction_propertyvaluespecification, mutation_add_controlaction_property
 from trompace.subscriptions.controlaction import subscription_controlaction
-from trompace.mutations.document import mutation_create_document, mutation_add_digital_document_controlaction
-from trompace.connection import submit_query, download_file
-from trompace.exceptions import QueryException
-import trompace.config as config
 
 
 def get_sub_dict(query):
@@ -104,17 +102,17 @@ async def create_entrypointcontrolaction_CE(created_app_id, entrypoint_name, con
                                             source, language, actionPlatform, contentType, encodingType, formatin,
                                             control_name, description_ca, actionStatus):
     """
-    Creates an entry point and control action in the contributor environment and linkss the two to the application. 
+    Creates an entry point and control action in the contributor environment and linkss the two to the application.
     Arguments:
-        created_app_id: The id of the application that the entry point and control actions should be linked to. 
-        Entry point arguments: 
-            entrypoint_name: The name of the entry point. 
+        created_app_id: The id of the application that the entry point and control actions should be linked to.
+        Entry point arguments:
+            entrypoint_name: The name of the entry point.
             source: The URL of the web resource to be represented by the node.
             description: A description of the application.
             formatin: The format of the input files to be used for the application.
             subject: The subject associated with the application.
             contributor: A person, an organization, or a service responsible for adding the software application. This can be either a name or a base URL.
-            creator: The person, organization or service responsible for adding the software application.        
+            creator: The person, organization or service responsible for adding the software application.
             actionPlatform: The action platform.
             contentType: The content type associated with the entry point, should be a mimetype.
             encodingType: The encoding type associated with the entry point, should be a mimetype.
@@ -174,7 +172,7 @@ async def create_propertyvalue_CE(created_ca_id, value_name, value_description, 
                                   valueMinLength \
                                   , multipleValues, valueName, valuePattern, valueRequired):
     """
-    Creates a property value specification in the controbutor environment and liks it to the control action. 
+    Creates a property value specification in the controbutor environment and liks it to the control action.
     Arguments:
         created_ca_id: The contributor environment id of the control action to link the property value specification object to.
         value_name: The name of the property value specification.
@@ -235,7 +233,7 @@ async def subscribe_controlaction(entrypoint_id, command_line, num_properties, n
         entrypoint_id: the identifier for the entry point linked to the control action to subscribe to.
         command_line: The command line command for the application, must adhere to the standards proposed.
         num_properties: The number of properties related to the control action.
-        num_propertyvalues: The number of property values related to the control action. 
+        num_propertyvalues: The number of property values related to the control action.
     """
     websocket_port = config.websocket_port
     print(websocket_port)
@@ -260,11 +258,11 @@ async def subscribe_controlaction(entrypoint_id, command_line, num_properties, n
 async def handle_control_action(identifier, command_line, properties, property_values):
     """
     A function to handle a control action request.
-    Arguments: 
+    Arguments:
         identifier: the identifier for the entry point.
         command_line: The command line associated with the application associated with the entry point,
         properties: A list of required properties.
-        property_values: A list of required property values. 
+        property_values: A list of required property values.
     """
 
     properties, property_values = await get_control_action_id(identifier, properties, property_values)
@@ -277,7 +275,7 @@ async def handle_control_action(identifier, command_line, properties, property_v
     format_dict = {"PropertyValue{}".format(x + 1): property_values[y] for x, y in enumerate(property_values)}
 
     for i, pro in enumerate(properties, 1):
-        # TODO: Assert that the format of the file matches the required format. 
+        # TODO: Assert that the format of the file matches the required format.
 
         input_url = properties[pro]['source']
         out_path = "./{}".format(input_url.split("/")[-1])
@@ -329,7 +327,7 @@ async def get_control_all_actions():
 
 async def get_control_action_id(control_id, properties, property_values):
     """
-    Get property and property value objects for the control action to be handeled. 
+    Get property and property value objects for the control action to be handeled.
 
     Arguments:
         control_id: The identifier of the control action.
