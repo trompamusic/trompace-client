@@ -214,7 +214,7 @@ async def create_application_CE(application_name: str, subject: str, description
         contributor: A person, an organization, or a service responsible for adding the software application. This can be either a name or a base URL.
         creator: The person, organization or service responsible for adding the software application.
     Returns:
-	    The identifiers for the created application.
+        The identifiers for the created application.
 
     """
     create_application_query = mutation_create_application(application_name, contributor, creator, source, subject,

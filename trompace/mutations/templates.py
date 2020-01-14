@@ -9,7 +9,7 @@ from ..constants import SUPPORTED_LANGUAGES
 def mutation_create(args, mutation_string: str):
     """Returns a mutation for creating an object.
     Arguments:
-		args: a dictionary of arguments for the template. The fucntion calling this function is responsible for validating the arguments.
+        args: a dictionary of arguments for the template. The fucntion calling this function is responsible for validating the arguments.
 
     Returns:
         The string for the mutation for creating the object.
