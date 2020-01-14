@@ -1,5 +1,3 @@
-name = "mutations"
-
 import json
 
 
