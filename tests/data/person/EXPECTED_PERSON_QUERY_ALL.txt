@@ -1,0 +1,13 @@
+query {
+  Person
+  {
+    identifier
+    name
+    publisher
+    contributor
+    creator
+    source
+    description
+    language
+  }
+}
