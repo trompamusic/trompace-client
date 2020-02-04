@@ -3,6 +3,7 @@ import os
 import unittest
 
 from trompace.mutations import document
+from trompace.queries import document as document_query
 from tests import util
 
 
@@ -11,6 +12,18 @@ class TestDocument(unittest.TestCase):
     def setUp(self) -> None:
         super()
         self.data_dir = os.path.join(os.path.dirname(__file__), "data", "document")
+
+    def test_query(self):
+        expected = util.read_file(self.data_dir, "EXPECTED_DOCUMENT_QUERY.txt")
+
+        created_document = document_query.query_document("ff59650b-1d47-4ea5-b356-31fddeb48315")
+        self.assertEqual(created_document, expected)
+
+    def test_query_all(self):
+        expected = util.read_file(self.data_dir, "EXPECTED_DOCUMENT_QUERY_ALL.txt")
+
+        created_document = document_query.query_document()
+        self.assertEqual(created_document, expected)
 
     def test_create(self):
         expected = util.read_file(self.data_dir, "EXPECTED_DOCUMENT.txt")
