@@ -3,6 +3,10 @@ class UnsupportedLanguageException(Exception):
         super().__init__("Languauage {} is not a supported language. See {}".format(language,
                                                                                     "trompace.constants.SUPPORTED_LANGUAGES"))
 
+class UnsupportedActionStatusException(Exception):
+    def __init__(self, actionstatus):
+        super().__init__("{} is not a supported action status. See {}".format(language,
+                                                                                    "trompace.constants.SUPPORTED_ACTIONSTATUS_TYPES"))
 
 class IDNotFoundException(Exception):
     def __init__(self, object):
