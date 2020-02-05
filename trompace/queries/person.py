@@ -35,7 +35,7 @@ QUERY_PERSON_ALL = '''query {
 }'''
 
 
-def query_artist(identifier: str=None, artist_name=None, publisher=None, contributor=None, creator=None,
+def query_artist(identifier: str=None, artist_name=None, publisher=None, contributor=None, creator=None, subject=None,
                              source=None, description=None, language=None):
     """Returns a query for a personobject
     Arguments:
@@ -58,8 +58,10 @@ def query_artist(identifier: str=None, artist_name=None, publisher=None, contrib
     if language and language not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
 
-    if identifier:
-        return query_create(identifier, QUERY_PERSON, artist_name, publisher, contributor, creator,
-                                 source, description, language)
-    else:
+    if all(v is None for v in locals().values()):
         return QUERY_PERSON_ALL
+    else:
+        return query_create(identifier, QUERY_PERSON, artist_name, publisher, contributor, creator, subject,
+                                 source, description, language)
+
+        

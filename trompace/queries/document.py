@@ -36,7 +36,7 @@ QUERY_DIGITALDOCUMENT_ALL = '''query {
 
 
 
-def query_document(identifier: str=None, document_name=None, publisher=None, contributor=None, creator=None,
+def query_document(identifier: str=None, document_name=None, publisher=None, contributor=None, creator=None, subject=None,
                              source=None, description=None, language=None):
     """Returns a query for a digital document object
     Arguments:
@@ -59,8 +59,8 @@ def query_document(identifier: str=None, document_name=None, publisher=None, con
     if language and language not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
 
-    if identifier:
-        return query_create(identifier, QUERY_DIGITALDOCUMENT, document_name, publisher, contributor, creator,
-                                 source, description, language)
+    if all(v is None for v in locals().values()):
+    	return QUERY_DIGITALDOCUMENT_ALL 
     else:
-        return QUERY_DIGITALDOCUMENT_ALL 
+        return query_create(identifier, QUERY_DIGITALDOCUMENT, document_name, publisher, contributor, creator,
+                                 subject,source, description, language)        

@@ -5,7 +5,7 @@ class UnsupportedLanguageException(Exception):
 
 class UnsupportedActionStatusException(Exception):
     def __init__(self, actionstatus):
-        super().__init__("{} is not a supported action status. See {}".format(language,
+        super().__init__("{} is not a supported action status. See {}".format(actionstatus,
                                                                                     "trompace.constants.SUPPORTED_ACTIONSTATUS_TYPES"))
 
 class IDNotFoundException(Exception):
