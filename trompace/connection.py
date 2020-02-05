@@ -13,6 +13,23 @@ async def submit_query(querystr: str):
     """
     q = {"query": querystr}
     server = config.server_id
+    print(server)
+    r = requests.post(server, json=q)
+    try:
+        r.raise_for_status()
+    except requests.exceptions.HTTPError:
+        print("error")
+        print(r.json())
+        print(querystr)
+    resp = r.json()
+    if "errors" in resp.keys():
+        raise QueryException(resp['errors'])
+    return resp
+
+def submit_query_nasync(querystr: str):
+    q = {"query": querystr}
+    server = config.server_id
+    print(server)
     r = requests.post(server, json=q)
     try:
         r.raise_for_status()
