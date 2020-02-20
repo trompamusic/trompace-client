@@ -96,9 +96,3 @@ def query(identifier: str=None, document_name=None, publisher=None, contributor=
     resp = submit_query_nasync(query_to_send)
     return resp
 
-
-if __name__ == "__main__":
-  query()
-    # loop = asyncio.get_event_loop()
-    # loop.run_until_complete(query())
-

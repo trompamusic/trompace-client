@@ -14,7 +14,7 @@ def query_create(identifier: str, query_string: str, name=None, publisher=None, 
                     alternateName=None, image=None, sameAs=None, url=None, additionalName=None,
                     award=None, birthDate=None, deathDate=None, familyName=None, gender=None, givenName=None,
                     honorificPrefix=None, honorificSuffix=None, jobTitle=None, knowsLanguage=None):
-    """Returns a mutation for updating an object.
+    """Returns a query for an object object.
     Arguments:
         identifier: The unique identifier of the object.
         name (optional): The name of the object.
@@ -27,7 +27,7 @@ def query_create(identifier: str, query_string: str, name=None, publisher=None, 
 
 
     Returns:
-        The string for the mutation for creating the artist.
+        The string for the query object. 
     Raises:
         UnsupportedLanguageException if the input language is not one of the supported languages.
     """
