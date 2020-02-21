@@ -15,20 +15,9 @@ class TestPerson(unittest.TestCase):
     def test_create(self):
         expected = util.read_file(self.data_dir, "EXPECTED_ARTIST.txt")
 
-        created_artist = mutation_create_artist("A. J. Fynn", "https://www.cpdl.org", "https://www.cpdl.org",
-                                                "https://www.upf.edu", "https://www.cpdl.org/wiki/index.php/A._J._Fynn",
-                                                "Born circa 1860Died circa 1920A. J. Fynn was an early 20th Century scholar in literature and anthropology, specializing in the American West and Native American culture. His most notable musical composition was \u201cWhere The Columbines Grow\u201d, which was adopted as the official state song of the US State of Colorado in 1915.View the Wikipedia article on A. J. Fynn.",
-                                                "en")
-        self.assertEqual(created_artist, expected)
-
-    def test_create_additional(self):
-        expected = util.read_file(self.data_dir, "EXPECTED_ARTIST_ADDITIONAL.txt")
-
-        created_artist = mutation_create_artist("A. J. Fynn", "https://www.cpdl.org", "https://www.cpdl.org",
-                                                "https://www.upf.edu", "https://www.cpdl.org/wiki/index.php/A._J._Fynn",
-                                                "Born circa 1860Died circa 1920A. J. Fynn was an early 20th Century scholar in literature and anthropology, specializing in the American West and Native American culture. His most notable musical composition was \u201cWhere The Columbines Grow\u201d, which was adopted as the official state song of the US State of Colorado in 1915.View the Wikipedia article on A. J. Fynn.",
-                                                "en", birthDate="1860", deathDate="1920",
-                                                url="https://en.wikipedia.org/wiki/A._J._Fynn")
+        created_artist = mutation_create_artist("A. J. Fynn", "https://www.cpdl.org","https://www.upf.edu", "https://www.cpdl.org/wiki/index.php/A._J._Fynn","https://www.cpdl.org",
+         "en", description="Born circa 1860Died circa 1920A. J. Fynn was an early 20th Century scholar in literature and anthropology",)
+        print(created_artist)
         self.assertEqual(created_artist, expected)
 
     def test_update(self):

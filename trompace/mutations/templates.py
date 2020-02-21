@@ -21,28 +21,32 @@ def mutation_create(args, mutation_string: str):
     return MUTATION.format(mutation=create_mutation)
 
 
-def mutation_update(identifier: str, mutation_string: str, name=None, publisher=None, contributor=None, creator=None,
-                    source=None, description=None, language=None, coverage=None, date=None,
-                    disambiguatingDescription=None, relation=None, _type=None, _searchScore=None, additionalType=None,
-                    alternateName=None, image=None, sameAs=None, url=None, additionalName=None,
-                    award=None, birthDate=None, deathDate=None, familyName=None, gender=None, givenName=None,
-                    honorificPrefix=None, honorificSuffix=None, jobTitle=None, knowsLanguage=None):
-    """Returns a mutation for updating an object.
+def mutation_update(args, mutation_string: str):
+    """Returns a mutation for updating an object
     Arguments:
-        identifier: The unique identifier of the object.
-        name (optional): The name of the object.
-        publisher (optional): The person, organization or service responsible for making the artist inofrmation available
-        contributor (optional): A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
-        creator (optional): The person, organization or service who created the thing the web resource is about.
-        source (optional): The URL of the web resource to be represented by the node.
-        description (optional): An account of the artist.
-        language (optional): The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
-
+        identifier: The identifier of the object in the CE to be updated
+        title: The title of the page from which the object information was extracted.      
+        contributor: A person, an organization, or a service responsible for contributing the object to the web resource. This can be either a name or a base URL.
+        creator: The person, organization or service who created the thing the web resource is about.
+        sourcer: The URL of the web resource to be represented by the node.
+        language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
+        formatin: A MimeType of the format of the object, default is "text/html"
+        name: The name of the object
+        description: An account of the object.
+        image (optional): An image associated with the object.
+        birthDate (optional): The birth date of the object, currently accepts string, but needs to be chenged to date format.
+        deathDate (optional): The date of death of the object, currently accepts string, but needs to be chenged to date format.
+        familyName (optional); The family name of the object.
+        givenName (optional); The given name of the object.
+        gender (optinal): The objects gender.
+        honorificPrefix (optional): The object's prefix.
+        honorificSuffix (optional): The object's suffix.
+        jobTitle (optional): The object's job title.
 
     Returns:
-        The string for the mutation for creating the artist.
+        The string for the mutation for updating the object.
     Raises:
-        UnsupportedLanguageException if the input language is not one of the supported languages.
+        Assertion error if the input language is not one of the supported languages.
     """
 
     if language and language not in SUPPORTED_LANGUAGES:
@@ -112,7 +116,7 @@ def mutation_delete(identifier: str, mutation_string: str):
     Arguments:
         identifier: The unique identifier of the object.
     Returns:
-        The string for the mutation for creating the artist.
+        The string for the mutation for creating the object.
     Raises:
         Assertion error if the input language is not one of the supported languages.
     """

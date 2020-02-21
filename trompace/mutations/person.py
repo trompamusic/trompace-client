@@ -1,7 +1,7 @@
 # Generate GraphQL queries for mutations pertaining to persons/artists objects.
 from trompace.exceptions import UnsupportedLanguageException, MimeTypeException
 from . import StringConstant
-from .templates import mutation_create, mutation_update, mutation_delete
+from .templates import mutation_create, mutation_delete
 from ..constants import SUPPORTED_LANGUAGES
 
 CREATE_PERSON = '''CreatePerson(
@@ -23,7 +23,7 @@ DELETE_PERSON = '''DeletePerson(
     }}'''
 
 
-def mutation_create_artist(title: str, contributor: str, creator: str, source: str,
+def mutation_create_artist(title: str, contributor: str, creator: str, source: str, publisher: str,
                            language: str, formatin:str="text/html", name: str=None, description: str=None,
                            image=None, sameAs=None, birthDate=None, deathDate=None, familyName=None, givenName=None, gender=None,
                            honorificPrefix=None, honorificSuffix=None, jobTitle=None):
@@ -55,7 +55,7 @@ def mutation_create_artist(title: str, contributor: str, creator: str, source: s
         UnsupportedLanguageException if the input language is not one of the supported languages.
     """
 
-    if language not in SUPPORTED_LANGUAGES:
+    if language and language not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
 
     if "/" not in formatin:
@@ -95,12 +95,13 @@ def mutation_create_artist(title: str, contributor: str, creator: str, source: s
     return mutation_create(args, CREATE_PERSON)
 
 
-def mutation_update_artist(identifier: str, title: str, contributor: str, creator: str, source: str,
-                           language: str, formatin:str="text/html", name: str=None, description: str=None,
+def mutation_update_artist(identifier: str, title: str=None, contributor: str=None, creator: str=None, source: str=None,publisher: str=None,
+                           language: str=None, formatin:str="text/html", name: str=None, description: str=None,
                            image=None, sameAs=None, birthDate=None, deathDate=None, familyName=None, givenName=None, gender=None,
                            honorificPrefix=None, honorificSuffix=None, jobTitle=None):
     """Returns a mutation for updating a person object
     Arguments:
+        identifier: The identifier of the artist in the CE to be updated
         title: The title of the page from which the artist information was extracted.      
         contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
         creator: The person, organization or service who created the thing the web resource is about.
@@ -124,9 +125,49 @@ def mutation_update_artist(identifier: str, title: str, contributor: str, creato
     Raises:
         Assertion error if the input language is not one of the supported languages.
     """
+    if language and language not in SUPPORTED_LANGUAGES:
+        raise UnsupportedLanguageException(language)
 
-    return mutation_update(identifier, UPDATE_PERSON, artist_name, publisher, contributor, creator, source, description,
-                           language)
+    if "/" not in formatin:
+        raise MimeTypeException(formatin)
+
+    args = {"identifier": identifier}
+    if title:
+        args["title"] = name
+    if name:
+        args["name"] = name
+    if contributor:
+        args["contributor"] = contributor
+    if publisher:
+        args["publisher"] = publisher
+    if creator:
+        args["creator"] = creator
+    if source:
+        args["source"] = source
+    if language:
+        args["language"] = StringConstant(language.lower()),
+    if description:
+        args['description'] = description
+    if name:
+        args['name'] = name
+    if image:
+        args["image"] = image
+    if birthDate:
+        args["birthDate"] = birthDate
+    if deathDate:
+        args["deathDate"] = deathDate
+    if familyName:
+        args["familyName"] = familyName
+    if gender:
+        args["gender"] = gender
+    if honorificPrefix:
+        args["honorificPrefix"] = honorificPrefix
+    if honorificSuffix:
+        args["honorificSuffix"] = honorificSuffix
+    if jobTitle:
+        args["jobTitle"] = jobTitle
+
+    return mutation_create(args, UPDATE_PERSON)
 
 
 def mutation_delete_artist(identifier: str):
