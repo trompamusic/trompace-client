@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import date
 
 
 class StringConstant:
@@ -19,10 +19,10 @@ class _Neo4jDate(StringConstant):
     StringConstant in the GraphQL. The date will be formatted
     as: { year:[int] [month: [int] day: [int]] }
 
-    The constructor argument can be a datetime or a year."""
+    The constructor argument can be a date or a year."""
 
     def __init__(self, value):
-        if isinstance(value, datetime):
+        if isinstance(value, date):
             self.value = "{{ year: {0} month: {1} day: {2} }}".format(value.year, value.month, value.day)
         else:
             self.value = "{{ year: {0} }}".format(value)
