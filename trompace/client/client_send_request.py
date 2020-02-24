@@ -5,7 +5,7 @@ import json
 import websockets
 
 from trompace.connection import submit_query
-from trompace.exceptions import VaueNotFound
+from trompace.exceptions import ValueNotFound
 from trompace.mutations import StringConstant, make_parameters
 from trompace.subscriptions.controlaction import subscription_controlaction_client
 
@@ -141,7 +141,7 @@ async def request_controlaction(req_config_file='req_config1.ini'):
         prop = config['Property{}'.format(i + 1)]
         prop_dict['potentialActionPropertyIdentifier'] = prop['ce_id']
         if prop['value'] == '':
-            raise VaueNotFound('potentialActionPropertyIdentifier{}'.format(1 + 1))
+            raise ValueNotFound('potentialActionPropertyIdentifier{}'.format(1 + 1))
         prop_dict['nodeIdentifier'] = prop['value']
         prop_dict['nodeType'] = StringConstant(prop['rangeincludes'])
         # TODO: Right now, assumes that only one value is given.
@@ -153,7 +153,7 @@ async def request_controlaction(req_config_file='req_config1.ini'):
         pvs = config['PropertyValueSpecification{}'.format(i + 1)]
         pvs_dict['potentialActionPropertyValueSpecificationIdentifier'] = pvs['ce_id']
         if pvs['value'] == '' and pvs.getboolean('valuerequired'):
-            raise VaueNotFound('potentialActionPropertyValueSpecificationIdentifier{}'.format(1 + 1))
+            raise ValueNotFound('potentialActionPropertyValueSpecificationIdentifier{}'.format(1 + 1))
         pvs_dict['value'] = pvs['value']
         pvs_dict['valuePattern'] = StringConstant(pvs['valuepattern'])
         pvs_params = make_parameters(**pvs_dict)
