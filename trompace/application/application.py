@@ -344,12 +344,12 @@ async def get_control_action_id(control_id, properties, property_values):
         elif ob['name'] in property_values:
             op_pvs[ob['name']] = ob['value']
         else:
-            raise VaueNotFound(ob['name'])
+            raise ValueNotFound(ob['name'])
     for pro in properties:
         if pro not in op_pro.keys():
-            raise VaueNotFound(pro)
+            raise ValueNotFound(pro)
     for pro in property_values:
         if pro not in op_pvs.keys():
-            raise VaueNotFound(pro)
+            raise ValueNotFound(pro)
 
     return op_pro, op_pvs
