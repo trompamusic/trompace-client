@@ -1,4 +1,13 @@
-__pycache__
-build
-
 .DS_Store
+
+# Distribution / packaging
+__pycache__
+.Python
+build/
+develop-eggs/
+dist/
+eggs/
+.eggs/
+*.egg-info/
+*.egg
+MANIFEST
