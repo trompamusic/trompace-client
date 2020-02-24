@@ -1,7 +1,7 @@
 # Generate GraphQL queries for mutations pertaining to entry points.
 from typing import List
 
-from trompace.exceptions import UnsupportedLanguageException, MimeTypeException
+from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
 from . import StringConstant
 from .templates import mutation_create
 from ..constants import SUPPORTED_LANGUAGES
@@ -35,13 +35,13 @@ def mutation_create_entry_point(name: str, contributor: str, subject: str,
     if language not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
     if "/" not in formatin:
-        raise MimeTypeException(formatin)
+        raise NotAMimeTypeException(formatin)
     if not all("/" in x for x in contentType):
         missing_list = [x for x in contentType if "/" not in x]
-        raise MimeTypeException(missing_list)
+        raise NotAMimeTypeException(missing_list)
     if not all("/" in x for x in encodingType):
         missing_list = [x for x in encodingType if "/" not in x]
-        raise MimeTypeException(missing_list)
+        raise NotAMimeTypeException(missing_list)
 
     args = {
         "title": name,

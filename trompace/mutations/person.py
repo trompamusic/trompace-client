@@ -1,5 +1,5 @@
 # Generate GraphQL queries for mutations pertaining to persons/artists objects.
-from trompace.exceptions import UnsupportedLanguageException, MimeTypeException
+from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
 from . import StringConstant
 from .templates import mutation_create, mutation_update, mutation_delete
 from ..constants import SUPPORTED_LANGUAGES
@@ -73,7 +73,7 @@ def mutation_create_artist(artist_name: str, publisher: str, contributor: str, c
         raise UnsupportedLanguageException(language)
 
     if "/" not in formatin:
-        raise MimeTypeException(formatin)
+        raise NotAMimeTypeException(formatin)
 
     args = {
         "title": artist_name,
