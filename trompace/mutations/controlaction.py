@@ -80,5 +80,3 @@ def mutation_modify_controlaction(controlaction_id: str, status: str, error: str
     }
 
     return mutation_create(args, MODIFY_CONTROLACTION_STATUS)
-
-    # return MUTATION.format(mutation=MODIFY_CONTROLACTION_STATUS.format(identifier=controlaction_id, status=status, error=error))

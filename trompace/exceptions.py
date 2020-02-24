@@ -9,7 +9,7 @@ class IDNotFoundException(Exception):
         super().__init__("{} ID not found".format(object))
 
 
-class MimeTypeException(Exception):
+class NotAMimeTypeException(ValueError):
     def __init__(self, object):
         super().__init__("{} Not a valid mimetype".format(object))
 
