@@ -93,10 +93,6 @@ QUERY_CONTROLACTION_ID = """
 """
 
 
-async def dummy_function(inputs):
-    return inputs
-
-
 async def create_entrypointcontrolaction_CE(created_app_id, entrypoint_name, contributor, subject, description_ep,
                                             creator,
                                             source, language, actionPlatform, contentType, encodingType, formatin,
