@@ -98,7 +98,7 @@ async def dummy_function(inputs):
 
 
 async def create_entrypointcontrolaction_CE(created_app_id, entrypoint_name, contributor, subject, description_ep,
-                                            creator, \
+                                            creator,
                                             source, language, actionPlatform, contentType, encodingType, formatin,
                                             control_name, description_ca, actionStatus):
     """
@@ -117,10 +117,8 @@ async def create_entrypointcontrolaction_CE(created_app_id, entrypoint_name, con
             contentType: The content type associated with the entry point, should be a mimetype.
             encodingType: The encoding type associated with the entry point, should be a mimetype.
         Controal Action arguments:
-                control_name: the name of the control action.
-                actionStatus: The default actionStatus for a newly instantiated ControlAction ‘job'.“
-
-
+            control_name: the name of the control action.
+            actionStatus: The default actionStatus for a newly instantiated ControlAction 'job'.
     """
 
     create_entrypoint_query = mutation_create_entry_point(entrypoint_name, contributor, subject, description_ep,
