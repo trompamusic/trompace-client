@@ -21,11 +21,11 @@ class _Neo4jDate(StringConstant):
 
     The constructor argument can be a datetime or a year."""
 
-    def __init__(self, *args):
-        if isinstance(args[0], datetime):
-            self.value = "{{ year: {0} month: {1} day: {2} }}".format(args[0].year, args[0].month, args[0].day)
+    def __init__(self, value):
+        if isinstance(value, datetime):
+            self.value = "{{ year: {0} month: {1} day: {2} }}".format(value.year, value.month, value.day)
         else:
-            self.value = "{{ year: {0} }}".format(args[0])
+            self.value = "{{ year: {0} }}".format(value)
 
 
 def encode_list(thelist, encoder):
