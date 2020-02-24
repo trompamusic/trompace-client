@@ -1,6 +1,6 @@
 # Generate GraphQL queries for mutations pertaining to persons/artists objects.
 from trompace.exceptions import UnsupportedLanguageException, MimeTypeException
-from . import StringConstant
+from . import StringConstant, _Neo4jDate
 from .templates import mutation_create, mutation_update, mutation_delete
 from ..constants import SUPPORTED_LANGUAGES
 
@@ -90,7 +90,7 @@ def mutation_create_artist(artist_name: str, publisher: str, contributor: str, c
     if coverage:
         args["coverage"] = coverage
     if date:
-        args["date"] = date
+        args["date"] = _Neo4jDate(date)
     if disambiguatingDescription:
         args["disambiguatingDescription"] = disambiguatingDescription
     if relation:
@@ -114,9 +114,9 @@ def mutation_create_artist(artist_name: str, publisher: str, contributor: str, c
     if award:
         args["award"] = award
     if birthDate:
-        args["birthDate"] = birthDate
+        args["birthDate"] = _Neo4jDate(birthDate)
     if deathDate:
-        args["deathDate"] = deathDate
+        args["deathDate"] = _Neo4jDate(deathDate)
     if familyName:
         args["familyName"] = familyName
     if gender:
