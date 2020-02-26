@@ -32,7 +32,7 @@ def mutation_create_person(title: str, contributor: str, creator: str, source: s
         title: The title of the page from which the person information was extracted.      
         contributor: A person, an organization, or a service responsible for contributing the person to the web resource. This can be either a name or a base URL.
         creator: The person, organization or service who created the thing the web resource is about.
-        sourcer: The URL of the web resource to be represented by the node.
+        source: The URL of the web resource to be represented by the node.
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
         formatin: A MimeType of the format of the person, default is "text/html"
         name: The name of the person
@@ -105,7 +105,7 @@ def mutation_update_person(identifier: str, title: str=None, contributor: str=No
         title: The title of the page from which the person information was extracted.      
         contributor: A person, an organization, or a service responsible for contributing the person to the web resource. This can be either a name or a base URL.
         creator: The person, organization or service who created the thing the web resource is about.
-        sourcer: The URL of the web resource to be represented by the node.
+        source: The URL of the web resource to be represented by the node.
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
         formatin: A MimeType of the format of the person, default is "text/html"
         name: The name of the person
