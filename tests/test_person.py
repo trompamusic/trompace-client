@@ -16,8 +16,7 @@ class TestPerson(unittest.TestCase):
         expected = util.read_file(self.data_dir, "EXPECTED_PERSON.txt")
 
         created_person = mutation_create_person("A. J. Fynn", "https://www.cpdl.org","https://www.upf.edu", "https://www.cpdl.org/wiki/index.php/A._J._Fynn","https://www.cpdl.org",
-         "en", description="Born circa 1860Died circa 1920A. J. Fynn was an early 20th Century scholar in literature and anthropology",)
-        print(created_person)
+         "en", description="Born circa 1860Died circa 1920A. J. Fynn was an early 20th Century scholar in literature and anthropology")
         self.assertEqual(created_person, expected)
 
     def test_update(self):
