@@ -1,4 +1,4 @@
-# Tests for mutations pertaining to person/persons objects.
+# Tests for mutations pertaining to person objects.
 import os
 import unittest
 

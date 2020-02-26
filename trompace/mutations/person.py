@@ -1,4 +1,4 @@
-# Generate GraphQL queries for mutations pertaining to persons/persons objects.
+# Generate GraphQL queries for mutations pertaining to person objects.
 from trompace.exceptions import UnsupportedLanguageException, MimeTypeException
 from . import StringConstant
 from .templates import mutation_create, mutation_delete
