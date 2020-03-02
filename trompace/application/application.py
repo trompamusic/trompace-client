@@ -6,7 +6,7 @@ import websockets
 
 import trompace.config as config
 from trompace.connection import submit_query, download_file
-from trompace.exceptions import QueryException
+from trompace.exceptions import QueryException, ValueNotFound
 from trompace.mutations.application import mutation_create_application, mutation_add_entrypoint_application
 from trompace.mutations.controlaction import mutation_create_controlaction, mutation_add_entrypoint_controlaction, \
     mutation_modify_controlaction
