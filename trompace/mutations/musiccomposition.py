@@ -96,7 +96,7 @@ ADD_MUSIC_COMPOSITION_TO_CONTROL_ACTION_MUTATION = """AddActionInterfaceThingInt
         }}"""
 
 
-def mutation_create_music_composition(title: str, contributor: str, creator: str, source: str, publisher: str,
+def mutation_create_music_composition(title: str, contributor: str, creator: str, source: str,
                            language: str, inLanguage:str, formatin:str="text/html", name: str=None, description: str=None):
     """Returns a mutation for creating a music composition object
     Arguments:
@@ -127,7 +127,6 @@ def mutation_create_music_composition(title: str, contributor: str, creator: str
 
     args = {
         "title": title,
-        "publisher": publisher,
         "contributor": contributor,
         "creator": creator,
         "source": source,
@@ -143,7 +142,7 @@ def mutation_create_music_composition(title: str, contributor: str, creator: str
     return mutation_create(args, CREATE_DIGITAL_DOCUMENT)
 
 
-def mutation_update_music_composition(identifier: str, title: str=None, contributor: str=None, creator: str=None, source: str=None, publisher: str=None,
+def mutation_update_music_composition(identifier: str, title: str=None, contributor: str=None, creator: str=None, source: str=None,
                            language: str=None, inLanguage:str=None, formatin:str=None, name: str=None, description: str=None):
     """Returns a mutation for updating a music composition object.
     Arguments:
@@ -173,8 +172,6 @@ def mutation_update_music_composition(identifier: str, title: str=None, contribu
         args["creator"] = creator
     if source:
         args["source"] = source
-    if publisher:
-        args["publisher"] = publisher
     if language:
         if language not in SUPPORTED_LANGUAGES:
             raise UnsupportedLanguageException(language)
@@ -200,14 +197,14 @@ def mutation_delete_music_composition(identifier: str):
     Arguments:
         identifier: The unique identifier of the music composition object.
     Returns:
-        The string for the mutation for deleting the music compositionobject based on the identifier.
+        The string for the mutation for deleting the music composition object based on the identifier.
     """
 
     return mutation_delete(identifier, DELETE_MUSIC_COMPOSITION)
 
 
-def mutation_add_broad_match_document(from_identifier: str, to_identifier: str):
-    """Returns a mutation for creating a broad match between two digital document objects.
+def mutation_add_broad_match_music_composition(from_identifier: str, to_identifier: str):
+    """Returns a mutation for creating a broad match between two music comosition objects.
     Arguments:
         from_identifier: The unique identifier of the digital document object from which to create the broad match.
         to_identifier: The unique identifier of the digital document object to which the broad match should be created.
@@ -215,66 +212,66 @@ def mutation_add_broad_match_document(from_identifier: str, to_identifier: str):
         The string for the mutation for creating the broad match between the two documents.
     """
 
-    return mutation_link(from_identifier, to_identifier, ADD_DIGITAL_DOCUMENT_BROAD_MATCH)
+    return mutation_link(from_identifier, to_identifier, ADD_MUSIC_COMPOSITION_BROAD_MATCH)
 
 
-def mutation_remove_broad_match_document(from_identifier: str, to_identifier: str):
-    """Returns a mutation for removing a broad match between two digital document objects.
+def mutation_remove_broad_match_music_composition(from_identifier: str, to_identifier: str):
+    """Returns a mutation for removing a broad match between two music composition objects.
     Arguments:
-        from_identifier: The unique identifier of the digital document object from which to remove the broad match.
+        from_identifier: The unique identifier of the music composition object from which to remove the broad match.
         to_identifier: The unique identifier of the digital document object to which the broad match should be removed.
     Returns:
-        The string for the mutation for removing the broad match between the two documents.
+        The string for the mutation for removing the broad match between the music compositions.
     """
 
-    return mutation_link(from_identifier, to_identifier, REMOVE_DIGITAL_DOCUMENT_BROAD_MATCH)
+    return mutation_link(from_identifier, to_identifier, REMOVE_MUSIC_COMPOSITION_BROAD_MATCH)
 
 
-def mutation_add_digital_document_work_example_composition(document_id: str, composition_id: str):
-    """Returns a mutation for adding a digital document as an exampleOf a composition.
+def mutation_add_music_composition_work_example_composition(music_composition_id: str, composition_id: str):
+    """Returns a mutation for adding a music composition as an example of a composition.
     Arguments:
-        document_id: The unique identifier of the digital document object.
+        music_composition_id: The unique identifier of the music composition object.
         composition_id: The unique identifier of the composition object.
     Returns:
-        The string for the mutation for adding the document as an exampleOf the composition.
+        The string for the mutation for adding the music composition as an example of the composition.
     """
 
-    return mutation_link(document_id, composition_id, ADD_DIGITAL_DOCUMENT_WORK_EXAMPLE_COMPOSITION)
+    return mutation_link(music_composition_id, composition_id, ADD_DIGITAL_DOCUMENT_WORK_EXAMPLE_COMPOSITION)
 
 
-def mutation_merge_digital_document_work_example_composition(document_id: str, composition_id: str):
-    """Returns a mutation for merging a digital document as an exampleOf a composition.
+def mutation_merge_digital_document_work_example_composition(music_composition_id: str, composition_id: str):
+    """Returns a mutation for merging a music composition as an example of a composition.
     Merging means that the connection will be added only if it does not exist.
 
     Arguments:
-        document_id: The unique identifier of the digital document object.
+        music_composition_id: The unique identifier of the music composition object.
         composition_id: The unique identifier of the composition object.
     Returns:
-        The string for the mutation for merging the document as an exampleOf the composition.
+        The string for the mutation for merging the music composition as an example of the composition.
     """
 
-    return mutation_link(document_id, composition_id, MERGE_DIGITAL_DOCUMENT_WORK_EXAMPLE_COMPOSITION)
+    return mutation_link(music_composition_id, composition_id, MERGE_DIGITAL_DOCUMENT_WORK_EXAMPLE_COMPOSITION)
 
 
-def mutation_remove_digital_document_work_example_composition(document_id: str, composition_id: str):
-    """Returns a mutation for removing a digital document as an exampleOf a composition.
+def mutation_remove_music_composition_work_example_composition(music_composition_id: str, composition_id: str):
+    """Returns a mutation for removing a music composition as an example of a composition.
     Arguments:
-        document_id: The unique identifier of the digital document object.
+        music_composition_id: The unique identifier of the music composition object.
         composition_id: The unique identifier of the composition object.
     Returns:
-        The string for the mutation for removing the document as an exampleOf the composition.
+        The string for the mutation for removing the music composition as an example of the composition.
     """
 
-    return mutation_link(document_id, composition_id, REMOVE_DIGITAL_DOCUMENT_WORK_EXAMPLE_COMPOSITION)
+    return mutation_link(music_composition_id, composition_id, REMOVE_MUSIC_COMPOSITION_WORK_EXAMPLE_COMPOSITION)
 
 
-def mutation_add_digital_document_controlaction(document_id: str, controlaction_id: str):
-    """Returns a mutation for adding a digital document as a subject of a composition.
+def mutation_add_music_composition_controlaction(music_composition_id: str, controlaction_id: str):
+    """Returns a mutation for adding a music composition to a control action.
     Arguments:
-        document_id: The unique identifier of the digital document object.
+        music_composition_id: The unique identifier of the music composition object.
         composition_id: The unique identifier of the composition object.
     Returns:
-        The string for the mutation for adding the document as a subject of the composition.
+        The string for the mutation for adding the music composition to the control action. 
     """
 
-    return mutation_link(document_id, controlaction_id, ADD_DIGITAL_DOCUMENT_TO_CONTROL_ACTION_MUTATION)
+    return mutation_link(music_composition_id, controlaction_id, ADD_MUSIC_COMPOSITION_TO_CONTROL_ACTION_MUTATION)

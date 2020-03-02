@@ -1,8 +1,8 @@
-# Tests for mutations pertaining to digital document objects.
+# Tests for mutations pertaining to music composition objects.
 import os
 import unittest
 
-from trompace.mutations import document
+from trompace.mutations import musiccomposition
 from tests import util
 
 
@@ -10,7 +10,7 @@ class TestDocument(unittest.TestCase):
 
     def setUp(self) -> None:
         super()
-        self.data_dir = os.path.join(os.path.dirname(__file__), "data", "document")
+        self.data_dir = os.path.join(os.path.dirname(__file__), "data", "musiccomposition")
 
     def test_create(self):
         expected = util.read_file(self.data_dir, "EXPECTED_DOCUMENT.txt")
