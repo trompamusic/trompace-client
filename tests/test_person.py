@@ -15,7 +15,7 @@ class TestPerson(unittest.TestCase):
     def test_create(self):
         expected = util.read_file(self.data_dir, "EXPECTED_PERSON.txt")
 
-        created_person = mutation_create_person("A. J. Fynn", "https://www.cpdl.org","https://www.upf.edu", "https://www.cpdl.org/wiki/index.php/A._J._Fynn","https://www.cpdl.org",
+        created_person = mutation_create_person("A. J. Fynn", "https://www.cpdl.org","https://www.upf.edu", "https://www.cpdl.org/wiki/index.php/A._J._Fynn",
          "en", description="Born circa 1860Died circa 1920A. J. Fynn was an early 20th Century scholar in literature and anthropology")
         self.assertEqual(created_person, expected)
 
@@ -23,7 +23,7 @@ class TestPerson(unittest.TestCase):
         expected = util.read_file(self.data_dir, "EXPECTED_PERSON_UPDATE.txt")
 
         created_update = mutation_update_person('2eeca6dd-c62c-490e-beb0-2e3899fca74f',
-                                                publisher="Https://www.cpdl.org")
+                                                title="A. J. Fynn")
         self.assertEqual(created_update, expected)
 
     def test_delete(self):

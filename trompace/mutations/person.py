@@ -23,7 +23,7 @@ DELETE_PERSON = '''DeletePerson(
     }}'''
 
 
-def mutation_create_person(title: str, contributor: str, creator: str, source: str, publisher: str,
+def mutation_create_person(title: str, contributor: str, creator: str, source: str,
                            language: str, formatin:str="text/html", name: str=None, description: str=None,
                            image=None, birthDate=None, deathDate=None, familyName=None, givenName=None, gender=None,
                            honorificPrefix=None, honorificSuffix=None, jobTitle=None):
@@ -63,7 +63,6 @@ def mutation_create_person(title: str, contributor: str, creator: str, source: s
 
     args = {
         "title": title,
-        "publisher": publisher,
         "contributor": contributor,
         "creator": creator,
         "source": source,
@@ -95,7 +94,7 @@ def mutation_create_person(title: str, contributor: str, creator: str, source: s
     return mutation_create(args, CREATE_PERSON)
 
 
-def mutation_update_person(identifier: str, title: str=None, contributor: str=None, creator: str=None, source: str=None,publisher: str=None,
+def mutation_update_person(identifier: str, title: str=None, contributor: str=None, creator: str=None, source: str=None,
                            language: str=None, formatin:str="text/html", name: str=None, description: str=None,
                            image=None, birthDate=None, deathDate=None, familyName=None, givenName=None, gender=None,
                            honorificPrefix=None, honorificSuffix=None, jobTitle=None):
@@ -133,13 +132,11 @@ def mutation_update_person(identifier: str, title: str=None, contributor: str=No
 
     args = {"identifier": identifier}
     if title:
-        args["title"] = name
+        args["title"] = title
     if name:
         args["name"] = name
     if contributor:
         args["contributor"] = contributor
-    if publisher:
-        args["publisher"] = publisher
     if creator:
         args["creator"] = creator
     if source:

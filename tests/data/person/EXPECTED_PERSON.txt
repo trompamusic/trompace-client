@@ -1,7 +1,6 @@
 mutation {
   CreatePerson(
         title: "A. J. Fynn"
-        publisher: "https://www.cpdl.org"
         contributor: "https://www.cpdl.org"
         creator: "https://www.upf.edu"
         source: "https://www.cpdl.org/wiki/index.php/A._J._Fynn"
