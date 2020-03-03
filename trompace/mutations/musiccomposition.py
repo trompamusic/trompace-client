@@ -129,8 +129,6 @@ def mutation_create_music_composition(title: str, contributor: str, creator: str
         "title": title,
         "contributor": contributor,
         "creator": creator,
-        "source": source,
-        "subject": subject,
         "format": formatin,
         "language": StringConstant(language.lower()),
         "inLanguage": StringConstant(inLanguage.lower()),
@@ -139,7 +137,7 @@ def mutation_create_music_composition(title: str, contributor: str, creator: str
         args["name"] = name
     if description:
         args["description"] = description
-    return mutation_create(args, CREATE_DIGITAL_DOCUMENT)
+    return mutation_create(args, CREATE_MUSIC_COMPOSITION)
 
 
 def mutation_update_music_composition(identifier: str, title: str=None, contributor: str=None, creator: str=None, source: str=None,
