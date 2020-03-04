@@ -106,7 +106,7 @@ def mutation_create_music_composition(title: str, contributor: str, creator: str
         source: The URL of the web resource to be represented by the node.
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
         inLanguage: The language of the music composition. Currently supported languages are en,es,ca,nl,de,fr
-        formatin: A MimeType of the format of the music composition, default is "text/html"
+        formatin: A MimeType of the format of the page describing the music composition, default is "text/html"
         name: The name of the music composition.
         description: An account of the music composition.
 
@@ -150,7 +150,7 @@ def mutation_update_music_composition(identifier: str, title: str=None, contribu
         source: The URL of the web resource to be represented by the node.
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
         inLanguage: The language of the music composition. Currently supported languages are en,es,ca,nl,de,fr
-        formatin: A MimeType of the format of the music composition, default is "text/html"
+        formatin: A MimeType of the format of the page describing the music composition, default is "text/html"
         name: The name of the music composition.
         description: An account of the music composition.
     Returns:
