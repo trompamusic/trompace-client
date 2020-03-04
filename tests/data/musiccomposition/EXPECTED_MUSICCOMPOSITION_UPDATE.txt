@@ -1,7 +1,7 @@
 mutation {
-  UpdateDigitalDocument(
+  UpdateMusicComposition(
         identifier: "2eeca6dd-c62c-490e-beb0-2e3899fca74f"
-        publisher: "Https://www.cpdl.org"
+        name: "No Document"
 ) {
   identifier
 }

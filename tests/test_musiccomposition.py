@@ -27,47 +27,47 @@ class TestDocument(unittest.TestCase):
                                                   name="No Document")
         self.assertEqual(created_update, expected)
 
-    # def test_delete(self):
-    #     expected = util.read_file(self.data_dir, "EXPECTED_DOCUMENT_DELETE.txt")
+    def test_delete(self):
+        expected = util.read_file(self.data_dir, "EXPECTED_MUSICCOMPOSITION_DELETE.txt")
 
-    #     created_delete = document.mutation_delete_document('2eeca6dd-c62c-490e-beb0-2e3899fca74f')
-    #     self.assertEqual(created_delete, expected)
+        created_delete = musiccomposition.mutation_delete_music_composition('2eeca6dd-c62c-490e-beb0-2e3899fca74f')
+        self.assertEqual(created_delete, expected)
 
-    # def test_add_broad_match(self):
-    #     expected = util.read_file(self.data_dir, "EXPECTED_DOCUMENT_BROAD_MATCH.txt")
+    def test_add_broad_match(self):
+        expected = util.read_file(self.data_dir, "EXPECTED_MUSICCOMPOSITION_BROAD_MATCH.txt")
 
-    #     created_match = document.mutation_add_broad_match_document("ff562d2e-2265-4f61-b340-561c92e797e9",
-    #                                                       "59ce8093-5e0e-4d59-bfa6-805edb11e396")
-    #     self.assertEqual(created_match, expected)
+        created_match = musiccomposition.mutation_add_broad_match_music_composition("ff562d2e-2265-4f61-b340-561c92e797e9",
+                                                          "59ce8093-5e0e-4d59-bfa6-805edb11e396")
+        self.assertEqual(created_match, expected)
 
-    # def test_remove_broad_match(self):
-    #     expected = util.read_file(self.data_dir, "EXPECTED_DOCUMENT_REMOVE_BROAD_MATCH.txt")
+    def test_remove_broad_match(self):
+        expected = util.read_file(self.data_dir, "EXPECTED_MUSICCOMPOSITION_REMOVE_BROAD_MATCH.txt")
 
-    #     created_match = document.mutation_remove_broad_match_document(
-    #         "ff562d2e-2265-4f61-b340-561c92e797e9",
-    #         "59ce8093-5e0e-4d59-bfa6-805edb11e396")
-    #     self.assertEqual(created_match, expected)
+        created_match = musiccomposition.mutation_remove_broad_match_music_composition(
+            "ff562d2e-2265-4f61-b340-561c92e797e9",
+            "59ce8093-5e0e-4d59-bfa6-805edb11e396") 
+        self.assertEqual(created_match, expected)
 
-    # def test_add_exampleOf(self):
-    #     expected = util.read_file(self.data_dir, "expected_Document_add_exampleOf_Composition.txt")
+    def test_add_exampleOf(self):
+        expected = util.read_file(self.data_dir, "EXPECTED_MUSICCOMPOSITION_ADD_EXAMPLEOF_COMPOSITION.txt")
 
-    #     created_match = document.mutation_add_digital_document_work_example_composition(
-    #         "ff562d2e-2265-4f61-b340-561c92e797e9",
-    #         "59ce8093-5e0e-4d59-bfa6-805edb11e396")
-    #     self.assertEqual(created_match, expected)
+        created_match = musiccomposition.mutation_add_music_composition_work_example_composition(
+            "ff562d2e-2265-4f61-b340-561c92e797e9",
+            "59ce8093-5e0e-4d59-bfa6-805edb11e396")
+        self.assertEqual(created_match, expected)
 
-    # def test_merge_exampleOf(self):
-    #     expected = util.read_file(self.data_dir, "expected_Document_merge_exampleOf_Composition.txt")
+    def test_merge_exampleOf(self):
+        expected = util.read_file(self.data_dir, "EXPECTED_MUSICCOMPOSITION_MERGE_EXAMPLEOF_COMPOSITION.txt")
 
-    #     created_match = document.mutation_merge_digital_document_work_example_composition(
-    #         "ff562d2e-2265-4f61-b340-561c92e797e9",
-    #         "59ce8093-5e0e-4d59-bfa6-805edb11e396")
-    #     self.assertEqual(created_match, expected)
+        created_match = musiccomposition.mutation_merge_music_composition_work_example_composition(
+            "ff562d2e-2265-4f61-b340-561c92e797e9",
+            "59ce8093-5e0e-4d59-bfa6-805edb11e396")
+        self.assertEqual(created_match, expected)
 
-    # def test_remove_exampleOf(self):
-    #     expected = util.read_file(self.data_dir, "expected_Document_remove_exampleOf_Composition.txt")
+    def test_remove_exampleOf(self):
+        expected = util.read_file(self.data_dir, "EXPECTED_MUSICCOMPOSITION_REMOVE_EXAMPLEOF_COMPOSITION.txt")
 
-    #     created_match = document.mutation_remove_digital_document_work_example_composition(
-    #         "ff562d2e-2265-4f61-b340-561c92e797e9",
-    #         "59ce8093-5e0e-4d59-bfa6-805edb11e396")
-    #     self.assertEqual(created_match, expected)
+        created_match = musiccomposition.mutation_remove_music_composition_work_example_composition(
+            "ff562d2e-2265-4f61-b340-561c92e797e9",
+            "59ce8093-5e0e-4d59-bfa6-805edb11e396")
+        self.assertEqual(created_match, expected)

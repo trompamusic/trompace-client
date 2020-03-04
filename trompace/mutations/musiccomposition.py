@@ -234,10 +234,10 @@ def mutation_add_music_composition_work_example_composition(music_composition_id
         The string for the mutation for adding the music composition as an example of the composition.
     """
 
-    return mutation_link(music_composition_id, composition_id, ADD_DIGITAL_DOCUMENT_WORK_EXAMPLE_COMPOSITION)
+    return mutation_link(music_composition_id, composition_id, ADD_MUSIC_COMPOSITION_WORK_EXAMPLE_COMPOSITION)
 
 
-def mutation_merge_digital_document_work_example_composition(music_composition_id: str, composition_id: str):
+def mutation_merge_music_composition_work_example_composition(music_composition_id: str, composition_id: str):
     """Returns a mutation for merging a music composition as an example of a composition.
     Merging means that the connection will be added only if it does not exist.
 
@@ -248,7 +248,7 @@ def mutation_merge_digital_document_work_example_composition(music_composition_i
         The string for the mutation for merging the music composition as an example of the composition.
     """
 
-    return mutation_link(music_composition_id, composition_id, MERGE_DIGITAL_DOCUMENT_WORK_EXAMPLE_COMPOSITION)
+    return mutation_link(music_composition_id, composition_id, MERGE_MUSIC_COMPOSITION_WORK_EXAMPLE_COMPOSITION)
 
 
 def mutation_remove_music_composition_work_example_composition(music_composition_id: str, composition_id: str):
