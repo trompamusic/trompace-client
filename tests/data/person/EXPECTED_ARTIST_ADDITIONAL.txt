@@ -11,8 +11,8 @@ mutation {
         format: "text/html"
         language: en
         url: "https://en.wikipedia.org/wiki/A._J._Fynn"
-        birthDate: "1860"
-        deathDate: "1920"
+        birthDate: { year: 1860 }
+        deathDate: { year: 1920 }
     ) {
       identifier
     }

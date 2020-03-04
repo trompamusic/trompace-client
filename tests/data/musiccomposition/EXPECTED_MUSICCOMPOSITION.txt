@@ -1,0 +1,13 @@
+mutation {
+  CreateMusicComposition(
+        title: "A Document"
+        contributor: "https://www.cpdl.org"
+        creator: "https://www.cpdl.org/A_Document"
+        format: "text/html"
+        language: en
+        inLanguage: en
+        name: "A Document"
+  ) {
+    identifier
+  }
+}
