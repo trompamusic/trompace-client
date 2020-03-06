@@ -19,7 +19,7 @@ class ConfigRequirementException(Exception):
         super().__init__("{} not found in configuration file".format(object))
 
 
-class VaueNotFound(Exception):
+class ValueNotFound(Exception):
     def __init__(self, object):
         super().__init__("{} value not found".format(object))
 

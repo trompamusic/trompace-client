@@ -2,7 +2,7 @@
 
 # To be added EntryPoint, ControlAction, PropertyValueSpecification and Property
 from trompace.exceptions import UnsupportedLanguageException
-from . import make_parameters, MUTATION
+from . import make_parameters, MUTATION, StringConstant, _Neo4jDate
 from ..constants import SUPPORTED_LANGUAGES
 
 
@@ -63,7 +63,7 @@ def mutation_update(identifier: str, mutation_string: str, name=None, publisher=
     if coverage:
         args["coverage"] = coverage
     if date:
-        args["date"] = date
+        args["date"] = _Neo4jDate(date)
     if disambiguatingDescription:
         args["disambiguatingDescription"] = disambiguatingDescription
     if relation:
@@ -87,9 +87,9 @@ def mutation_update(identifier: str, mutation_string: str, name=None, publisher=
     if award:
         args["award"] = award
     if birthDate:
-        args["birthDate"] = birthDate
+        args["birthDate"] = _Neo4jDate(birthDate)
     if deathDate:
-        args["deathDate"] = deathDate
+        args["deathDate"] = _Neo4jDate(deathDate)
     if familyName:
         args["familyName"] = familyName
     if gender:

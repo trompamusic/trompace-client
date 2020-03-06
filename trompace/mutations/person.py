@@ -40,7 +40,7 @@ def mutation_create_artist(artist_name: str, publisher: str, contributor: str, c
         description: An account of the artist.
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
         coverage (optional): The spatial or temporal topic of the resource, the spatial applicability of the resource, or the jurisdiction under which the resource is relevant.
-        date (optional): A point in time associated with an event in the lifecycle of the resource. Must be in ‘YYYY’, ‘YYYY-MM’ or ‘YYYY-MM-DD’ format.
+        date (optional): A point in time associated with an event in the lifecycle of the resource. Accepts a date type, year(int) or list with [year, month, date] where month and date are optional.
         disambiguatingDescription (optional): An alternate description of the artist, particularlly to distinguish from other similar artists.
         relation (optional): A related resource. Any web resource can be used as a relation.
         _type (optional): The RDF type URI of the node.
@@ -52,8 +52,8 @@ def mutation_create_artist(artist_name: str, publisher: str, contributor: str, c
         url (optional): An additional URL for the artist.
         additionalName (optional): An additional name for the artist.
         award (optional): Awards won the artist?
-        birthDate (optional): The birth date of the artist, currently accepts string, but needs to be chenged to date format.
-        deathDate (optional): The date of death of the artist, currently accepts string, but needs to be chenged to date format.
+        birthDate (optional): The birth date of the artist. Accepts a date type, year(int) or list with [year, month, date] where month and date are optional.
+        deathDate (optional): The date of death of the artist. Accepts a date type, year(int) or list with [year, month, date] where month and date are optional.
         familyName (optional); The family name of the artist.
         gender (optinal): The artists gender.
         honorificPrefix (optional): The artist's prefix.
@@ -151,7 +151,7 @@ def mutation_update_artist(identifier: str, artist_name=None, publisher=None, co
         description (optional): An account of the artist.
         language (optional): The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr.
         coverage (optional): The spatial or temporal topic of the resource, the spatial applicability of the resource, or the jurisdiction under which the resource is relevant.
-        date (optional): A point in time associated with an event in the lifecycle of the resource. Must be in ‘YYYY’, ‘YYYY-MM’ or ‘YYYY-MM-DD’ format.
+        date (optional): A point in time associated with an event in the lifecycle of the resource. Accepts a date type, year(int) or list with [year, month, date] where month and date are optional.
         disambiguatingDescription (optional): An alternate description of the artist, particularlly to distinguish from other similar artists.
         relation (optional): A related resource. Any web resource can be used as a relation.
         _type (optional): The RDF type URI of the node.
@@ -163,8 +163,8 @@ def mutation_update_artist(identifier: str, artist_name=None, publisher=None, co
         url (optional): An additional URL for the artist.
         additionalName (optional): An additional name for the artist.
         award (optional): Awards won the artist?
-        birthDate (optional): The birth date of the artist, currently accepts string, but needs to be chenged to date format.
-        deathDate (optional): The date of death of the artist, currently accepts string, but needs to be chenged to date format.
+        birthDate (optional): The birth date of the artist. Accepts a date type, year(int) or list with [year, month, date] where month and date are optional.
+        deathDate (optional): The date of death of the artist. Accepts a date type, year(int) or list with [year, month, date] where month and date are optional.
         familyName (optional); The family name of the artist.
         gender (optinal): The artists gender.
         honorificPrefix (optional): The artist's prefix.

@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import date
 
 
 class StringConstant:
@@ -16,16 +16,24 @@ class StringConstant:
 
 class _Neo4jDate(StringConstant):
     """The _Neo4jDate is used for Date values. It will be added as
-    StringConstant in the GraphQL. The date will be formatted
-    as: { year:[int] [month: [int] day: [int]] }
+    StringConstant in the GraphQL. The date will be formatted as:
+        { year:[int] [month: [int] day: [int]] }
 
-    The constructor argument can be a datetime or a year."""
+    The constructor argument can be a date, a list of dateparts [year, month,
+    day] or a year. The month and day in the list of dateparts are optional.
+    All dateparts should be of type int."""
 
-    def __init__(self, *args):
-        if isinstance(args[0], datetime):
-            self.value = "{{ year: {0} month: {1} day: {2} }}".format(args[0].year, args[0].month, args[0].day)
+    def __init__(self, value):
+        if isinstance(value, date):
+            self.value = "{{ year: {0} month: {1} day: {2} }}".format(value.year, value.month, value.day)
+        elif isinstance(value, list):
+            date_parts = ['year','month','day']
+            date_str = ""
+            for i in range(min(len(date_parts), len(value))):
+                date_str += "{0}: {1} ".format(date_parts[i], value[i])
+            self.value = "{{ {0}}}".format(date_str)
         else:
-            self.value = "{{ year: {0} }}".format(args[0])
+            self.value = "{{ year: {0} }}".format(value)
 
 
 def encode_list(thelist, encoder):
