@@ -46,7 +46,7 @@ def mutation_create_controlaction(name: str, description: str, actionStatus: str
     args = {
         "name": name,
         "description": description,
-        "actionStatus": StringConstant(actionStatus.lower())
+        "actionStatus": StringConstant(actionStatus)
     }
     if identifier:
         args["identifier"] = identifier
