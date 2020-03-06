@@ -10,8 +10,8 @@ CREATE_CONTROLACTION = '''CreateControlAction(
     }}'''
 
 ADD_ENTRYPOINT_CONTROLACTION = '''AddThingInterfacePotentialAction(
-        from: {{identifier: "{identifier_1}", type:EntryPoint}}
-        to: {{identifier: "{identifier_2}", type: ControlAction}}
+        from: {{identifier: "{identifier_1}"}}
+        to: {{identifier: "{identifier_2}"}}
         ){{
         from {{
         ... on EntryPoint{{
