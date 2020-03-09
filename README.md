@@ -2,7 +2,8 @@
 
 Music Technology Group, Universitat Pompeu Fabra, Barcelona
 
-A python library to read from and write to the Trompa CE
+A python library to read from and write to the Trompa Contributor Environment
+(Trompa CE).
 
 ## Installation
 
@@ -14,7 +15,13 @@ to install the package and dependencies
 
 ## Using the library
 
+This library connects to an existing Trompa CE instance. For testing on a local
+environment the docker containers from https://github.com/trompamusic/ce-api
+can be run.
+
 Basic example code for using the library to add an artist to the Trompa CE.
+
+To use the library an existing Trompa Contributor environment
 
 ```python
 import asyncio
