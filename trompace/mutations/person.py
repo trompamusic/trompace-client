@@ -24,7 +24,7 @@ DELETE_PERSON = '''DeletePerson(
 
 
 def mutation_create_person(title: str, contributor: str, creator: str, source: str,
-                           language: str, formatin:str="text/html", name: str=None, description: str=None,
+                           language: str, format_:str="text/html", name: str=None, description: str=None,
                            image=None, birthDate=None, deathDate=None, familyName=None, givenName=None, gender=None,
                            honorificPrefix=None, honorificSuffix=None, jobTitle=None):
     """Returns a mutation for creating a person object
@@ -34,7 +34,7 @@ def mutation_create_person(title: str, contributor: str, creator: str, source: s
         creator: The person, organization or service who created the thing the web resource is about.
         source: The URL of the web resource to be represented by the node.
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
-        formatin: A MimeType of the format of the person, default is "text/html"
+        format_: A MimeType of the format of the person, default is "text/html"
         name: The name of the person
         description: An account of the person.
         image (optional): An image associated with the person.
@@ -66,7 +66,7 @@ def mutation_create_person(title: str, contributor: str, creator: str, source: s
         "contributor": contributor,
         "creator": creator,
         "source": source,
-        "format": formatin,
+        "format": format_,
         "language": StringConstant(language.lower()),
     }
     if description:
@@ -95,7 +95,7 @@ def mutation_create_person(title: str, contributor: str, creator: str, source: s
 
 
 def mutation_update_person(identifier: str, title: str=None, contributor: str=None, creator: str=None, source: str=None,
-                           language: str=None, formatin:str="text/html", name: str=None, description: str=None,
+                           language: str=None, name: str=None, description: str=None,
                            image=None, birthDate=None, deathDate=None, familyName=None, givenName=None, gender=None,
                            honorificPrefix=None, honorificSuffix=None, jobTitle=None):
     """Returns a mutation for updating a person object
@@ -106,18 +106,17 @@ def mutation_update_person(identifier: str, title: str=None, contributor: str=No
         creator: The person, organization or service who created the thing the web resource is about.
         source: The URL of the web resource to be represented by the node.
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
-        formatin: A MimeType of the format of the person, default is "text/html"
         name: The name of the person
         description: An account of the person.
-        image (optional): An image associated with the person.
-        birthDate (optional): The birth date of the person, currently accepts string, but needs to be chenged to date format.
-        deathDate (optional): The date of death of the person, currently accepts string, but needs to be chenged to date format.
-        familyName (optional); The family name of the person.
-        givenName (optional); The given name of the person.
+        image: An image associated with the person.
+        birthDate: The birth date of the person, currently accepts string, but needs to be chenged to date format.
+        deathDate: The date of death of the person, currently accepts string, but needs to be chenged to date format.
+        familyName: The family name of the person.
+        givenName: The given name of the person.
         gender (optinal): The persons gender.
-        honorificPrefix (optional): The person's prefix.
-        honorificSuffix (optional): The person's suffix.
-        jobTitle (optional): The person's job title.
+        honorificPrefix: The person's prefix.
+        honorificSuffix: The person's suffix.
+        jobTitle: The person's job title.
 
     Returns:
         The string for the mutation for updating the person.
