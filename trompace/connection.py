@@ -13,7 +13,6 @@ async def submit_query(querystr: str):
     """
     q = {"query": querystr}
     server = config.server_id
-    print(server)
     r = requests.post(server, json=q)
     try:
         r.raise_for_status()
@@ -29,7 +28,6 @@ async def submit_query(querystr: str):
 def submit_query_nasync(querystr: str):
     q = {"query": querystr}
     server = config.server_id
-    print(server)
     r = requests.post(server, json=q)
     try:
         r.raise_for_status()

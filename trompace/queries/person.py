@@ -1,6 +1,6 @@
 # Generate GraphQL queries for queries pertaining to persons objects.
 from trompace.exceptions import UnsupportedLanguageException, MimeTypeException
-from .. import StringConstant
+from .. import StringConstant, QUERY
 from .templates import query_create
 from ..constants import SUPPORTED_LANGUAGES
 
@@ -106,7 +106,7 @@ def query_person(identifier: str=None, title: str=None, contributor: str=None, c
       args["jobTitle"] = jobTitle
 
     if len(args) == 0:
-        return QUERY_PERSON_ALL
+        return QUERY.format(query=QUERY_PERSON_ALL)
     else:
         return query_create(args, QUERY_PERSON)
 

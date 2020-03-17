@@ -22,7 +22,7 @@ class TestPerson(unittest.TestCase):
     def test_query_all(self):
         expected = util.read_file(self.data_dir, "EXPECTED_PERSON_QUERY_ALL.txt")
 
-        created_person = person_query.query_artist()
+        created_person = person_query.query_person()
         self.assertEqual(created_person, expected)
 
     def test_create(self):
