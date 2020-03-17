@@ -16,7 +16,7 @@ class TestPerson(unittest.TestCase):
     def test_query(self):
         expected = util.read_file(self.data_dir, "EXPECTED_PERSON_QUERY.txt")
 
-        created_person = person_query.query_artist("ff59650b-1d47-4ea5-b356-31fddeb48315")
+        created_person = person_query.query_person("ff59650b-1d47-4ea5-b356-31fddeb48315")
         self.assertEqual(created_person, expected)
 
     def test_query_all(self):

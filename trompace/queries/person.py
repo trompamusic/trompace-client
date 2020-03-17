@@ -1,11 +1,10 @@
-# Generate GraphQL queries for mutations pertaining to persons/artists objects.
+# Generate GraphQL queries for queries pertaining to persons objects.
 from trompace.exceptions import UnsupportedLanguageException, MimeTypeException
-from . import StringConstant
+from .. import StringConstant
 from .templates import query_create
 from ..constants import SUPPORTED_LANGUAGES
 
-QUERY_PERSON = '''query {{
-  Person(
+QUERY_PERSON = '''Person(
   {parameters}
   )
   {{
@@ -17,11 +16,9 @@ QUERY_PERSON = '''query {{
     source
     description
     language
-  }}
-}}'''
+  }}'''
 
-QUERY_PERSON_ALL = '''query {
-  Person
+QUERY_PERSON_ALL = '''Person
   {
     identifier
     name
@@ -31,23 +28,34 @@ QUERY_PERSON_ALL = '''query {
     source
     description
     language
-  }
-}'''
+  }'''
 
 
-def query_artist(identifier: str=None, artist_name=None, publisher=None, contributor=None, creator=None, subject=None,
-                             source=None, description=None, language=None):
-    """Returns a query for a personobject
+
+
+def query_person(identifier: str=None, title: str=None, contributor: str=None, creator: str=None, source: str=None,
+                           language: str=None, format_:str=None, name: str=None, description: str=None,
+                           image=None, birthDate=None, deathDate=None, familyName=None, givenName=None, gender=None,
+                           honorificPrefix=None, honorificSuffix=None, jobTitle=None):
+    """Returns a mutation for creating a person object
     Arguments:
-        identifier: The unique identifier of the person.
-        document_name: The name of the person.
-        publisher: The person, organization or service responsible for making the artist information available.
-        contributor: A person, an organization, or a service responsible for contributing the artist to the web resource.
-            This can be either a name or a base URL.
+        title: The title of the page from which the person information was extracted.      
+        contributor: A person, an organization, or a service responsible for contributing the person to the web resource. This can be either a name or a base URL.
         creator: The person, organization or service who created the thing the web resource is about.
         source: The URL of the web resource to be represented by the node.
-        description: An account of the artist.
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
+        format_: A MimeType of the format of the person, default is "text/html"
+        name: The name of the person
+        description: An account of the person.
+        image: An image associated with the person.
+        birthDate : The birth date of the person, currently accepts string, but needs to be chenged to date format.
+        deathDate : The date of death of the person, currently accepts string, but needs to be chenged to date format.
+        familyName ; The family name of the person.
+        givenName ; The given name of the person.
+        gender : The persons gender.
+        honorificPrefix : The person's prefix.
+        honorificSuffix : The person's suffix.
+        jobTitle: The person's job title.
 
 
     Returns:
@@ -57,11 +65,49 @@ def query_artist(identifier: str=None, artist_name=None, publisher=None, contrib
     """
     if language and language not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
+    args ={}
 
-    if all(v is None for v in locals().values()):
+    if identifier:
+      args["identifier"] = identifier
+
+    if title:
+      args["title"] = title
+    if contributor:
+      args["contributor"] = contributor
+    if creator:
+      args["creator"] = creator
+    if source:
+      args["source"] = source
+    if language:
+      args["language"] = language
+    if format_:
+      args["format"] = format_
+    if name:
+      args["name"] = name
+    if description:
+      args["description"] = description
+    if image:
+      args["image"] = image
+    if birthDate:
+      args["birthDate"] = birthDate
+    if deathDate:
+      args["deathDate"] = deathDate
+    if familyName:
+      args["familyName"] = familyName
+    if givenName:
+      args["givenName"] = givenName
+    if gender:
+      args["gender"] = gender
+    if honorificPrefix:
+      args["honorificPrefix"] = honorificPrefix
+    if honorificSuffix:
+      args["honorificSuffix"] = honorificSuffix
+    if jobTitle:
+      args["jobTitle"] = jobTitle
+
+    if len(args) == 0:
         return QUERY_PERSON_ALL
     else:
-        return query_create(identifier, QUERY_PERSON, artist_name, publisher, contributor, creator, subject,
-                                 source, description, language)
+        return query_create(args, QUERY_PERSON)
 
         
