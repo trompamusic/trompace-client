@@ -1,7 +1,8 @@
 # Generate GraphQL queries for mutations pertaining to person objects.
-from trompace.exceptions import UnsupportedLanguageException, MimeTypeException
-from . import StringConstant
-from .templates import mutation_create, mutation_delete
+
+from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
+from .. import StringConstant, _Neo4jDate
+from .templates import mutation_create, mutation_update, mutation_delete
 from ..constants import SUPPORTED_LANGUAGES
 
 CREATE_PERSON = '''CreatePerson(
@@ -34,6 +35,7 @@ def mutation_create_person(title: str, contributor: str, creator: str, source: s
         creator: The person, organization or service who created the thing the web resource is about.
         source: The URL of the web resource to be represented by the node.
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
+
         format_: A MimeType of the format of the person, default is "text/html"
         name: The name of the person
         description: An account of the person.
@@ -59,7 +61,7 @@ def mutation_create_person(title: str, contributor: str, creator: str, source: s
         raise UnsupportedLanguageException(language)
 
     if "/" not in formatin:
-        raise MimeTypeException(formatin)
+        raise NotAMimeTypeException(formatin)
 
     args = {
         "title": title,
@@ -76,9 +78,9 @@ def mutation_create_person(title: str, contributor: str, creator: str, source: s
     if image:
         args["image"] = image
     if birthDate:
-        args["birthDate"] = birthDate
+        args["birthDate"] = _Neo4jDate(birthDate)
     if deathDate:
-        args["deathDate"] = deathDate
+        args["deathDate"] = _Neo4jDate(deathDate)
     if familyName:
         args["familyName"] = familyName
     if gender:
@@ -117,6 +119,7 @@ def mutation_update_person(identifier: str, title: str=None, contributor: str=No
         honorificPrefix: The person's prefix.
         honorificSuffix: The person's suffix.
         jobTitle: The person's job title.
+
 
     Returns:
         The string for the mutation for updating the person.

@@ -6,7 +6,7 @@ import websockets
 
 import trompace.config as config
 from trompace.connection import submit_query, download_file
-from trompace.exceptions import QueryException
+from trompace.exceptions import QueryException, ValueNotFound
 from trompace.mutations.application import mutation_create_application, mutation_add_entrypoint_application
 from trompace.mutations.controlaction import mutation_create_controlaction, mutation_add_entrypoint_controlaction, \
     mutation_modify_controlaction
@@ -91,10 +91,6 @@ QUERY_CONTROLACTION_ID = """
         }}
     }}
 """
-
-
-async def dummy_function(inputs):
-    return inputs
 
 
 async def create_entrypointcontrolaction_CE(created_app_id, entrypoint_name, contributor, subject, description_ep,
@@ -348,12 +344,12 @@ async def get_control_action_id(control_id, properties, property_values):
         elif ob['name'] in property_values:
             op_pvs[ob['name']] = ob['value']
         else:
-            raise VaueNotFound(ob['name'])
+            raise ValueNotFound(ob['name'])
     for pro in properties:
         if pro not in op_pro.keys():
-            raise VaueNotFound(pro)
+            raise ValueNotFound(pro)
     for pro in property_values:
         if pro not in op_pvs.keys():
-            raise VaueNotFound(pro)
+            raise ValueNotFound(pro)
 
     return op_pro, op_pvs

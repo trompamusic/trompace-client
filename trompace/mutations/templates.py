@@ -1,11 +1,10 @@
 # Templates for generate GraphQL queries for mutations.
 
-# To be added EntryPoint, ControlAction, PropertyValueSpecification and Property
 from trompace.exceptions import UnsupportedLanguageException
-from . import  MUTATION
-from .. import make_parameters
-from ..constants import SUPPORTED_LANGUAGES
 
+from . import MUTATION
+from ..constants import SUPPORTED_LANGUAGES
+from .. import make_parameters, _Neo4jDate, StringConstant
 
 def mutation_create(args, mutation_string: str):
     """Returns a mutation for creating an object.

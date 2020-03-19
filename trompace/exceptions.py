@@ -9,7 +9,7 @@ class IDNotFoundException(Exception):
         super().__init__("{} ID not found".format(object))
 
 
-class MimeTypeException(Exception):
+class NotAMimeTypeException(ValueError):
     def __init__(self, object):
         super().__init__("{} Not a valid mimetype".format(object))
 
@@ -19,7 +19,7 @@ class ConfigRequirementException(Exception):
         super().__init__("{} not found in configuration file".format(object))
 
 
-class VaueNotFound(Exception):
+class ValueNotFound(Exception):
     def __init__(self, object):
         super().__init__("{} value not found".format(object))
 
