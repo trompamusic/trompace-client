@@ -16,7 +16,7 @@ class TestControlAction(unittest.TestCase):
         expected = util.read_file(self.data_dir, "EXPECTED_CONTROLACTION.txt")
 
         created_control_action = mutation_create_controlaction("Verovio MusicXML Converter",
-                                                               "MusicXML to MEI conversion", "accepted")
+                                                               "MusicXML to MEI conversion", "active")
         self.assertEqual(created_control_action, expected)
 
     def test_add_entrypoint_controlaction(self):

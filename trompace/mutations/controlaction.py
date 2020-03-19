@@ -2,6 +2,8 @@
 
 from . import StringConstant
 from .templates import mutation_create, mutation_link
+from ..constants import SUPPORTED_ACTIONSTATUS_TYPES
+from trompace.exceptions import UnsupportedActionStatusException
 
 CREATE_CONTROLACTION = '''CreateControlAction(
         {parameters}
@@ -42,6 +44,9 @@ def mutation_create_controlaction(name: str, description: str, actionStatus: str
         The string for the mutation for creating the control action object.
 
     """
+    if actionStatus not in SUPPORTED_ACTIONSTATUS_TYPES:
+        raise UnsupportedActionStatusException(actionStatus)
+
 
     args = {
         "name": name,
@@ -74,6 +79,8 @@ def mutation_modify_controlaction(controlaction_id: str, status: str, error: str
     Returns:
         The string for the mutation for modifying a control action status.
     """
+    if status not in SUPPORTED_ACTIONSTATUS_TYPES:
+        raise UnsupportedActionStatusException(status)
     args = {
         "identifier": controlaction_id,
         "actionStatus": StringConstant(status.lower())
