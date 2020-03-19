@@ -1,7 +1,11 @@
 class UnsupportedLanguageException(Exception):
     def __init__(self, language):
-        super().__init__("Languauage {} is not a supported language. See {}".format(language,
-                                                                                    "trompace.constants.SUPPORTED_LANGUAGES"))
+        super().__init__("Language {} is not a supported language. See trompace.constants.SUPPORTED_LANGUAGES".format(language))
+
+
+class InvalidActionStatusException(Exception):
+    def __init__(self, actionstatus):
+        super().__init__("ActionStatusType {} is not a valid actionStatus. See trompace.constants.ActionStatusType".format(actionstatus))
 
 
 class IDNotFoundException(Exception):
@@ -29,4 +33,4 @@ class QueryException(Exception):
         error_str = "\n"
         for i, error in enumerate(errors):
             error_str += "{}. {}\n".format(1, error['message'])
-        super().__init__("Query error {} occured".format(error_str))
+        super().__init__("Query error {} occurred".format(error_str))

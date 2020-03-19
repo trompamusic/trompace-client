@@ -1,0 +1,8 @@
+mutation {
+  UpdateControlAction(
+        identifier: "93982f65-005d-4d69-9731-6079d2489598"
+        actionStatus: CompletedActionStatus
+    ) {
+      identifier
+    }
+}

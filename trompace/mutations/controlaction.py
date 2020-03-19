@@ -1,7 +1,9 @@
 # Generate GraphQL queries for mutations pertaining to control actions.
 
-from . import StringConstant
-from .templates import mutation_create, mutation_link
+from trompace.mutations import StringConstant
+from trompace.mutations.templates import mutation_create, mutation_link
+from trompace.constants import ActionStatusType
+import trompace.exceptions
 
 CREATE_CONTROLACTION = '''CreateControlAction(
         {parameters}
@@ -25,31 +27,33 @@ ADD_ENTRYPOINT_CONTROLACTION = '''AddThingInterfacePotentialAction(
       }}
     }}'''
 
-MODIFY_CONTROLACTION_STATUS = """UpdateControlAction (
-            {parameters}
-        ) {{
-            identifier
-        }}"""
+UPDATE_CONTROLACTION = """UpdateControlAction(
+        {parameters}
+    ) {{
+      identifier
+    }}"""
 
 
-def mutation_create_controlaction(name: str, description: str, actionStatus: str, identifier=None):
-    """Returns a mutation for creating a control action object
+def mutation_create_controlaction(name: str, description: str,
+                                  actionstatus: ActionStatusType = ActionStatusType.PotentialActionStatus):
+    """Returns a mutation for creating a ControlAction.
+    If an action status is not set, defaults to a PotentialActionStatus
     Arguments:
-        name: The name of the cvontrol action.
-        description: An account of the control action.
-        actionStatus: The default actionStatus for a newly instantiated ControlAction ‘job'.
+        name: The name of the ControlAction.
+        description: An account of the ControlAction.
+        actionstatus: The status of the ControlAction.
     Returns:
-        The string for the mutation for creating the control action object.
-
+        The string for the mutation for creating the ControlAction object.
     """
+
+    if not isinstance(actionstatus, ActionStatusType):
+        raise trompace.exceptions.InvalidActionStatusException(actionstatus)
 
     args = {
         "name": name,
         "description": description,
-        "actionStatus": StringConstant(actionStatus)
+        "actionStatus": StringConstant(actionstatus)
     }
-    if identifier:
-        args["identifier"] = identifier
     return mutation_create(args, CREATE_CONTROLACTION)
 
 
@@ -65,18 +69,24 @@ def mutation_add_entrypoint_controlaction(entrypoint_id: str, controlaction_id: 
     return mutation_link(entrypoint_id, controlaction_id, ADD_ENTRYPOINT_CONTROLACTION)
 
 
-def mutation_modify_controlaction(controlaction_id: str, status: str, error: str = "None"):
-    """Returns a mutation for modifying the status and errors of the control action
-    Arguments:s
-        controlaction_id: The unique identifier of the control action.
-        status: the status to update to.
-        error: The erros to update to.
+def mutation_modify_controlaction(controlaction_id: str, actionstatus: ActionStatusType, error: str = None):
+    """Returns a mutation for modifying the status and errors of the ControlAction
+    Arguments:
+        controlaction_id: The unique identifier of the ControlAction.
+        actionstatus: the status to update to.
+        error: An error to set if the actionstatus is FailedActionStatus
     Returns:
-        The string for the mutation for modifying a control action status.
+        The string for the mutation for modifying a ControlAction.
     """
+
+    if not isinstance(actionstatus, ActionStatusType):
+        raise trompace.exceptions.InvalidActionStatusException(actionstatus)
+
     args = {
         "identifier": controlaction_id,
-        "actionStatus": StringConstant(status.lower())
+        "actionStatus": StringConstant(actionstatus)
     }
+    if error:
+        args["error"] = error
 
-    return mutation_create(args, MODIFY_CONTROLACTION_STATUS)
+    return mutation_create(args, UPDATE_CONTROLACTION)

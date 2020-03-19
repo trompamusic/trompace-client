@@ -2,7 +2,9 @@
 import os
 import unittest
 
-from trompace.mutations.controlaction import mutation_create_controlaction, mutation_add_entrypoint_controlaction
+from trompace.constants import ActionStatusType
+from trompace.mutations import controlaction
+import trompace.exceptions
 from tests import util
 
 
@@ -12,17 +14,49 @@ class TestControlAction(unittest.TestCase):
         super()
         self.data_dir = os.path.join(os.path.dirname(__file__), "data", "controlaction")
 
-    def test_create(self):
-        expected = util.read_file(self.data_dir, "EXPECTED_CONTROLACTION.txt")
+    def test_create_controlaction(self):
+        expected = util.read_file(self.data_dir, "controlaction.txt")
 
-        created_control_action = mutation_create_controlaction("Verovio MusicXML Converter",
-                                                               "MusicXML to MEI conversion", "accepted")
+        created_control_action = controlaction.mutation_create_controlaction("Verovio MusicXML Converter",
+                                                               "MusicXML to MEI conversion")
         self.assertEqual(created_control_action, expected)
+
+        expected = util.read_file(self.data_dir, "controlaction_active.txt")
+        created_control_action = controlaction.mutation_create_controlaction("Verovio MusicXML Converter",
+                                                               "MusicXML to MEI conversion", ActionStatusType.ActiveActionStatus)
+        self.assertEqual(created_control_action, expected)
+
+    def test_create_controlaction_invalid_status(self):
+        """An invalid status for the ControlAction raises an Exception"""
+        with self.assertRaises(trompace.exceptions.InvalidActionStatusException):
+            controlaction.mutation_create_controlaction("Verovio MusicXML Converter",
+                                                        "MusicXML to MEI conversion", "NotAStatus")
+
+    def test_update_controlaction(self):
+        """Update a ControlAction to have a different actionStatus or error message"""
+
+        expected = util.read_file(self.data_dir, "update_controlaction.txt")
+        ca = controlaction.mutation_modify_controlaction("93982f65-005d-4d69-9731-6079d2489598",
+                                                         ActionStatusType.CompletedActionStatus)
+        self.assertEqual(ca, expected)
+
+        # Add an Error message
+        expected = util.read_file(self.data_dir, "update_controlaction_error.txt")
+        ca = controlaction.mutation_modify_controlaction("93982f65-005d-4d69-9731-6079d2489598",
+                                                         ActionStatusType.FailedActionStatus,
+                                                         error="Failed to do a thing")
+        self.assertEqual(ca, expected)
+
+    def test_update_controlaction_invalid_status(self):
+        """An invalid status for the ControlAction raises an Exception"""
+        with self.assertRaises(trompace.exceptions.InvalidActionStatusException):
+            controlaction.mutation_modify_controlaction("93982f65-005d-4d69-9731-6079d2489598",
+                                                        "NotAStatus",
+                                                        error="Failed to do a thing")
 
     def test_add_entrypoint_controlaction(self):
         expected = util.read_file(self.data_dir, "EXPECTED_ADD_CONTROLACTION_ENTRYPOINT.txt")
 
-        created_match = mutation_add_entrypoint_controlaction("ff562d2e-2265-4f61-b340-561c92e797e9",
-                                                              "59ce8093-5e0e-4d59-bfa6-805edb11e396")
-        print(created_match)
+        created_match = controlaction.mutation_add_entrypoint_controlaction("ff562d2e-2265-4f61-b340-561c92e797e9",
+                                                                            "59ce8093-5e0e-4d59-bfa6-805edb11e396")
         self.assertEqual(created_match, expected)
