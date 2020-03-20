@@ -7,6 +7,7 @@ setuptools.setup(
     name="trompa-ce-client",
     version="0.0.1",
     author="Pritish Chandna",
+    install_requires=['requests', 'asyncio', 'aiohttp', 'websockets', 'aiofiles']
     author_email="pritish.chandna@upf.edu",
     description="A python library to read from and write to the Trompa CE",
     long_description=long_description,
