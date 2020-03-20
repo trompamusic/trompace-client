@@ -1,0 +1,9 @@
+mutation {
+  CreateControlAction(
+        name: "Verovio MusicXML Converter"
+        description: "MusicXML to MEI conversion"
+        actionStatus: ActiveActionStatus
+    ) {
+      identifier
+    }
+}
