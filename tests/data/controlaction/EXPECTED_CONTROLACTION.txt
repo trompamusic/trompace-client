@@ -2,7 +2,7 @@ mutation {
   CreateControlAction(
         name: "Verovio MusicXML Converter"
         description: "MusicXML to MEI conversion"
-        actionStatus: accepted
+        actionStatus: active
     ) {
       identifier
     }
