@@ -1,6 +1,6 @@
 # Generate GraphQL queries for mutations pertaining to musical compositions and works related objects.
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
-from trompace import StringConstant
+from trompace import StringConstant, filter_none_args
 from .templates import mutation_create, mutation_update, mutation_delete, mutation_link
 from ..constants import SUPPORTED_LANGUAGES
 
@@ -116,8 +116,19 @@ def mutation_update_composition(identifier: str, composition_name=None, publishe
         Assertion error if the input language is not one of the supported languages.
     """
 
-    return mutation_update(identifier, UPDATE_MUSIC_COMPOSITION, composition_name, publisher, contributor, creator,
-                           source, description, language)
+    args = {"identifier": identifier,
+            "name": composition_name,
+            "publisher": publisher,
+            "contributor": contributor,
+            "creator": creator,
+            "source": source,
+            "description": description,
+            "language": language
+            }
+
+    args = filter_none_args(args)
+
+    return mutation_update(args, UPDATE_MUSIC_COMPOSITION)
 
 
 def mutation_delete_composition(identifier: str):

@@ -1,6 +1,6 @@
 # Generate GraphQL queries for mutations pertaining to digital document objects.
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
-from trompace import StringConstant
+from trompace import StringConstant, filter_none_args
 from .templates import mutation_create, mutation_delete, mutation_update, mutation_link
 from ..constants import SUPPORTED_LANGUAGES
 
@@ -145,7 +145,7 @@ def mutation_update_document(identifier: str, document_name=None, publisher=None
         publisher (optional): The person, organization or service responsible for making the artist inofrmation available.
         contributor (optional): A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
         creator (optional): The person, organization or service who created the document that the web resource is about.
-        sourcer (optional): The URL of the web resource to be represented by the node.
+        source (optional): The URL of the web resource to be represented by the node.
         description (optional): An account of the artist.
         language (optional): The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr.
     Returns:
@@ -154,8 +154,18 @@ def mutation_update_document(identifier: str, document_name=None, publisher=None
         Assertion error if the input language is not one of the supported languages.
     """
 
-    return mutation_update(identifier, UPDATE_DIGITAL_DOCUMENT, document_name, publisher, contributor, creator, source,
-                           description, language)
+    args = {"identifier": identifier,
+            "name": document_name,
+            "publisher": publisher,
+            "contributor": contributor,
+            "creator": creator,
+            "source": source,
+            "description": description,
+            "language": language}
+
+    args = filter_none_args(args)
+
+    return mutation_update(args, UPDATE_DIGITAL_DOCUMENT)
 
 
 def mutation_delete_document(identifier: str):
