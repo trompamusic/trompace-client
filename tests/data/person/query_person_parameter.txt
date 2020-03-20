@@ -1,0 +1,13 @@
+query {
+  Person(identifier: "ff59650b-1d47-4ea5-b356-31fddeb48315")
+{
+identifier
+name
+publisher
+contributor
+creator
+source
+description
+language
+}
+}

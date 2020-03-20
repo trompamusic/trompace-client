@@ -2,6 +2,12 @@ import json
 from datetime import date
 
 
+def filter_none_args(args):
+    """Filter a dictionary and only return items where the value is not None
+    A StringConstant with a value of None is also counted as an empty value"""
+    return {k: v for k, v in args.items() if v is not None}
+
+
 class StringConstant:
     """Some values in GraphQL are constants, not strings, and so they shouldn't
     be encoded or have quotes put around them. Use this to represent a constant

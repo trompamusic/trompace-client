@@ -1,10 +1,31 @@
-# Templates for generate GraphQL queries for mutations.
+# Templates for generating GraphQL queries for mutations.
+from typing import Dict, Any
 
-from trompace.exceptions import UnsupportedLanguageException
+from trompace.mutations import MUTATION
+from trompace import make_parameters
 
-from . import MUTATION
-from ..constants import SUPPORTED_LANGUAGES
-from .. import make_parameters, _Neo4jDate, StringConstant
+
+MUTATION_TEMPLATE = '''{mutationname}(
+{parameters}
+) {{
+identifier
+}}'''
+
+
+def format_mutation(mutationname: str, args: Dict[str, Any]):
+    """Create a mutation to send to the Contributor Environment.
+
+    Arguments:
+        mutationname: the name of the mutation to generate
+        args: a dictionary of field: value pairs to add to the mutation
+
+    Returns:
+        A formatted mutation
+    """
+
+    formatted_mutation = MUTATION_TEMPLATE.format(mutationname=mutationname, parameters=make_parameters(**args))
+    return MUTATION.format(mutation=formatted_mutation)
+
 
 def mutation_create(args, mutation_string: str):
     """Returns a mutation for creating an object.

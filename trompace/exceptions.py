@@ -7,10 +7,6 @@ class InvalidActionStatusException(Exception):
     def __init__(self, actionstatus):
         super().__init__("ActionStatusType {} is not a valid actionStatus. See trompace.constants.ActionStatusType".format(actionstatus))
 
-class UnsupportedActionStatusException(Exception):
-    def __init__(self, actionstatus):
-        super().__init__("{} is not a supported action status. See {}".format(actionstatus,
-                                                                                    "trompace.constants.SUPPORTED_ACTIONSTATUS_TYPES"))
 
 class IDNotFoundException(Exception):
     def __init__(self, object):

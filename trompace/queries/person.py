@@ -1,109 +1,64 @@
 # Generate GraphQL queries for queries pertaining to persons objects.
-from trompace.exceptions import UnsupportedLanguageException
-from trompace import QUERY
-from .templates import query_create
-from ..constants import SUPPORTED_LANGUAGES
+from typing import List
 
-QUERY_PERSON = '''Person(
-  {parameters}
-  )
-  {{
-    identifier
-    name
-    publisher
-    contributor
-    creator
-    source
-    description
-    language
-  }}'''
+from trompace import QUERY, filter_none_args, make_parameters
 
-QUERY_PERSON_ALL = '''Person
-  {
-    identifier
-    name
-    publisher
-    contributor
-    creator
-    source
-    description
-    language
-  }'''
+QUERY_PERSON = '''Person{parameters}
+{{
+{fields}
+}}'''
+
+QUERY_PERSON_SUBSTRING = '''personBySubstring{parameters}
+{{
+{fields}
+}}'''
+
+default_fields = ["identifier", "name", "publisher", "contributor", "creator", "source", "description", "language"]
 
 
-def query_person(identifier: str=None, title: str=None, contributor: str=None, creator: str=None, source: str=None,
-                           language: str=None, format_:str=None, name: str=None, description: str=None,
-                           image=None, birthDate=None, deathDate=None, familyName=None, givenName=None, gender=None,
-                           honorificPrefix=None, honorificSuffix=None, jobTitle=None):
-    """Returns a mutation for creating a person object
+# TODO: We only define some basic query fields for now. Potential to add more if we see that they're needed
+def query_person(query: str = None, identifier: str = None, contributor: str = None, creator: str = None,
+                 source: str = None,
+                 first: int = None, offset: int = None, fields: List[str] = None):
+    """Returns a query for obtaining Person objects
+
     Arguments:
-        title: The title of the page from which the person information was extracted.
-        contributor: A person, an organization, or a service responsible for contributing the person to the web resource. This can be either a name or a base URL.
-        creator: The person, organization or service who created the thing the web resource is about.
-        source: The URL of the web resource to be represented by the node.
-        language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
-        format_: A MimeType of the format of the person, default is "text/html"
-        name: The name of the person
-        description: An account of the person.
-        image: An image associated with the person.
-        birthDate : The birth date of the person, currently accepts string, but needs to be chenged to date format.
-        deathDate : The date of death of the person, currently accepts string, but needs to be chenged to date format.
-        familyName ; The family name of the person.
-        givenName ; The given name of the person.
-        gender : The persons gender.
-        honorificPrefix : The person's prefix.
-        honorificSuffix : The person's suffix.
-        jobTitle: The person's job title.
-
+        query: perform a substring query on the name field
+        identifier: get a Person with this identifier
+        contributor: get Person objects from this contributor
+        creator: get Person objects from this creator
+        source: get Person objects from this source
+        first: get the first this many items
+        offset: offset search results by this value
+        fields: return these fields in the Person objects. Defaults to `trompace.queries.person.default_fields`
 
     Returns:
-        The string for the mutation for creating the document object.
-    Raises:
-        UnsupportedLanguageException if the input language is not one of the supported languages.
+        A Person Query string
     """
-    if language and language not in SUPPORTED_LANGUAGES:
-        raise UnsupportedLanguageException(language)
-    args ={}
 
-    if identifier:
-      args["identifier"] = identifier
-
-    if title:
-      args["title"] = title
-    if contributor:
-      args["contributor"] = contributor
-    if creator:
-      args["creator"] = creator
-    if source:
-      args["source"] = source
-    if language:
-      args["language"] = language
-    if format_:
-      args["format"] = format_
-    if name:
-      args["name"] = name
-    if description:
-      args["description"] = description
-    if image:
-      args["image"] = image
-    if birthDate:
-      args["birthDate"] = birthDate
-    if deathDate:
-      args["deathDate"] = deathDate
-    if familyName:
-      args["familyName"] = familyName
-    if givenName:
-      args["givenName"] = givenName
-    if gender:
-      args["gender"] = gender
-    if honorificPrefix:
-      args["honorificPrefix"] = honorificPrefix
-    if honorificSuffix:
-      args["honorificSuffix"] = honorificSuffix
-    if jobTitle:
-      args["jobTitle"] = jobTitle
-
-    if len(args) == 0:
-        return QUERY.format(query=QUERY_PERSON_ALL)
+    if query:
+        args = {"query": query,
+                "first": first,
+                "offset": offset}
+        querystr = QUERY_PERSON_SUBSTRING
     else:
-        return query_create(args, QUERY_PERSON)
+        args = {"identifier": identifier,
+                "contributor": contributor,
+                "creator": creator,
+                "source": source,
+                "first": first,
+                "offset": offset}
+        querystr = QUERY_PERSON
+
+    args = filter_none_args(args)
+
+    if fields:
+        fields = "\n".join(fields)
+    else:
+        fields = "\n".join(default_fields)
+
+    parameters = ""
+    if args:
+        parameters = "({})".format(make_parameters(**args))
+    formatted_query = querystr.format(parameters=parameters, fields=fields)
+    return QUERY.format(query=formatted_query)

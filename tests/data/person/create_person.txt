@@ -1,13 +1,13 @@
 mutation {
   CreatePerson(
-        title: "A. J. Fynn"
+title: "A. J. Fynn"
         contributor: "https://www.cpdl.org"
         creator: "https://www.upf.edu"
         source: "https://www.cpdl.org/wiki/index.php/A._J._Fynn"
         format: "text/html"
-        language: en
         description: "Born circa 1860Died circa 1920A. J. Fynn was an early 20th Century scholar in literature and anthropology"
-    ) {
-      identifier
-    }
+        language: en
+) {
+identifier
+}
 }
