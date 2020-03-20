@@ -6,7 +6,7 @@ import websockets
 
 from trompace.connection import submit_query
 from trompace.exceptions import ValueNotFound
-from trompace.mutations import StringConstant, make_parameters
+from trompace import StringConstant, make_parameters
 from trompace.subscriptions.controlaction import subscription_controlaction_client
 
 INIT_STR = """{"type":"connection_init","payload":{}}"""

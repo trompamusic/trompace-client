@@ -1,11 +1,5 @@
 # Generate GraphQL queries pertaining to digital document objects.
-import json
-import os
-import asyncio
-
-
-import trompace.config as config
-from trompace.exceptions import UnsupportedLanguageException, MimeTypeException, QueryException
+from trompace.exceptions import UnsupportedLanguageException
 from trompace.queries.templates import query_create
 from trompace.constants import SUPPORTED_LANGUAGES
 from .. import QUERY
@@ -35,7 +29,6 @@ QUERY_DIGITALDOCUMENT_ALL = '''DigitalDocument
     description
     language
   }'''
-
 
 
 def query_document(identifier: str=None, document_name=None, publisher=None, contributor=None, format_=None, creator=None,
@@ -86,7 +79,7 @@ def query_document(identifier: str=None, document_name=None, publisher=None, con
     if len(args) == 0:
         return QUERY.format(query=QUERY_DIGITALDOCUMENT_ALL)
     else:
-        return query_create(args, QUERY_DIGITALDOCUMENT) 
+        return query_create(args, QUERY_DIGITALDOCUMENT)
 
 
 

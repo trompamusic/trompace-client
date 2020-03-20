@@ -1,6 +1,6 @@
 # Generate GraphQL queries for mutations pertaining to software applications.
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
-from . import StringConstant
+from trompace import StringConstant
 from .templates import mutation_create, mutation_link
 from ..constants import SUPPORTED_LANGUAGES
 

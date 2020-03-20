@@ -1,7 +1,7 @@
 import unittest
 
 from datetime import date
-from trompace.mutations import make_parameters, StringConstant, _Neo4jDate
+from trompace import make_parameters, StringConstant, _Neo4jDate
 
 
 class TestMakeParameters(unittest.TestCase):

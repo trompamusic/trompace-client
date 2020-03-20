@@ -1,6 +1,6 @@
 # Generate GraphQL queries for mutations pertaining to control actions.
 
-from . import StringConstant
+from trompace import StringConstant
 from .templates import mutation_create, mutation_link
 from ..constants import SUPPORTED_ACTIONSTATUS_TYPES
 from trompace.exceptions import UnsupportedActionStatusException

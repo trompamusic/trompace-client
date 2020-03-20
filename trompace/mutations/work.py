@@ -1,6 +1,6 @@
 # Generate GraphQL queries for mutations pertaining to musical compositions and works related objects.
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
-from . import StringConstant
+from trompace import StringConstant
 from .templates import mutation_create, mutation_update, mutation_delete, mutation_link
 from ..constants import SUPPORTED_LANGUAGES
 
@@ -100,18 +100,18 @@ def mutation_create_composition(composition_name: str, publisher: str, contribut
 
 def mutation_update_composition(identifier: str, composition_name=None, publisher=None, contributor=None, creator=None,
                                 source=None, description=None, language=None):
-    """Returns a mutation for updating a person object
+    """Returns a mutation for updating a composition
     Arguments:
         identifier: The unique identifier of the composition.
         composition_name (optional): The name of the composition.
         publisher (optional): The person, organization or service responsible for making the artist inofrmation available.
         contributor (optional): A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
         creator (optional): The person, organization or service who created the composition that the web resource is about.
-        sourcer (optional): The URL of the web resource to be represented by the node.
+        source (optional): The URL of the web resource to be represented by the node.
         description (optional): An account of the artist.
         language (optional): The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr.
     Returns:
-        The string for the mutation for creating the artist.
+        The string for the mutation for updating a composition
     Raises:
         Assertion error if the input language is not one of the supported languages.
     """

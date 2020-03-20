@@ -1,6 +1,6 @@
 # Generate GraphQL queries for queries pertaining to persons objects.
-from trompace.exceptions import UnsupportedLanguageException, MimeTypeException
-from .. import StringConstant, QUERY
+from trompace.exceptions import UnsupportedLanguageException
+from trompace import QUERY
 from .templates import query_create
 from ..constants import SUPPORTED_LANGUAGES
 
@@ -31,15 +31,13 @@ QUERY_PERSON_ALL = '''Person
   }'''
 
 
-
-
 def query_person(identifier: str=None, title: str=None, contributor: str=None, creator: str=None, source: str=None,
                            language: str=None, format_:str=None, name: str=None, description: str=None,
                            image=None, birthDate=None, deathDate=None, familyName=None, givenName=None, gender=None,
                            honorificPrefix=None, honorificSuffix=None, jobTitle=None):
     """Returns a mutation for creating a person object
     Arguments:
-        title: The title of the page from which the person information was extracted.      
+        title: The title of the page from which the person information was extracted.
         contributor: A person, an organization, or a service responsible for contributing the person to the web resource. This can be either a name or a base URL.
         creator: The person, organization or service who created the thing the web resource is about.
         source: The URL of the web resource to be represented by the node.
@@ -109,5 +107,3 @@ def query_person(identifier: str=None, title: str=None, contributor: str=None, c
         return QUERY.format(query=QUERY_PERSON_ALL)
     else:
         return query_create(args, QUERY_PERSON)
-
-        

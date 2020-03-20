@@ -30,7 +30,7 @@ def mutation_create_person(title: str, contributor: str, creator: str, source: s
                            honorificPrefix=None, honorificSuffix=None, jobTitle=None):
     """Returns a mutation for creating a person object
     Arguments:
-        title: The title of the page from which the person information was extracted.      
+        title: The title of the page from which the person information was extracted.
         contributor: A person, an organization, or a service responsible for contributing the person to the web resource. This can be either a name or a base URL.
         creator: The person, organization or service who created the thing the web resource is about.
         source: The URL of the web resource to be represented by the node.
@@ -103,7 +103,7 @@ def mutation_update_person(identifier: str, title: str=None, contributor: str=No
     """Returns a mutation for updating a person object
     Arguments:
         identifier: The identifier of the person in the CE to be updated
-        title: The title of the page from which the person information was extracted.      
+        title: The title of the page from which the person information was extracted.
         contributor: A person, an organization, or a service responsible for contributing the person to the web resource. This can be either a name or a base URL.
         creator: The person, organization or service who created the thing the web resource is about.
         source: The URL of the web resource to be represented by the node.
@@ -130,7 +130,7 @@ def mutation_update_person(identifier: str, title: str=None, contributor: str=No
         raise UnsupportedLanguageException(language)
 
     if "/" not in formatin:
-        raise MimeTypeException(formatin)
+        raise NotAMimeTypeException(formatin)
 
     args = {"identifier": identifier}
     if title:
