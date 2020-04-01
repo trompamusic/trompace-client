@@ -13,8 +13,8 @@ identifier
 }}'''
 
 LINK_MUTATION_TEMPLATE = '''{mutationname}(
-    from: {{identifier: "{identifier_1}" }}
-    to: {{identifier: "{identifier_2}" }}
+    from: {{identifier: "{identifier_1}"}}
+    to: {{identifier: "{identifier_2}"}}
   ) {{
     from {{
       identifier

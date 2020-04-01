@@ -15,9 +15,9 @@ class TestDocument(unittest.TestCase):
     def test_create(self):
         expected = util.read_file(self.data_dir, "EXPECTED_MUSICCOMPOSITION.txt")
 
-        created_musiccomposition = musiccomposition.mutation_create_music_composition("A Document", "https://www.cpdl.org",
-                                                    "https://www.cpdl.org/A_Document", "https://www.upf.edu",
-                                                    "en", "en", name="A Document")
+        created_musiccomposition = musiccomposition.mutation_create_music_composition(title="A Document", contributor="https://www.cpdl.org", creator="https://www.cpdl.org/A_Document",
+                                                    source= "https://www.cpdl.org/wiki/index.php/A._J._Fynn""https://www.cpdl.org/A_Document", subject="subject",
+                                                    language="en", inLanguage="en", name="A Document")
         self.assertEqual(created_musiccomposition, expected)
 
     def test_update(self):
@@ -48,13 +48,6 @@ class TestDocument(unittest.TestCase):
             "59ce8093-5e0e-4d59-bfa6-805edb11e396") 
         self.assertEqual(created_match, expected)
 
-    def test_add_exampleOf(self):
-        expected = util.read_file(self.data_dir, "EXPECTED_MUSICCOMPOSITION_ADD_EXAMPLEOF_COMPOSITION.txt")
-
-        created_match = musiccomposition.mutation_add_music_composition_work_example_composition(
-            "ff562d2e-2265-4f61-b340-561c92e797e9",
-            "59ce8093-5e0e-4d59-bfa6-805edb11e396")
-        self.assertEqual(created_match, expected)
 
     def test_merge_exampleOf(self):
         expected = util.read_file(self.data_dir, "EXPECTED_MUSICCOMPOSITION_MERGE_EXAMPLEOF_COMPOSITION.txt")

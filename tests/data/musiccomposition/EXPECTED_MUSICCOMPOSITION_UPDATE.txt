@@ -1,8 +1,8 @@
 mutation {
   UpdateMusicComposition(
-        identifier: "2eeca6dd-c62c-490e-beb0-2e3899fca74f"
+identifier: "2eeca6dd-c62c-490e-beb0-2e3899fca74f"
         name: "No Document"
 ) {
-  identifier
+identifier
 }
 }

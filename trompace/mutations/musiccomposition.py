@@ -29,14 +29,14 @@ def mutation_create_music_composition(title: str, contributor: str, creator: str
     if language not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
 
-    if "/" not in formatin:
+    if "/" not in format_:
         raise NotAMimeTypeException(formatin)
 
     args = {
         "title": title,
         "contributor": contributor,
         "creator": creator,
-        "format": formatin,
+        "format": format_,
         "subject": subject,
         "source": source,
         "language": StringConstant(language.lower()),
@@ -155,7 +155,7 @@ def mutation_merge_music_composition_work_example_composition(music_composition_
         The string for the mutation for merging the music composition as an example of the composition.
     """
 
-    return format_link_mutation("MergeMusicCompositionExampleOfWork", from_identifier, to_identifier)
+    return format_link_mutation("MergeMusicCompositionExampleOfWork", music_composition_id, composition_id)
 
 def mutation_remove_music_composition_work_example_composition(music_composition_id: str, composition_id: str):
     """Returns a mutation for removing a music composition as an example of a composition.
@@ -166,6 +166,6 @@ def mutation_remove_music_composition_work_example_composition(music_composition
         The string for the mutation for removing the music composition as an example of the composition.
     """
 
-    return format_link_mutation("RemoveMusicCompositionExampleOfWork", from_identifier, to_identifier)
+    return format_link_mutation("RemoveMusicCompositionExampleOfWork", music_composition_id, composition_id)
 
 
