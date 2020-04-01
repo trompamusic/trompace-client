@@ -1,8 +1,8 @@
 # Generate GraphQL queries for mutations pertaining to music composition objects.
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
-from . import StringConstant
-from .templates import mutation_create, mutation_delete, mutation_link
-from ..constants import SUPPORTED_LANGUAGES
+from trompace.mutations.templates import format_mutation
+from trompace import StringConstant, _Neo4jDate, filter_none_args
+from trompace.constants import SUPPORTED_LANGUAGES
 
 ADD_MUSIC_COMPOSITION_BROAD_MATCH = '''AddMusicCompositionBroadMatch(
     from: {{identifier: "{identifier_1}" }}
@@ -64,23 +64,7 @@ REMOVE_MUSIC_COMPOSITION_WORK_EXAMPLE_COMPOSITION = '''RemoveMusicCompositionExa
     }}
 }}'''
 
-CREATE_MUSIC_COMPOSITION = '''CreateMusicComposition(
-        {parameters}
-  ) {{
-    identifier
-  }}'''
 
-UPDATE_MUSIC_COMPOSITION = '''UpdateMusicComposition(
-        {parameters}
-) {{
-  identifier
-}}'''
-
-DELETE_MUSIC_COMPOSITION = '''DeleteMusicComposition(
-    {parameters}
-  ) {{
-    identifier
-  }}'''
 
 ADD_MUSIC_COMPOSITION_TO_CONTROL_ACTION_MUTATION = """AddActionInterfaceThingInterface (
             from: {{identifier: "{identifier_2}", type: ControlAction}}
@@ -137,11 +121,14 @@ def mutation_create_music_composition(title: str, contributor: str, creator: str
         args["name"] = name
     if description:
         args["description"] = description
-    return mutation_create(args, CREATE_MUSIC_COMPOSITION)
+
+    args = filter_none_args(args)
+
+    return format_mutation("CreateMusicComposition", args)
 
 
 def mutation_update_music_composition(identifier: str, title: str=None, contributor: str=None, creator: str=None, source: str=None,
-                           language: str=None, inLanguage:str=None, formatin:str=None, name: str=None, description: str=None):
+                           language: str=None, inLanguage:str=None, format_:str=None, name: str=None, description: str=None):
     """Returns a mutation for updating a music composition object.
     Arguments:
         title: The title of the page from which the music composition information was extracted.      
@@ -150,7 +137,7 @@ def mutation_update_music_composition(identifier: str, title: str=None, contribu
         source: The URL of the web resource to be represented by the node.
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
         inLanguage: The language of the music composition. Currently supported languages are en,es,ca,nl,de,fr
-        formatin: A MimeType of the format of the page describing the music composition, default is "text/html"
+        format_: A MimeType of the format of the page describing the music composition, default is "text/html"
         name: The name of the music composition.
         description: An account of the music composition.
     Returns:
@@ -180,13 +167,15 @@ def mutation_update_music_composition(identifier: str, title: str=None, contribu
             raise UnsupportedLanguageException(inLanguage)
         else:
             args["inLanguage"] = StringConstant(inLanguage.lower())
-    if formatin:
-        args["format"] = formatin
+    if format_:
+        args["format"] = format_
     if name:
         args["name"] = name
     if description:
         args["description"] = description
-    return mutation_create(args, UPDATE_MUSIC_COMPOSITION)
+    args = filter_none_args(args)
+
+    return format_mutation("UpdateMusicComposition", args)
 
 
 
@@ -198,7 +187,7 @@ def mutation_delete_music_composition(identifier: str):
         The string for the mutation for deleting the music composition object based on the identifier.
     """
 
-    return mutation_delete(identifier, DELETE_MUSIC_COMPOSITION)
+    return mutation_delete("DeleteMusicComposition", {"identifier": identifier})
 
 
 def mutation_add_broad_match_music_composition(from_identifier: str, to_identifier: str):

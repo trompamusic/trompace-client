@@ -1,193 +1,138 @@
-# Generate GraphQL queries for mutations pertaining to persons/artists objects.
+# Generate GraphQL queries for mutations pertaining to person objects.
+
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
-from . import StringConstant, _Neo4jDate
-from .templates import mutation_create, mutation_update, mutation_delete
-from ..constants import SUPPORTED_LANGUAGES
-
-CREATE_PERSON = '''CreatePerson(
-        {parameters}
-    ) {{
-      identifier
-    }}'''
-
-UPDATE_PERSON = '''UpdatePerson(
-      {parameters}
-    ) {{
-      identifier
-    }}'''
-
-DELETE_PERSON = '''DeletePerson(
-      {parameters}
-    ) {{
-      identifier
-    }}'''
+from trompace.mutations.templates import format_mutation
+from trompace import StringConstant, _Neo4jDate, filter_none_args
+from trompace.constants import SUPPORTED_LANGUAGES
 
 
-def mutation_create_artist(artist_name: str, publisher: str, contributor: str, creator: str, source: str,
-                           description: str, language: str, formatin="text/html", coverage=None, date=None,
-                           disambiguatingDescription=None, relation=None, _type=None, _searchScore=None,
-                           additionalType=None, alternateName=None, image=None, sameAs=None, url=None,
-                           additionalName=None,
-                           award=None, birthDate=None, deathDate=None, familyName=None, gender=None, givenName=None,
-                           honorificPrefix=None, honorificSuffix=None, jobTitle=None, knowsLanguage=None):
-    """Returns a mutation for creating a person object
+def mutation_create_person(title: str, contributor: str, creator: str, source: str,
+                           language: str = None, format_: str = None, name: str = None,
+                           family_name: str = None, given_name: str = None, gender: str = None,
+                           birth_date: str = None, death_date: str = None,
+                           description: str = None, image: str = None, publisher: str = None,
+                           honorific_prefix: str = None, honorific_suffix: str = None, job_title: str = None):
+    """Returns a mutation for creating a Person
     Arguments:
-        artist_name: The name of the artist
-        publisher: The person, organization or service responsible for making the artist inofrmation available
-        contributor: A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
-        creator: The person, organization or service who created the thing the web resource is about.
-        sourcer: The URL of the web resource to be represented by the node.
-        description: An account of the artist.
+        title: The title of the resource indicated by `source`
+        contributor: The main URL of the site where the information about this Person was taken from
+        creator: The person, organization or service who is creating this Person (e.g. URL of the software)
+        source: The URL of the web resource where information about this Person is taken from
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
-        coverage (optional): The spatial or temporal topic of the resource, the spatial applicability of the resource, or the jurisdiction under which the resource is relevant.
-        date (optional): A point in time associated with an event in the lifecycle of the resource. Accepts a date type, year(int) or list with [year, month, date] where month and date are optional.
-        disambiguatingDescription (optional): An alternate description of the artist, particularlly to distinguish from other similar artists.
-        relation (optional): A related resource. Any web resource can be used as a relation.
-        _type (optional): The RDF type URI of the node.
-        _searchScore (optional): Unknown, ask Alastair.
-        additionalType (optional): An additional type for the node.
-        alternateName (optional): Alternate name of the artist.
-        image (optional): An image associated with the artist.
-        sameAs (optional): A schema.org property, defined as the URL of a reference Web page that unambiguously indicates the item's identity.
-        url (optional): An additional URL for the artist.
-        additionalName (optional): An additional name for the artist.
-        award (optional): Awards won the artist?
-        birthDate (optional): The birth date of the artist. Accepts a date type, year(int) or list with [year, month, date] where month and date are optional.
-        deathDate (optional): The date of death of the artist. Accepts a date type, year(int) or list with [year, month, date] where month and date are optional.
-        familyName (optional); The family name of the artist.
-        gender (optinal): The artists gender.
-        honorificPrefix (optional): The artist's prefix.
-        honorificSuffix (optional): The artist's suffix.
-        jobTitle (optional): The artist's job title.
-        knowsLanguage (optional): The language known by the artist.
-
-
-
+        format_: The mimetype of the resource indicated by `source`
+        name: The name of the person
+        family_name (optional): The family name of the person
+        given_name (optional): The given name of the person
+        gender (optional): The person's gender
+        birth_date (optional): The birth date of the person, formatted as yyyy, yyyy-mm or yyyy-mm-dd
+        death_date (optional): The date of death of the person , formatted as yyyy, yyyy-mm or yyyy-mm-dd
+        description (optional): A biographical description of the person
+        image (optional): URL to an image associated with the person
+        publisher (optional): An entity responsible for making the resource available
+        honorific_prefix (optional): An honorific prefix.
+        honorific_suffix (optional): An honorific suffix.
+        job_title (optional): The person's job title.
     Returns:
-        The string for the mutation for creating the artist.
+        The string for the mutation for creating the person.
     Raises:
-        UnsupportedLanguageException if the input language is not one of the supported languages.
+        UnsupportedLanguageException if `language` is not one of the supported languages.
+        NotAMimeTypeException if `format_` is not a valid mimetype.
     """
 
-    if language not in SUPPORTED_LANGUAGES:
+    if language and language.lower() not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
 
-    if "/" not in formatin:
-        raise NotAMimeTypeException(formatin)
+    if format_ and "/" not in format_:
+        raise NotAMimeTypeException(format_)
 
     args = {
-        "title": artist_name,
-        "name": artist_name,
-        "publisher": publisher,
+        "title": title,
         "contributor": contributor,
         "creator": creator,
         "source": source,
-        "subject": "artist",
+        "format": format_,
+        "name": name,
+        "familyName": family_name,
+        "givenName": given_name,
+        "gender": gender,
         "description": description,
-        "format": formatin,
-        "language": StringConstant(language.lower()),
+        "image": image,
+        "publisher": publisher,
+        "honorificPrefix": honorific_prefix,
+        "honorificSuffix": honorific_suffix,
+        "jobTitle": job_title
     }
-    if coverage:
-        args["coverage"] = coverage
-    if date:
-        args["date"] = _Neo4jDate(date)
-    if disambiguatingDescription:
-        args["disambiguatingDescription"] = disambiguatingDescription
-    if relation:
-        args["relation"] = relation
-    if _type:
-        args["type"] = _type
-    if _searchScore:
-        args["_searchScore"] = _searchScore
-    if additionalType:
-        args["additionalType"] = additionalType
-    if alternateName:
-        args["alternateName"] = alternateName
-    if image:
-        args["image"] = image
-    if sameAs:
-        args["sameAs"] = sameAs
-    if url:
-        args["url"] = url
-    if additionalName:
-        args["additionalName"] = additionalName
-    if award:
-        args["award"] = award
-    if birthDate:
-        args["birthDate"] = _Neo4jDate(birthDate)
-    if deathDate:
-        args["deathDate"] = _Neo4jDate(deathDate)
-    if familyName:
-        args["familyName"] = familyName
-    if gender:
-        args["gender"] = gender
-    if honorificPrefix:
-        args["honorificPrefix"] = honorificPrefix
-    if honorificSuffix:
-        args["honorificSuffix"] = honorificSuffix
-    if jobTitle:
-        args["jobTitle"] = jobTitle
-    if knowsLanguage:
-        args["knowsLanguage"] = knowsLanguage
+    if language is not None:
+        args["language"] = StringConstant(language.lower())
+    if birth_date is not None:
+        args["birthDate"] = _Neo4jDate(birth_date)
+    if death_date is not None:
+        args["deathDate"] = _Neo4jDate(death_date)
 
-    return mutation_create(args, CREATE_PERSON)
+    args = filter_none_args(args)
+
+    return format_mutation("CreatePerson", args)
 
 
-def mutation_update_artist(identifier: str, artist_name=None, publisher=None, contributor=None, creator=None,
-                           source=None, description=None, language=None, coverage=None, date=None,
-                           disambiguatingDescription=None, relation=None, _type=None, _searchScore=None,
-                           additionalType=None, alternateName=None, image=None, sameAs=None, url=None,
-                           additionalName=None,
-                           award=None, birthDate=None, deathDate=None, familyName=None, gender=None, givenName=None,
-                           honorificPrefix=None, honorificSuffix=None, jobTitle=None, knowsLanguage=None):
-    """Returns a mutation for updating a person object
+def mutation_update_person(identifier: str, title: str = None, contributor: str = None, creator: str = None,
+                           source: str = None, language: str = None, format_: str = None, name: str = None,
+                           family_name: str = None, given_name: str = None, gender: str = None,
+                           birth_date: str = None, death_date: str = None,
+                           description: str = None, image: str = None, publisher: str = None,
+                           honorific_prefix: str = None, honorific_suffix: str = None, job_title: str = None):
+    """Returns a mutation for updating a Person
     Arguments:
-        identifier: The unique identifier of the artist
-        artist_name (optional): The name of the artist
-        publisher (optional): The person, organization or service responsible for making the artist inofrmation available.
-        contributor (optional): A person, an organization, or a service responsible for contributing the artist to the web resource. This can be either a name or a base URL.
-        creator (optional): The person, organization or service who created the thing the web resource is about.
-        sourcer (optional): The URL of the web resource to be represented by the node.
-        description (optional): An account of the artist.
-        language (optional): The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr.
-        coverage (optional): The spatial or temporal topic of the resource, the spatial applicability of the resource, or the jurisdiction under which the resource is relevant.
-        date (optional): A point in time associated with an event in the lifecycle of the resource. Accepts a date type, year(int) or list with [year, month, date] where month and date are optional.
-        disambiguatingDescription (optional): An alternate description of the artist, particularlly to distinguish from other similar artists.
-        relation (optional): A related resource. Any web resource can be used as a relation.
-        _type (optional): The RDF type URI of the node.
-        _searchScore (optional): Unknown, ask Alastair.
-        additionalType (optional): An additional type for the node.
-        alternateName (optional): Alternate name of the artist.
-        image (optional): An image associated with the artist.
-        sameAs (optional): A schema.org property, defined as the URL of a reference Web page that unambiguously indicates the item's identity.
-        url (optional): An additional URL for the artist.
-        additionalName (optional): An additional name for the artist.
-        award (optional): Awards won the artist?
-        birthDate (optional): The birth date of the artist. Accepts a date type, year(int) or list with [year, month, date] where month and date are optional.
-        deathDate (optional): The date of death of the artist. Accepts a date type, year(int) or list with [year, month, date] where month and date are optional.
-        familyName (optional); The family name of the artist.
-        gender (optinal): The artists gender.
-        honorificPrefix (optional): The artist's prefix.
-        honorificSuffix (optional): The artist's suffix.
-        jobTitle (optional): The artist's job title.
-        knowsLanguage (optional): The language known by the artist.
-
+        identifier: The identifier of the person in the CE to be updated
+        TODO: See if there's a way of including argument lists from the `create_person` method to not duplicate info
     Returns:
-        The string for the mutation for updating the artist.
+        The string for the mutation for updating the person.
     Raises:
-        Assertion error if the input language is not one of the supported languages.
+        UnsupportedLanguageException if `language` is not one of the supported languages.
+        NotAMimeTypeException if `format_` is not a valid mimetype.
     """
 
-    return mutation_update(identifier, UPDATE_PERSON, artist_name, publisher, contributor, creator, source, description,
-                           language)
+    if language and language.lower() not in SUPPORTED_LANGUAGES:
+        raise UnsupportedLanguageException(language)
+
+    if format_ and "/" not in format_:
+        raise NotAMimeTypeException(format_)
+
+    args = {
+        "identifier": identifier,
+        "title": title,
+        "contributor": contributor,
+        "creator": creator,
+        "source": source,
+        "format": format_,
+        "name": name,
+        "familyName": family_name,
+        "givenName": given_name,
+        "gender": gender,
+        "description": description,
+        "image": image,
+        "publisher": publisher,
+        "honorificPrefix": honorific_prefix,
+        "honorificSuffix": honorific_suffix,
+        "jobTitle": job_title
+    }
+    if language is not None:
+        args["language"] = StringConstant(language.lower())
+    if birth_date is not None:
+        args["birthDate"] = _Neo4jDate(birth_date)
+    if death_date is not None:
+        args["deathDate"] = _Neo4jDate(death_date)
+
+    args = filter_none_args(args)
+
+    return format_mutation("UpdatePerson", args)
 
 
-def mutation_delete_artist(identifier: str):
-    """Returns a mutation for deleting a person object based on the identifier.
+def mutation_delete_person(identifier: str):
+    """Returns a mutation for deleting a Person with the given identifier.
     Arguments:
-        identifier: The unique identifier of the artist.
+        identifier: The identifier of the Person to delete.
     Returns:
-        The string for the mutation for deleting the artist based on the identifier.
+        A mutation string to delete a Person
     """
 
-    return mutation_delete(identifier, DELETE_PERSON)
+    return format_mutation("DeletePerson", {"identifier": identifier})
