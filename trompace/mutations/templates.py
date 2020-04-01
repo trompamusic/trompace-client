@@ -1,7 +1,6 @@
-
 # Templates for generating GraphQL queries for mutations.
-from typing import Dict, Any
 
+from typing import Dict, Any
 from trompace.mutations import MUTATION
 from trompace import make_parameters
 

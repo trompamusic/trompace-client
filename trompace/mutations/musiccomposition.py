@@ -4,9 +4,9 @@ from trompace.mutations.templates import format_mutation, format_link_mutation
 from trompace import StringConstant, _Neo4jDate, filter_none_args
 from trompace.constants import SUPPORTED_LANGUAGES
 
-
 def mutation_create_music_composition(title: str, contributor: str, creator: str, subject:str, source: str, 
                            language: str, inLanguage:str, format_:str="text/html", name: str=None, description: str=None):
+
     """Returns a mutation for creating a music composition object
     Arguments:
         title: The title of the page from which the music composition information was extracted.      
@@ -116,6 +116,8 @@ def mutation_delete_music_composition(identifier: str):
     """
 
     return format_mutation("DeleteMusicComposition", {"identifier": identifier})
+
+
 
 
 def mutation_add_broad_match_music_composition(from_identifier: str, to_identifier: str):
