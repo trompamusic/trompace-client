@@ -4,8 +4,10 @@ mutation {
         contributor: "https://www.cpdl.org"
         creator: "https://www.cpdl.org/A_Document"
         format: "text/html"
+        subject: "subject"
+        source: "https://www.cpdl.org/wiki/index.php/A._J._Fynn"
         language: en
-        inLanguage: en
+        inLanguage: "en"
         name: "A Document"
   ) {
     identifier
