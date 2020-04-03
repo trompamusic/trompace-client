@@ -45,4 +45,6 @@ class TestPerson(unittest.TestCase):
         expected = util.read_file(self.data_dir, "delete_person.txt")
 
         created_delete = mutation_delete_person('2eeca6dd-c62c-490e-beb0-2e3899fca74f')
+
         self.assertEqual(created_delete, expected)
+

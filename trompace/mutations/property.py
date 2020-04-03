@@ -1,7 +1,7 @@
 # Generate GraphQL queries for mutations pertaining to properties..
 from typing import List
 
-from . import StringConstant
+from trompace import StringConstant
 from .templates import mutation_create, mutation_link
 
 CREATE_PROPERTY = '''CreateProperty(

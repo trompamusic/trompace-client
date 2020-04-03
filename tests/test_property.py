@@ -3,7 +3,7 @@ import os
 import unittest
 
 from tests import util
-from trompace.mutations import StringConstant
+from trompace import StringConstant
 from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, \
     mutation_add_controlaction_propertyvaluespecification
 

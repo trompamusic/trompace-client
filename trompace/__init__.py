@@ -57,6 +57,7 @@ class _Neo4jDate(StringConstant):
     """The _Neo4jDate is used for Date values. It will be added as
     StringConstant in the GraphQL. The date will be formatted as:
         { year:[int] [month: [int] day: [int]] }
+
     The constructor argument can be a date, a list of dateparts [year, month,
     day] or a year. The month and day in the list of dateparts are optional.
     All dateparts should be of type int."""
@@ -77,3 +78,4 @@ class _Neo4jDate(StringConstant):
 QUERY = '''query {{
   {query}
 }}'''
+
