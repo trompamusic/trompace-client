@@ -1,22 +1,23 @@
 # Generate GraphQL queries for mutations pertaining to music composition objects.
+from trompace import StringConstant, filter_none_args
+from trompace.constants import SUPPORTED_LANGUAGES
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
 from trompace.mutations.templates import format_mutation, format_link_mutation
-from trompace import StringConstant, _Neo4jDate, filter_none_args
-from trompace.constants import SUPPORTED_LANGUAGES
 
-def mutation_create_music_composition(title: str, contributor: str, creator: str, subject:str, source: str, 
-                           language: str, inLanguage:str, format_:str="text/html", name: str=None, description: str=None):
 
+def mutation_create_music_composition(title: str, contributor: str, creator: str, subject: str, source: str,
+                                      language: str, inLanguage: str, format_: str = "text/html", name: str = None,
+                                      description: str = None):
     """Returns a mutation for creating a music composition object
     Arguments:
-        title: The title of the page from which the music composition information was extracted.      
+        title: The title of the page from which the music composition information was extracted.
         contributor: A person, an organization, or a service responsible for contributing the music composition to the web resource. This can be either a name or a base URL.
         creator: The person, organization or service who created the thing the web resource is about.
         subject: The subject of the music composition.
         source: The URL of the web resource to be represented by the node.
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
         inLanguage: The language of the music composition. Currently supported languages are en,es,ca,nl,de,fr
-        formatin: A MimeType of the format of the page describing the music composition, default is "text/html"
+        format_: A MimeType of the format of the page describing the music composition, default is "text/html"
         name: The name of the music composition.
         description: An account of the music composition.
 
@@ -30,7 +31,7 @@ def mutation_create_music_composition(title: str, contributor: str, creator: str
         raise UnsupportedLanguageException(language)
 
     if "/" not in format_:
-        raise NotAMimeTypeException(formatin)
+        raise NotAMimeTypeException(format_)
 
     args = {
         "title": title,
@@ -41,22 +42,22 @@ def mutation_create_music_composition(title: str, contributor: str, creator: str
         "source": source,
         "language": StringConstant(language.lower()),
         "inLanguage": inLanguage,
+        "name": name,
+        "description": description
     }
-    if name:
-        args["name"] = name
-    if description:
-        args["description"] = description
 
     args = filter_none_args(args)
 
     return format_mutation("CreateMusicComposition", args)
 
 
-def mutation_update_music_composition(identifier: str, title: str=None, contributor: str=None, creator: str=None, subject:str=None, source: str=None,
-                           language: str=None, inLanguage:str=None, format_:str=None, name: str=None, description: str=None):
+def mutation_update_music_composition(identifier: str, title: str = None, contributor: str = None, creator: str = None,
+                                      subject: str = None, source: str = None,
+                                      language: str = None, inLanguage: str = None, format_: str = None,
+                                      name: str = None, description: str = None):
     """Returns a mutation for updating a music composition object.
     Arguments:
-        title: The title of the page from which the music composition information was extracted.      
+        title: The title of the page from which the music composition information was extracted.
         contributor: A person, an organization, or a service responsible for contributing the music composition to the web resource. This can be either a name or a base URL.
         creator: The person, organization or service who created the thing the web resource is about.
         subject: The subject of the music composition.
@@ -71,40 +72,31 @@ def mutation_update_music_composition(identifier: str, title: str=None, contribu
     Raises:
         Assertion error if the input language or inLanguage is not one of the supported languages.
     """
-        
 
+    if language and language not in SUPPORTED_LANGUAGES:
+        raise UnsupportedLanguageException(language)
 
-    args = {"identifier": identifier}
-    if title:
-        args["title"] = title
-    if contributor:
-        args["contributor"] = contributor
-    if creator:
-        args["creator"] = creator
-    if subject:
-        args["subject"] = subject
-    if source:
-        args["source"] = source
-    if language:
-        if language not in SUPPORTED_LANGUAGES:
-            raise UnsupportedLanguageException(language)
-        else:
-            args["language"] = StringConstant(language.lower())
+    if inLanguage and inLanguage not in SUPPORTED_LANGUAGES:
+        raise UnsupportedLanguageException(inLanguage)
+
+    args = {"identifier": identifier,
+            "title": title,
+            "contributor": contributor,
+            "creator": creator,
+            "subject": subject,
+            "source": source,
+            "format": format_,
+            "name": name,
+            "description": description}
+
+    if language is not None:
+        args["language"] = StringConstant(language.lower())
     if inLanguage:
-        if inLanguage not in SUPPORTED_LANGUAGES:
-            raise UnsupportedLanguageException(inLanguage)
-        else:
-            args["inLanguage"] = StringConstant(inLanguage.lower())
-    if format_:
-        args["format"] = format_
-    if name:
-        args["name"] = name
-    if description:
-        args["description"] = description
+        args["inLanguage"] = StringConstant(inLanguage.lower())
+
     args = filter_none_args(args)
 
     return format_mutation("UpdateMusicComposition", args)
-
 
 
 def mutation_delete_music_composition(identifier: str):
@@ -116,8 +108,6 @@ def mutation_delete_music_composition(identifier: str):
     """
 
     return format_mutation("DeleteMusicComposition", {"identifier": identifier})
-
-
 
 
 def mutation_add_broad_match_music_composition(from_identifier: str, to_identifier: str):
@@ -144,8 +134,6 @@ def mutation_remove_broad_match_music_composition(from_identifier: str, to_ident
     return format_link_mutation("RemoveMusicCompositionBroadMatch", from_identifier, to_identifier)
 
 
-
-
 def mutation_merge_music_composition_work_example_composition(music_composition_id: str, composition_id: str):
     """Returns a mutation for merging a music composition as an example of a composition.
     Merging means that the connection will be added only if it does not exist.
@@ -159,6 +147,7 @@ def mutation_merge_music_composition_work_example_composition(music_composition_
 
     return format_link_mutation("MergeMusicCompositionExampleOfWork", music_composition_id, composition_id)
 
+
 def mutation_remove_music_composition_work_example_composition(music_composition_id: str, composition_id: str):
     """Returns a mutation for removing a music composition as an example of a composition.
     Arguments:
@@ -169,5 +158,3 @@ def mutation_remove_music_composition_work_example_composition(music_composition
     """
 
     return format_link_mutation("RemoveMusicCompositionExampleOfWork", music_composition_id, composition_id)
-
-

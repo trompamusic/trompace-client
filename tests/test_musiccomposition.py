@@ -6,7 +6,7 @@ from trompace.mutations import musiccomposition
 from tests import util
 
 
-class TestDocument(unittest.TestCase):
+class TestMusicComposition(unittest.TestCase):
 
     def setUp(self) -> None:
         super()
@@ -45,7 +45,7 @@ class TestDocument(unittest.TestCase):
 
         created_match = musiccomposition.mutation_remove_broad_match_music_composition(
             "ff562d2e-2265-4f61-b340-561c92e797e9",
-            "59ce8093-5e0e-4d59-bfa6-805edb11e396") 
+            "59ce8093-5e0e-4d59-bfa6-805edb11e396")
         self.assertEqual(created_match, expected)
 
 
