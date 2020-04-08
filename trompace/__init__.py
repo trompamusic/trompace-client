@@ -1,5 +1,6 @@
 import json
 from datetime import date
+import datetime
 
 
 def filter_none_args(args):
@@ -46,6 +47,8 @@ def make_parameters(**kwargs):
     for k, v in kwargs.items():
         if isinstance(v, StringConstant):
             value = v.value
+        elif isinstance(v, datetime.datetime):
+            value = f"{{formatted: {encoder.encode(v.isoformat())}}}"
         elif isinstance(v, list):
             value = "[{}]".format(", ".join(item for item in encode_list(v, encoder)))
         else:

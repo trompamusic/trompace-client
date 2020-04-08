@@ -1,0 +1,7 @@
+mutation {
+  DeleteDefinedTermSet(
+identifier: "f65d0bce-061a-4a6f-baa0-f8c3a292cc41"
+) {
+identifier
+}
+}

@@ -1,0 +1,7 @@
+mutation {
+  DeleteRating(
+identifier: "c9e0b0d0-d3b8-47c6-a4a4-4b9aa11969d1"
+) {
+identifier
+}
+}
