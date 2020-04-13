@@ -30,6 +30,9 @@ def mutation_create_music_composition(title: str, contributor: str, creator: str
     if language not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
 
+    if inLanguage and inLanguage not in SUPPORTED_LANGUAGES:
+        raise UnsupportedLanguageException(inLanguage)
+
     if "/" not in format_:
         raise NotAMimeTypeException(format_)
 
@@ -79,20 +82,22 @@ def mutation_update_music_composition(identifier: str, title: str = None, contri
     if inLanguage and inLanguage not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(inLanguage)
 
+    if format_ and "/" not in format_:
+        raise NotAMimeTypeException(format_)
+
     args = {"identifier": identifier,
             "title": title,
             "contributor": contributor,
             "creator": creator,
             "subject": subject,
             "source": source,
+            "inLanguage": inLanguage,
             "format": format_,
             "name": name,
             "description": description}
 
     if language is not None:
         args["language"] = StringConstant(language.lower())
-    if inLanguage:
-        args["inLanguage"] = StringConstant(inLanguage.lower())
 
     args = filter_none_args(args)
 

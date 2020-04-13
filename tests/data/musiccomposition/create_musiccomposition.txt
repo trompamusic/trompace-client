@@ -1,0 +1,15 @@
+mutation {
+  CreateMusicComposition(
+title: "Das Lied von der Erde"
+        contributor: "https://www.cpdl.org"
+        creator: "https://www.upf.edu"
+        format: "text/html"
+        subject: "Music Composition"
+        source: "https://www.cpdl.org/Das_Lied_von_der_Erde"
+        language: en
+        inLanguage: "en"
+        name: "The Song of the Earth"
+) {
+identifier
+}
+}
