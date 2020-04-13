@@ -131,7 +131,7 @@ def mutation_merge_media_object_work_example(media_object_identifier: str, work_
     return format_link_mutation("MergeMediaObjectExampleOfWork", media_object_identifier, work_identifier)
 
 
-def mutation_reomve_media_object_work_example(media_object_identifier: str, work_identifier: str):
+def mutation_remove_media_object_work_example(media_object_identifier: str, work_identifier: str):
     """Returns a mutation for creating removing a media object as an example of a work.
     Arguments:
         media_object_identifier: The unique identifier of the media object.
@@ -143,7 +143,7 @@ def mutation_reomve_media_object_work_example(media_object_identifier: str, work
     return format_link_mutation("RemoveMediaObjectExampleOfWork", media_object_identifier, work_identifier)
 
 
-def mutation_merge_media_object_work_example(media_object_identifier_1: str, media_object_identifier_2: str):
+def mutation_merge_media_object_encoding(media_object_identifier_1: str, media_object_identifier_2: str):
     """Returns a mutation for creating merging a media object as an encoding of another media object
     Arguments:
         media_object_identifier_1: The unique identifier of the media object that is encoding the other.
@@ -155,7 +155,7 @@ def mutation_merge_media_object_work_example(media_object_identifier_1: str, med
     return format_link_mutation("MergeMediaObjectEncoding", media_object_identifier_1, media_object_identifier_2)
 
 
-def mutation_remove_media_object_work_example(media_object_identifier_1: str, media_object_identifier_2: str):
+def mutation_remove_media_object_encoding(media_object_identifier_1: str, media_object_identifier_2: str):
     """Returns a mutation for creating removing a media object as an encoding of another media object
     Arguments:
         media_object_identifier_1: The unique identifier of the media object that is encoding the other.
