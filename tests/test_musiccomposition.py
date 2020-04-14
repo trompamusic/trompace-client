@@ -18,7 +18,7 @@ class TestMusicComposition(unittest.TestCase):
 
         created_musiccomposition = musiccomposition.mutation_create_music_composition(title="Das Lied von der Erde", contributor="https://www.cpdl.org", creator="https://www.upf.edu",
                                                     source= "https://www.cpdl.org/Das_Lied_von_der_Erde", subject="Music Composition",
-                                                    language="en", inLanguage="en", name="The Song of the Earth")
+                                                    language="en", inLanguage="de", name="The Song of the Earth")
         self.assertEqual(created_musiccomposition, expected)
 
     def test_update_name(self):
