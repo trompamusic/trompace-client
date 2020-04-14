@@ -34,7 +34,6 @@ class TestMusicComposition(unittest.TestCase):
         created_update = musiccomposition.mutation_update_music_composition('2eeca6dd-c62c-490e-beb0-2e3899fca74f',title="Das Lied von der Erde", contributor="https://www.cpdl.org", creator="https://www.upf.edu",
                                                     source= "https://www.cpdl.org/Das_Lied_von_der_Erde", subject="Music Composition",
                                                     language="en", inLanguage="en", name="The Song of the Earth")
-        print(created_update)
         self.assertEqual(created_update, expected)
 
     def test_invalid_language(self):
