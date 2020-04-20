@@ -20,11 +20,12 @@ class TestDocument(unittest.TestCase):
         contentUrl="https://www.cpdl.org/wiki/index.php/Rossinyol", language="en")
         self.assertEqual(created_mediaobject, expected)
 
-    def test_update(self):
-        expected = util.read_file(self.data_dir, "update_mediaobject.txt")
+    def test_update_name(self):
+        expected = util.read_file(self.data_dir, "update_mediaobject_name.txt")
 
-        created_update = musiccomposition.mutation_update_media_object('2eeca6dd-c62c-490e-beb0-2e3899fca74f',
-                                                  name="No Document")
+        created_update = mediaobject.mutation_update_media_object('2eeca6dd-c62c-490e-beb0-2e3899fca74f',
+                                                  name="Rossinyol")
+        print(created_update)
         self.assertEqual(created_update, expected)
 
     def test_delete(self):

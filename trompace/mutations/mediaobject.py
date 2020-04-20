@@ -82,10 +82,10 @@ def mutation_update_media_object(identifier: str, name: str=None, title:str=None
     """
 
     args = {
+        "identifier": identifier,
         "name": name,
         "title": title,
         "description": description,
-        "date": _Neo4jDate(date),
         "creator": creator,
         "contributor": contributor,
         "format": format_,
@@ -93,8 +93,9 @@ def mutation_update_media_object(identifier: str, name: str=None, title:str=None
         "source": source,
         "subject": subject,
         "contentUrl": contentUrl,
-        "language": StringConstant(language.lower())
     }
+    if date:
+        args["date"] = _Neo4jDate(date)
     if language:
         if language not in SUPPORTED_LANGUAGES:
             raise UnsupportedLanguageException(language)
