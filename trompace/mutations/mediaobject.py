@@ -80,6 +80,12 @@ def mutation_update_media_object(identifier: str, name: str=None, title:str=None
     Raises:
         Assertion error if the input language or inLanguage is not one of the supported languages.
     """
+    if format_ is not None and "/" not in format_:
+        raise NotAMimeTypeException(formatin)
+
+    if encodingFormat is not None and "/" not in encodingFormat:
+        raise NotAMimeTypeException(encodingFormat)
+
 
     args = {
         "identifier": identifier,
@@ -97,7 +103,7 @@ def mutation_update_media_object(identifier: str, name: str=None, title:str=None
     if date:
         args["date"] = _Neo4jDate(date)
     if language:
-        if language not in SUPPORTED_LANGUAGES:
+        if language is not None and language not in SUPPORTED_LANGUAGES:
             raise UnsupportedLanguageException(language)
         else:
             args["language"] = StringConstant(language.lower())
