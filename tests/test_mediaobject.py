@@ -10,15 +10,15 @@ class TestDocument(unittest.TestCase):
 
     def setUp(self) -> None:
         super()
-        self.data_dir = os.path.join(os.path.dirname(__file__), "data", "musiccomposition")
+        self.data_dir = os.path.join(os.path.dirname(__file__), "data", "mediaobject")
 
     def test_create(self):
         expected = util.read_file(self.data_dir, "create_mediaobject.txt")
 
-        created_musiccomposition = musiccomposition.mutation_create_media_object(title="A Document", contributor="https://www.cpdl.org", creator="https://www.cpdl.org/A_Document",
-                                                    source= "https://www.cpdl.org/wiki/index.php/A._J._Fynn""https://www.cpdl.org/A_Document", subject="subject",
-                                                    language="en", inLanguage="en", name="A Document")
-        self.assertEqual(created_musiccomposition, expected)
+        created_mediaobject = mediaobject.mutation_create_media_object(name="Rossinyol", description="Traditional choir piece", date="1972", creator="trompamusic.eu",\
+        contributor="www.upf.edu", format_="text/html", encodingFormat="text/html", source="https://www.cpdl.org/wiki/index.php/Rossinyol", subject="Catalan choir piece", \
+        contentUrl="https://www.cpdl.org/wiki/index.php/Rossinyol", language="en")
+        self.assertEqual(created_mediaobject, expected)
 
     def test_update(self):
         expected = util.read_file(self.data_dir, "update_mediaobject.txt")

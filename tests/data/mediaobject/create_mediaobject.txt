@@ -1,0 +1,17 @@
+mutation {
+  CreateMediaObject(
+name: "Rossinyol"
+        description: "Traditional choir piece"
+        date: { year: 1972 }
+        creator: "trompamusic.eu"
+        contributor: "www.upf.edu"
+        format: "text/html"
+        encodingFormat: "text/html"
+        source: "https://www.cpdl.org/wiki/index.php/Rossinyol"
+        subject: "Catalan choir piece"
+        contentUrl: "https://www.cpdl.org/wiki/index.php/Rossinyol"
+        language: en
+) {
+identifier
+}
+}

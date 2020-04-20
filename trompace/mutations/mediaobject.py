@@ -6,7 +6,7 @@ from trompace.constants import SUPPORTED_LANGUAGES
 
 
 def mutation_create_media_object(name: str, description: str, date: str, creator: str, contributor: str, format_: str, encodingFormat: str, source: str, subject: str, \
-    conrtentUrl:str, language: str, title:str=None):
+    contentUrl:str, language: str, title:str=None):
 
     """Returns a mutation for creating a media object object
     Arguments:
@@ -38,6 +38,7 @@ def mutation_create_media_object(name: str, description: str, date: str, creator
         raise NotAMimeTypeException(encodingFormat)
 
     args = {
+        "name": name,
         "title": title,
         "description": description,
         "date": _Neo4jDate(date),
@@ -47,11 +48,9 @@ def mutation_create_media_object(name: str, description: str, date: str, creator
         "encodingFormat": encodingFormat,
         "source": source,
         "subject": subject,
-        "contentUrl": contentUrl
-        "language": StringConstant(language.lower()),
+        "contentUrl": contentUrl,
+        "language": StringConstant(language.lower())
     }
-    if title:
-        args["title"] = title
 
 
     args = filter_none_args(args)
@@ -60,7 +59,7 @@ def mutation_create_media_object(name: str, description: str, date: str, creator
 
 
 def mutation_update_media_object(identifier: str, name: str=None, title:str=None, description: str=None, date: str=None, creator: str=None, contributor: str=None,\
-    format_: str=None, encodingFormat: str=None, source: str=None, subject: str=None, conrtentUrl:str=None, language: str=None):
+    format_: str=None, encodingFormat: str=None, source: str=None, subject: str=None, contentUrl:str=None, language: str=None):
     """Returns a mutation for updating a media object object.
     Arguments:
         name: The name of the media object.  
@@ -82,7 +81,8 @@ def mutation_update_media_object(identifier: str, name: str=None, title:str=None
         Assertion error if the input language or inLanguage is not one of the supported languages.
     """
 
-    args = {"identifier": identifier
+    args = {
+        "name": name,
         "title": title,
         "description": description,
         "date": _Neo4jDate(date),
@@ -92,7 +92,8 @@ def mutation_update_media_object(identifier: str, name: str=None, title:str=None
         "encodingFormat": encodingFormat,
         "source": source,
         "subject": subject,
-        "contentUrl": contentUrl
+        "contentUrl": contentUrl,
+        "language": StringConstant(language.lower())
     }
     if language:
         if language not in SUPPORTED_LANGUAGES:
