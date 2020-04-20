@@ -7,7 +7,7 @@ title: "Das Lied von der Erde"
         subject: "Music Composition"
         source: "https://www.cpdl.org/Das_Lied_von_der_Erde"
         language: en
-        inLanguage: "en"
+        inLanguage: "de"
         name: "The Song of the Earth"
 ) {
 identifier
