@@ -32,7 +32,7 @@ def mutation_create_media_object(name: str, description: str, date: str, creator
         raise UnsupportedLanguageException(language)
 
     if "/" not in format_:
-        raise NotAMimeTypeException(formatin)
+        raise NotAMimeTypeException(format_)
 
     if "/" not in encodingFormat:
         raise NotAMimeTypeException(encodingFormat)
@@ -81,7 +81,7 @@ def mutation_update_media_object(identifier: str, name: str=None, title:str=None
         Assertion error if the input language or inLanguage is not one of the supported languages.
     """
     if format_ is not None and "/" not in format_:
-        raise NotAMimeTypeException(formatin)
+        raise NotAMimeTypeException(format_)
 
     if encodingFormat is not None and "/" not in encodingFormat:
         raise NotAMimeTypeException(encodingFormat)
