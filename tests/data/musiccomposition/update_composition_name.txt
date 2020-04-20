@@ -1,0 +1,8 @@
+mutation {
+  UpdateMusicComposition(
+identifier: "2eeca6dd-c62c-490e-beb0-2e3899fca74f"
+        name: "The Song Of The Earth"
+) {
+identifier
+}
+}
