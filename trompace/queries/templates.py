@@ -1,11 +1,7 @@
 # Templates for generate GraphQL queries for mutations.
 
 # To be added EntryPoint, ControlAction, PropertyValueSpecification and Property
-from trompace.exceptions import UnsupportedLanguageException
 from .. import make_parameters, QUERY
-from ..constants import SUPPORTED_LANGUAGES
-
-
 
 
 def query_create(args, query_string: str):
@@ -21,4 +17,3 @@ def query_create(args, query_string: str):
 
     create_query = query_string.format(parameters=make_parameters(**args))
     return QUERY.format(query=create_query)
-

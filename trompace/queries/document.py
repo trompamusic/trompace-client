@@ -1,7 +1,7 @@
 # Generate GraphQL queries pertaining to digital document objects.
+from trompace.constants import SUPPORTED_LANGUAGES
 from trompace.exceptions import UnsupportedLanguageException
 from trompace.queries.templates import query_create
-from trompace.constants import SUPPORTED_LANGUAGES
 from .. import QUERY
 
 QUERY_DIGITALDOCUMENT = '''DigitalDocument(
@@ -31,8 +31,9 @@ QUERY_DIGITALDOCUMENT_ALL = '''DigitalDocument
   }'''
 
 
-def query_document(identifier: str=None, document_name=None, publisher=None, contributor=None, format_=None, creator=None,
-                             source=None, description=None, language=None):
+def query_document(identifier: str = None, document_name=None, publisher=None, contributor=None, format_=None,
+                   creator=None,
+                   source=None, description=None, language=None):
     """Returns a query for a digital document object
     Arguments:
         identifier: The unique identifier of the digital document.
@@ -56,30 +57,26 @@ def query_document(identifier: str=None, document_name=None, publisher=None, con
     args = {}
 
     if identifier:
-      args["identifier"] = identifier
+        args["identifier"] = identifier
 
     if document_name:
-      args["name"] = document_name
+        args["name"] = document_name
     if publisher:
-      args["publisher"] = publisher
+        args["publisher"] = publisher
     if contributor:
-      args["contributor"] = contributor
+        args["contributor"] = contributor
     if creator:
-      args["creator"] = creator
+        args["creator"] = creator
     if source:
-      args["source"] = source
+        args["source"] = source
     if language:
-      args["language"] = language
+        args["language"] = language
     if format_:
-      args["format"] = format_
+        args["format"] = format_
     if description:
-      args["description"] = description
-
+        args["description"] = description
 
     if len(args) == 0:
         return QUERY.format(query=QUERY_DIGITALDOCUMENT_ALL)
     else:
         return query_create(args, QUERY_DIGITALDOCUMENT)
-
-
-

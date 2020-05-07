@@ -1,6 +1,6 @@
+import datetime
 import json
 from datetime import date
-import datetime
 
 
 def filter_none_args(args):
@@ -69,7 +69,7 @@ class _Neo4jDate(StringConstant):
         if isinstance(value, date):
             self.value = "{{ year: {0} month: {1} day: {2} }}".format(value.year, value.month, value.day)
         elif isinstance(value, list):
-            date_parts = ['year','month','day']
+            date_parts = ['year', 'month', 'day']
             date_str = ""
             for i in range(min(len(date_parts), len(value))):
                 date_str += "{0}: {1} ".format(date_parts[i], value[i])
@@ -81,4 +81,3 @@ class _Neo4jDate(StringConstant):
 QUERY = '''query {{
   {query}
 }}'''
-

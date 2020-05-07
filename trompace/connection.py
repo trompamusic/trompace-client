@@ -25,6 +25,7 @@ async def submit_query(querystr: str):
         raise QueryException(resp['errors'])
     return resp
 
+
 def submit_query_nasync(querystr: str):
     q = {"query": querystr}
     server = config.server_id
