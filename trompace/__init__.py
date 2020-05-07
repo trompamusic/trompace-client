@@ -36,7 +36,6 @@ def make_parameters(**kwargs):
     quotes around them) and lists.
     String constants in a list are supported, but only to one level deep.
     This method does no validation of parameter names.
-
     Arguments:
          **kwargs: a mapping of field names to values
     Returns:
@@ -82,3 +81,4 @@ class _Neo4jDate(StringConstant):
 QUERY = '''query {{
   {query}
 }}'''
+

@@ -13,7 +13,6 @@ def mutation_create_person(title: str, contributor: str, creator: str, source: s
                            description: str = None, image: str = None, publisher: str = None,
                            honorific_prefix: str = None, honorific_suffix: str = None, job_title: str = None):
     """Returns a mutation for creating a Person
-
     Arguments:
         title: The title of the resource indicated by `source`
         contributor: The main URL of the site where the information about this Person was taken from
@@ -33,7 +32,6 @@ def mutation_create_person(title: str, contributor: str, creator: str, source: s
         honorific_prefix (optional): An honorific prefix.
         honorific_suffix (optional): An honorific suffix.
         job_title (optional): The person's job title.
-
     Returns:
         The string for the mutation for creating the person.
     Raises:
@@ -83,12 +81,9 @@ def mutation_update_person(identifier: str, title: str = None, contributor: str 
                            description: str = None, image: str = None, publisher: str = None,
                            honorific_prefix: str = None, honorific_suffix: str = None, job_title: str = None):
     """Returns a mutation for updating a Person
-
     Arguments:
         identifier: The identifier of the person in the CE to be updated
-
         TODO: See if there's a way of including argument lists from the `create_person` method to not duplicate info
-
     Returns:
         The string for the mutation for updating the person.
     Raises:

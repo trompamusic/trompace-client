@@ -1,9 +1,9 @@
 # Templates for generating GraphQL queries for mutations.
+
 from typing import Dict, Any
 
-from trompace.mutations import MUTATION
 from trompace import make_parameters
-
+from trompace.mutations import MUTATION
 
 MUTATION_TEMPLATE = '''{mutationname}(
 {parameters}
@@ -11,14 +11,24 @@ MUTATION_TEMPLATE = '''{mutationname}(
 identifier
 }}'''
 
+LINK_MUTATION_TEMPLATE = '''{mutationname}(
+    from: {{identifier: "{identifier_1}"}}
+    to: {{identifier: "{identifier_2}"}}
+  ) {{
+    from {{
+      identifier
+    }}
+    to {{
+      identifier
+    }}
+  }}'''
+
 
 def format_mutation(mutationname: str, args: Dict[str, Any]):
     """Create a mutation to send to the Contributor Environment.
-
     Arguments:
         mutationname: the name of the mutation to generate
         args: a dictionary of field: value pairs to add to the mutation
-
     Returns:
         A formatted mutation
     """
@@ -27,11 +37,23 @@ def format_mutation(mutationname: str, args: Dict[str, Any]):
     return MUTATION.format(mutation=formatted_mutation)
 
 
+def format_link_mutation(mutationname: str, identifier_1: str, identifier_2: str):
+    """Create a mutation with link between two identifiers to send to the Contributor Environment.
+    Arguments:
+        mutationname: the name of the mutation to generate
+        identifier_1: The unique identifier of the first object.
+        identifier_2: The unique identifier of the second object.
+    Returns:
+        A formatted mutation
+    """
+    return MUTATION.format(mutation=LINK_MUTATION_TEMPLATE.format(mutationname=mutationname, identifier_1=identifier_1,
+                                                                  identifier_2=identifier_2))
+
+
 def mutation_create(args, mutation_string: str):
     """Returns a mutation for creating an object.
     Arguments:
         args: a dictionary of arguments for the template. The fucntion calling this function is responsible for validating the arguments.
-
     Returns:
         The string for the mutation for creating the object.
     Raises:
