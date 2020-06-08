@@ -80,3 +80,23 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
+
+## Development
+
+This package is published on pypi, and has documentation on readthedocs:
+
+ * https://pypi.org/project/trompace-client/
+ * https://trompace-client.readthedocs.io/en/latest/
+ 
+To build and publish a new version:
+ 
+    git tag v0.3
+    git push --tags
+    python setup.py sdist bdist_wheel
+    twine upload dist/*
+     
+To release a version on github after pushing the tag, go to https://github.com/trompamusic/trompa-ce-client/releases/new
+and choose the tag that you just pushed.
+
+To build docs, go to https://readthedocs.org/projects/trompace-client/ and click
+"Build version".
