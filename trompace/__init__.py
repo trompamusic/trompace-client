@@ -3,6 +3,18 @@ import json
 from datetime import date
 
 
+def docstring_interpolate(name, values):
+    """Interpolate a variable into a function's docstring.
+    Use to prevent duplication of documentation in `create` and `update` methods."""
+    def _decorator(func):
+        args = {name: values}
+        if func.__doc__:
+            func.__doc__ = func.__doc__.format(**args)
+        return func
+
+    return _decorator
+
+
 def filter_none_args(args):
     """Filter a dictionary and only return items where the value is not None
     A StringConstant with a value of None is also counted as an empty value"""

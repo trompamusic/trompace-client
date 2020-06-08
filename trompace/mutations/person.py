@@ -2,19 +2,11 @@
 
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
 from trompace.mutations.templates import format_mutation
-from trompace import StringConstant, _Neo4jDate, filter_none_args
+from trompace import StringConstant, _Neo4jDate, filter_none_args, docstring_interpolate
 from trompace.constants import SUPPORTED_LANGUAGES
 
 
-def mutation_create_person(title: str, contributor: str, creator: str, source: str,
-                           language: str = None, format_: str = None, name: str = None,
-                           family_name: str = None, given_name: str = None, gender: str = None,
-                           birth_date: str = None, death_date: str = None,
-                           description: str = None, image: str = None, publisher: str = None,
-                           honorific_prefix: str = None, honorific_suffix: str = None, job_title: str = None):
-    """Returns a mutation for creating a Person
-    Arguments:
-        title: The title of the resource indicated by `source`
+PERSON_ARGS_DOCS = """title: The title of the resource indicated by `source`
         contributor: The main URL of the site where the information about this Person was taken from
         creator: The person, organization or service who is creating this Person (e.g. URL of the software)
         source: The URL of the web resource where information about this Person is taken from
@@ -31,12 +23,25 @@ def mutation_create_person(title: str, contributor: str, creator: str, source: s
         publisher (optional): An entity responsible for making the resource available
         honorific_prefix (optional): An honorific prefix.
         honorific_suffix (optional): An honorific suffix.
-        job_title (optional): The person's job title.
+        job_title (optional): The person's job title."""
+
+
+@docstring_interpolate("person_args", PERSON_ARGS_DOCS)
+def mutation_create_person(title: str, contributor: str, creator: str, source: str,
+                           language: str = None, format_: str = None, name: str = None,
+                           family_name: str = None, given_name: str = None, gender: str = None,
+                           birth_date: str = None, death_date: str = None,
+                           description: str = None, image: str = None, publisher: str = None,
+                           honorific_prefix: str = None, honorific_suffix: str = None, job_title: str = None):
+    """Returns a mutation for creating a Person
+
+    Args:
+        {person_args}
     Returns:
         The string for the mutation for creating the person.
     Raises:
-        UnsupportedLanguageException if `language` is not one of the supported languages.
-        NotAMimeTypeException if `format_` is not a valid mimetype.
+        UnsupportedLanguageException: if ``language`` is not one of the supported languages.
+        NotAMimeTypeException: if ``format_`` is not a valid mimetype.
     """
 
     if language and language.lower() not in SUPPORTED_LANGUAGES:
@@ -74,6 +79,7 @@ def mutation_create_person(title: str, contributor: str, creator: str, source: s
     return format_mutation("CreatePerson", args)
 
 
+@docstring_interpolate("person_args", PERSON_ARGS_DOCS)
 def mutation_update_person(identifier: str, title: str = None, contributor: str = None, creator: str = None,
                            source: str = None, language: str = None, format_: str = None, name: str = None,
                            family_name: str = None, given_name: str = None, gender: str = None,
@@ -81,14 +87,15 @@ def mutation_update_person(identifier: str, title: str = None, contributor: str 
                            description: str = None, image: str = None, publisher: str = None,
                            honorific_prefix: str = None, honorific_suffix: str = None, job_title: str = None):
     """Returns a mutation for updating a Person
-    Arguments:
+
+    Args:
         identifier: The identifier of the person in the CE to be updated
-        TODO: See if there's a way of including argument lists from the `create_person` method to not duplicate info
+        {person_args}
     Returns:
         The string for the mutation for updating the person.
     Raises:
-        UnsupportedLanguageException if `language` is not one of the supported languages.
-        NotAMimeTypeException if `format_` is not a valid mimetype.
+        UnsupportedLanguageException: if ``language`` is not one of the supported languages.
+        NotAMimeTypeException: if ``format_`` is not a valid mimetype.
     """
 
     if language and language.lower() not in SUPPORTED_LANGUAGES:
@@ -129,7 +136,8 @@ def mutation_update_person(identifier: str, title: str = None, contributor: str 
 
 def mutation_delete_person(identifier: str):
     """Returns a mutation for deleting a Person with the given identifier.
-    Arguments:
+
+    Args:
         identifier: The identifier of the Person to delete.
     Returns:
         A mutation string to delete a Person
