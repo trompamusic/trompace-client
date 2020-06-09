@@ -11,7 +11,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/trompamusic/trompa-ce-client",
-    packages=find_packages(exclude=['tests']),
+    packages=find_packages(exclude=['tests', 'demo']),
     use_scm_version=True,
     setup_requires=['setuptools_scm'],
     classifiers=[
