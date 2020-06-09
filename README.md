@@ -28,7 +28,7 @@ import asyncio
 import os
 import trompace as ce
 
-from trompace import config
+from trompace.config import config
 from trompace.connection import submit_query
 from trompace.mutations.person import mutation_create_artist
 
@@ -55,10 +55,8 @@ async def main():
 if __name__ == "__main__":
     config_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'import.ini')
 
-    if path.exists(config_file):
-        ce.config.read_config(config_file)
-    else:
-        ce.config.set_server('http://localhost:4000', False)
+    if os.path.exists(config_file):
+        config.load(config_file)
 
     asyncio.run(main())
 ```

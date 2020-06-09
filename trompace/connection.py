@@ -1,41 +1,52 @@
 # Utility functions for sending queries and downloading files.
+import os
+
 import requests
 
-import trompace.config as config
+from trompace.config import config
 from trompace.exceptions import QueryException
 
 
-async def submit_query(querystr: str):
-    """
-    Sends a query to the server set in the import.ini config file
+async def submit_query_async(querystr: str, auth_required=False):
+    """Submit a query to the CE (async).
     Arguments:
-    querystr: The query to be submitted in string format.
+        querystr: The query to be submitted
+        auth_required: If true, send an authentication key with this request
     """
     q = {"query": querystr}
-    server = config.server_id
-    r = requests.post(server, json=q)
+    headers = {}
+    if auth_required:
+        token = config.jwt_token
+        headers["Authorization"] = f"Bearer {token}"
+    r = requests.post(config.host, json=q, headers=headers)
     try:
         r.raise_for_status()
     except requests.exceptions.HTTPError:
         print("error")
         print(r.json())
-        print(querystr)
     resp = r.json()
     if "errors" in resp.keys():
         raise QueryException(resp['errors'])
     return resp
 
 
-def submit_query_nasync(querystr: str):
+def submit_query(querystr: str, auth_required=False):
+    """Submit a query to the CE.
+    Arguments:
+        querystr: The query to be submitted
+        auth_required: If true, send an authentication key with this request
+    """
     q = {"query": querystr}
-    server = config.server_id
-    r = requests.post(server, json=q)
+    headers = {}
+    if auth_required:
+        token = config.jwt_token
+        headers["Authorization"] = f"Bearer {token}"
+    r = requests.post(config.host, json=q, headers=headers)
     try:
         r.raise_for_status()
     except requests.exceptions.HTTPError:
         print("error")
         print(r.json())
-        print(querystr)
     resp = r.json()
     if "errors" in resp.keys():
         raise QueryException(resp['errors'])
@@ -49,7 +60,6 @@ async def download_file(url, file_link):
     url: url for the file to be downloaded
     file_link: the path to save the file in
     """
-    local_filename = url.split('/')[-1]
     with requests.get(url, stream=True) as r:
         r.raise_for_status()
         with open(file_link, 'wb') as f:

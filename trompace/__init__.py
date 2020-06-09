@@ -1,6 +1,9 @@
 import datetime
 import json
 from datetime import date
+import logging
+
+logger = logging.getLogger(__file__)
 
 
 def docstring_interpolate(name, values):
