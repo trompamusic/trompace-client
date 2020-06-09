@@ -1,7 +1,7 @@
 # Generate GraphQL queries for mutations pertaining to person objects.
 
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
-from trompace.mutations.templates import format_mutation
+from trompace.mutations.templates import format_mutation, format_link_mutation
 from trompace import StringConstant, _Neo4jDate, filter_none_args, docstring_interpolate
 from trompace.constants import SUPPORTED_LANGUAGES, SUPPORTED_GENDER
 
@@ -153,3 +153,25 @@ def mutation_delete_person(identifier: str):
     """
 
     return format_mutation("DeletePerson", {"identifier": identifier})
+
+
+def mutation_person_add_exact_match_person(identifier_from: str, identifier_to: str):
+    """Returns a mutation for linking two Person objects with skos:exactMatch.
+
+    Args:
+        identifier_from: the identifer of the Person to match to
+        identifier_to: the identifier of the Person that is an exact match of identifier_from
+    Returns: a mutation to make an exactMatch relationship between the Person objects
+    """
+    return format_link_mutation("MergePersonExactMatch", identifier_from, identifier_to)
+
+
+def mutation_person_remove_exact_match_person(identifier_from: str, identifier_to: str):
+    """Returns a mutation for removing the skos:exactMatch relation between two Person objects
+
+    Args:
+        identifier_from: the identifer of the Person to match to
+        identifier_to: the identifier of the Person that is an exact match of identifier_from
+    Returns: a mutation to remove the exactMatch relationship from the Person objects
+    """
+    return format_link_mutation("RemovePersonExactMatch", identifier_from, identifier_to)
