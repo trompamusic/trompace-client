@@ -78,13 +78,17 @@ class _Neo4jDate(StringConstant):
     All dateparts should be of type int."""
 
     def __init__(self, value):
+        if isinstance(value, str) and "-" in value:
+            value = value.split("-")
         if isinstance(value, date):
             self.value = "{{ year: {0} month: {1} day: {2} }}".format(value.year, value.month, value.day)
         elif isinstance(value, list):
             date_parts = ['year', 'month', 'day']
             date_str = ""
             for i in range(min(len(date_parts), len(value))):
-                date_str += "{0}: {1} ".format(date_parts[i], value[i])
+                # cast to int incase the value is a string - remove a leading 0 so that it's not
+                # interpreted as octal
+                date_str += "{0}: {1} ".format(date_parts[i], int(value[i]))
             self.value = "{{ {0}}}".format(date_str)
         else:
             self.value = "{{ year: {0} }}".format(value)
