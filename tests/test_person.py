@@ -2,6 +2,7 @@
 import os
 import unittest
 
+from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
 from trompace.queries import person as person_query
 from trompace.mutations.person import mutation_create_person, mutation_update_person, mutation_delete_person
 from tests import util
@@ -30,9 +31,29 @@ class TestPerson(unittest.TestCase):
 
         created_person = mutation_create_person(title="A. J. Fynn", contributor="https://www.cpdl.org",
                                                 creator="https://www.upf.edu", source="https://www.cpdl.org/wiki/index.php/A._J._Fynn",
-                                                language="en", format_="text/html",
+                                                language="en", format_="text/html", gender="male",
                                                 description="Born circa 1860Died circa 1920A. J. Fynn was an early 20th Century scholar in literature and anthropology")
         self.assertEqual(created_person, expected)
+
+    def test_create_invalid_values(self):
+        """Passing invalid values to language, format_, or gender cause exceptions"""
+        with self.assertRaises(ValueError):
+            mutation_create_person(title="A. J. Fynn", contributor="https://www.cpdl.org",
+                                   creator="https://www.upf.edu",
+                                   source="https://www.cpdl.org/wiki/index.php/A._J._Fynn",
+                                   gender="test")
+
+        with self.assertRaises(UnsupportedLanguageException):
+            mutation_create_person(title="A. J. Fynn", contributor="https://www.cpdl.org",
+                                   creator="https://www.upf.edu",
+                                   source="https://www.cpdl.org/wiki/index.php/A._J._Fynn",
+                                   language="pt")
+
+        with self.assertRaises(NotAMimeTypeException):
+            mutation_create_person(title="A. J. Fynn", contributor="https://www.cpdl.org",
+                                   creator="https://www.upf.edu",
+                                   source="https://www.cpdl.org/wiki/index.php/A._J._Fynn",
+                                   format_="html")
 
     def test_update(self):
         expected = util.read_file(self.data_dir, "update_person.txt")

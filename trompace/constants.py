@@ -1,6 +1,9 @@
 import enum
 
-SUPPORTED_LANGUAGES = ["en", "es", "ca", "nl", "de", "fr"]
+SUPPORTED_LANGUAGES = {"en", "es", "ca", "nl", "de", "fr"}
+
+
+SUPPORTED_GENDER = {"male", "female", "other"}
 
 
 class ActionStatusType(enum.Enum):

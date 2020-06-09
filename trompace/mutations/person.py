@@ -3,8 +3,7 @@
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
 from trompace.mutations.templates import format_mutation
 from trompace import StringConstant, _Neo4jDate, filter_none_args, docstring_interpolate
-from trompace.constants import SUPPORTED_LANGUAGES
-
+from trompace.constants import SUPPORTED_LANGUAGES, SUPPORTED_GENDER
 
 PERSON_ARGS_DOCS = """title: The title of the resource indicated by `source`
         contributor: The main URL of the site where the information about this Person was taken from
@@ -41,11 +40,15 @@ def mutation_create_person(title: str, contributor: str, creator: str, source: s
         The string for the mutation for creating the person.
     Raises:
         UnsupportedLanguageException: if ``language`` is not one of the supported languages.
+        ValueError: if ``gender`` is not a value supported by the Ce
         NotAMimeTypeException: if ``format_`` is not a valid mimetype.
     """
 
     if language and language.lower() not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
+
+    if gender and gender.lower() not in SUPPORTED_GENDER:
+        raise ValueError(f"unexpected value for gender: {gender}")
 
     if format_ and "/" not in format_:
         raise NotAMimeTypeException(format_)
@@ -59,7 +62,6 @@ def mutation_create_person(title: str, contributor: str, creator: str, source: s
         "name": name,
         "familyName": family_name,
         "givenName": given_name,
-        "gender": gender,
         "description": description,
         "image": image,
         "publisher": publisher,
@@ -67,6 +69,8 @@ def mutation_create_person(title: str, contributor: str, creator: str, source: s
         "honorificSuffix": honorific_suffix,
         "jobTitle": job_title
     }
+    if gender is not None:
+        args["gender"] = StringConstant(gender.lower())
     if language is not None:
         args["language"] = StringConstant(language.lower())
     if birth_date is not None:
@@ -95,11 +99,15 @@ def mutation_update_person(identifier: str, title: str = None, contributor: str 
         The string for the mutation for updating the person.
     Raises:
         UnsupportedLanguageException: if ``language`` is not one of the supported languages.
+        ValueError: if ``gender`` is not a value supported by the Ce
         NotAMimeTypeException: if ``format_`` is not a valid mimetype.
     """
 
     if language and language.lower() not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
+
+    if gender and gender.lower() not in SUPPORTED_GENDER:
+        raise ValueError(f"unexpected value for gender: {gender}")
 
     if format_ and "/" not in format_:
         raise NotAMimeTypeException(format_)
@@ -114,7 +122,6 @@ def mutation_update_person(identifier: str, title: str = None, contributor: str 
         "name": name,
         "familyName": family_name,
         "givenName": given_name,
-        "gender": gender,
         "description": description,
         "image": image,
         "publisher": publisher,
@@ -122,6 +129,8 @@ def mutation_update_person(identifier: str, title: str = None, contributor: str 
         "honorificSuffix": honorific_suffix,
         "jobTitle": job_title
     }
+    if gender is not None:
+        args["gender"] = StringConstant(gender.lower())
     if language is not None:
         args["language"] = StringConstant(language.lower())
     if birth_date is not None:
