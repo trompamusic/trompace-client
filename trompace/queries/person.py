@@ -1,64 +1,76 @@
-# Generate GraphQL queries for queries pertaining to persons objects.
-from typing import List
+# Generate GraphQL queries for queries pertaining to person objects.
 
-from trompace import QUERY, filter_none_args, make_parameters
-
-QUERY_PERSON = '''Person{parameters}
-{{
-{fields}
-}}'''
-
-QUERY_PERSON_SUBSTRING = '''personBySubstring{parameters}
-{{
-{fields}
-}}'''
-
-default_fields = ["identifier", "name", "publisher", "contributor", "creator", "source", "description", "language"]
+from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
+from trompace.queries.templates import format_query
+from trompace import StringConstant, _Neo4jDate, filter_none_args
+from trompace.constants import SUPPORTED_LANGUAGES
 
 
-# TODO: We only define some basic query fields for now. Potential to add more if we see that they're needed
-def query_person(query: str = None, identifier: str = None, contributor: str = None, creator: str = None,
-                 source: str = None,
-                 first: int = None, offset: int = None, fields: List[str] = None):
-    """Returns a query for obtaining Person objects
-
+def query_person(identifier: str=None,title: str=None, contributor: str=None, creator: str=None, source: str=None,
+                           language: str = None, format_: str = None, name: str = None,
+                           family_name: str = None, given_name: str = None, gender: str = None,
+                           birth_date: str = None, death_date: str = None,
+                           description: str = None, image: str = None, publisher: str = None,
+                           honorific_prefix: str = None, honorific_suffix: str = None, job_title: str = None):
+    """Returns a mutation for creating a Person
     Arguments:
-        query: perform a substring query on the name field
-        identifier: get a Person with this identifier
-        contributor: get Person objects from this contributor
-        creator: get Person objects from this creator
-        source: get Person objects from this source
-        first: get the first this many items
-        offset: offset search results by this value
-        fields: return these fields in the Person objects. Defaults to `trompace.queries.person.default_fields`
-
+        identifier: The identifier of the person in the CE to be updated
+        title: The title of the resource indicated by `source`
+        contributor: The main URL of the site where the information about this Person was taken from
+        creator: The person, organization or service who is creating this Person (e.g. URL of the software)
+        source: The URL of the web resource where information about this Person is taken from
+        language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
+        format_: The mimetype of the resource indicated by `source`
+        name: The name of the person
+        family_name (optional): The family name of the person
+        given_name (optional): The given name of the person
+        gender (optional): The person's gender
+        birth_date (optional): The birth date of the person, formatted as yyyy, yyyy-mm or yyyy-mm-dd
+        death_date (optional): The date of death of the person , formatted as yyyy, yyyy-mm or yyyy-mm-dd
+        description (optional): A biographical description of the person
+        image (optional): URL to an image associated with the person
+        publisher (optional): An entity responsible for making the resource available
+        honorific_prefix (optional): An honorific prefix.
+        honorific_suffix (optional): An honorific suffix.
+        job_title (optional): The person's job title.
     Returns:
-        A Person Query string
+        The string for the mutation for creating the person.
+    Raises:
+        UnsupportedLanguageException if `language` is not one of the supported languages.
+        NotAMimeTypeException if `format_` is not a valid mimetype.
     """
 
-    if query:
-        args = {"query": query,
-                "first": first,
-                "offset": offset}
-        querystr = QUERY_PERSON_SUBSTRING
-    else:
-        args = {"identifier": identifier,
-                "contributor": contributor,
-                "creator": creator,
-                "source": source,
-                "first": first,
-                "offset": offset}
-        querystr = QUERY_PERSON
+    if language and language.lower() not in SUPPORTED_LANGUAGES:
+        raise UnsupportedLanguageException(language)
+
+    if format_ and "/" not in format_:
+        raise NotAMimeTypeException(format_)
+
+    args = {
+        "identifier": identifier,
+        "title": title,
+        "contributor": contributor,
+        "creator": creator,
+        "source": source,
+        "format": format_,
+        "name": name,
+        "familyName": family_name,
+        "givenName": given_name,
+        "gender": gender,
+        "description": description,
+        "image": image,
+        "publisher": publisher,
+        "honorificPrefix": honorific_prefix,
+        "honorificSuffix": honorific_suffix,
+        "jobTitle": job_title
+    }
+    if language is not None:
+        args["language"] = StringConstant(language.lower())
+    if birth_date is not None:
+        args["birthDate"] = _Neo4jDate(birth_date)
+    if death_date is not None:
+        args["deathDate"] = _Neo4jDate(death_date)
 
     args = filter_none_args(args)
 
-    if fields:
-        fields = "\n".join(fields)
-    else:
-        fields = "\n".join(default_fields)
-
-    parameters = ""
-    if args:
-        parameters = "({})".format(make_parameters(**args))
-    formatted_query = querystr.format(parameters=parameters, fields=fields)
-    return QUERY.format(query=formatted_query)
+    return format_query("Person", args)

@@ -1,6 +1,7 @@
 query {
-  Person
-{
+  Person(
+
+) {
 identifier
 name
 publisher

@@ -1,19 +1,35 @@
-# Templates for generate GraphQL queries for mutations.
+# Templates for generating GraphQL queries.
 
 # To be added EntryPoint, ControlAction, PropertyValueSpecification and Property
 from .. import make_parameters, QUERY
+from typing import Dict, Any
+
+from trompace.queries import QUERY
+from trompace import make_parameters
+
+QUERY_TEMPLATE = '''{queryname}(
+{parameters}
+) {{
+identifier
+name
+publisher
+contributor
+creator
+source
+description
+language
+}}'''
 
 
-def query_create(args, query_string: str):
-    """Returns a mutation for creating an object.
+
+def format_query(queryname: str, args: Dict[str, Any]):
+    """Create a query to send to the Contributor Environment.
     Arguments:
-        args: a dictionary of arguments for the template. The fucntion calling this function is responsible for validating the arguments.
-
+        mqueryname: the name of the query to generate
+        args: a dictionary of field: value pairs to add to the mutation
     Returns:
-        The string for the mutation for creating the object.
-    Raises:
-        Assertion error if the input language is not one of the supported languages.
+        A formatted query
     """
 
-    create_query = query_string.format(parameters=make_parameters(**args))
-    return QUERY.format(query=create_query)
+    formatted_query = QUERY_TEMPLATE.format(queryname=queryname, parameters=make_parameters(**args))
+    return QUERY.format(query=formatted_query)
