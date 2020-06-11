@@ -8,3 +8,9 @@ Person
 
 .. automodule:: trompace.mutations.person
    :members:
+
+MusicComposition
+----------------
+
+.. automodule:: trompace.mutations.musiccomposition
+   :members:

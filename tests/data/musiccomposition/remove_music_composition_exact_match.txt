@@ -1,0 +1,13 @@
+mutation {
+  RemoveMusicCompositionExactMatch(
+    from: {identifier: "ff562d2e-2265-4f61-b340-561c92e797e9"}
+    to: {identifier: "ccd75459-db61-425f-b587-2dc96bf169df"}
+  ) {
+    from {
+      identifier
+    }
+    to {
+      identifier
+    }
+  }
+}

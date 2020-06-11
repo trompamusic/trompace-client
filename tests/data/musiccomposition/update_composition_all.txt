@@ -8,6 +8,7 @@ identifier: "2eeca6dd-c62c-490e-beb0-2e3899fca74f"
         source: "https://www.cpdl.org/Das_Lied_von_der_Erde"
         inLanguage: "en"
         name: "The Song of the Earth"
+        position: 2
         language: en
 ) {
 identifier
