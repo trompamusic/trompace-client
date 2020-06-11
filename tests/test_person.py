@@ -43,6 +43,7 @@ class TestPerson(unittest.TestCase):
                 title="A. J. Fynn", contributor="https://www.cpdl.org",
                 creator="https://www.upf.edu",
                 source="https://www.cpdl.org/wiki/index.php/A._J._Fynn",
+                format_="text/html",
                 gender="test"
             )
 
@@ -51,6 +52,7 @@ class TestPerson(unittest.TestCase):
                 title="A. J. Fynn", contributor="https://www.cpdl.org",
                 creator="https://www.upf.edu",
                 source="https://www.cpdl.org/wiki/index.php/A._J._Fynn",
+                format_="text/html",
                 language="pt"
             )
 

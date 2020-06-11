@@ -26,8 +26,8 @@ PERSON_ARGS_DOCS = """title: The title of the resource indicated by `source`
 
 
 @docstring_interpolate("person_args", PERSON_ARGS_DOCS)
-def mutation_create_person(title: str, contributor: str, creator: str, source: str,
-                           language: str = None, format_: str = None, name: str = None,
+def mutation_create_person(title: str, contributor: str, creator: str, source: str, format_: str,
+                           language: str = None, name: str = None,
                            family_name: str = None, given_name: str = None, gender: str = None,
                            birth_date: str = None, death_date: str = None,
                            description: str = None, image: str = None, publisher: str = None,
@@ -40,7 +40,7 @@ def mutation_create_person(title: str, contributor: str, creator: str, source: s
         The string for the mutation for creating the person.
     Raises:
         UnsupportedLanguageException: if ``language`` is not one of the supported languages.
-        ValueError: if ``gender`` is not a value supported by the Ce
+        ValueError: if ``gender`` is not a value supported by the CE
         NotAMimeTypeException: if ``format_`` is not a valid mimetype.
     """
 
@@ -50,7 +50,7 @@ def mutation_create_person(title: str, contributor: str, creator: str, source: s
     if gender and gender.lower() not in SUPPORTED_GENDER:
         raise ValueError(f"unexpected value for gender: {gender}")
 
-    if format_ and "/" not in format_:
+    if "/" not in format_:
         raise NotAMimeTypeException(format_)
 
     args = {
