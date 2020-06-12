@@ -3,6 +3,7 @@ import os
 import unittest
 
 from trompace.queries import person as person_query
+from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
 from trompace.mutations.person import mutation_create_person, mutation_update_person, mutation_delete_person
 from tests import util
 
@@ -17,14 +18,12 @@ class TestPerson(unittest.TestCase):
         expected = util.read_file(self.data_dir, "query_person_parameter.txt")
 
         created_person = person_query.query_person(identifier="ff59650b-1d47-4ea5-b356-31fddeb48315")
-        print(created_person)
         self.assertEqual(created_person, expected)
 
     def test_query_all(self):
         expected = util.read_file(self.data_dir, "query_person.txt")
 
         created_person = person_query.query_person()
-        print(created_person)
         self.assertEqual(created_person, expected)
 
     def test_create(self):
@@ -49,4 +48,22 @@ class TestPerson(unittest.TestCase):
         created_delete = mutation_delete_person('2eeca6dd-c62c-490e-beb0-2e3899fca74f')
 
         self.assertEqual(created_delete, expected)
+
+    def test_invalid_language(self):
+        with self.assertRaises(UnsupportedLanguageException):
+           mutation_update_person('2eeca6dd-c62c-490e-beb0-2e3899fca74f',language="ja")
+        with self.assertRaises(UnsupportedLanguageException):
+            mutation_create_person(title="A. J. Fynn", contributor="https://www.cpdl.org",
+                                                creator="https://www.upf.edu", source="https://www.cpdl.org/wiki/index.php/A._J._Fynn",
+                                                language="ja", format_="text/html",
+                                                description="Born circa 1860Died circa 1920A. J. Fynn was an early 20th Century scholar in literature and anthropology")
+
+    def test_invalid_format(self):
+        with self.assertRaises(NotAMimeTypeException):
+            mutation_update_person('2eeca6dd-c62c-490e-beb0-2e3899fca74f',format_="test,html")
+        with self.assertRaises(NotAMimeTypeException):
+            mutation_create_person(title="A. J. Fynn", contributor="https://www.cpdl.org",
+                                                creator="https://www.upf.edu", source="https://www.cpdl.org/wiki/index.php/A._J._Fynn",
+                                                language="en", format_="text,html",
+                                                description="Born circa 1860Died circa 1920A. J. Fynn was an early 20th Century scholar in literature and anthropology")
 
