@@ -1,0 +1,12 @@
+query {
+  MediaObject{
+identifier
+name
+publisher
+contributor
+creator
+source
+description
+language
+}
+}

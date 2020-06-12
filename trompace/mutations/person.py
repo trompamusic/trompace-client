@@ -83,6 +83,24 @@ def mutation_update_person(identifier: str, title: str = None, contributor: str 
     """Returns a mutation for updating a Person
     Arguments:
         identifier: The identifier of the person in the CE to be updated
+        title: The title of the resource indicated by `source`
+        contributor: The main URL of the site where the information about this Person was taken from
+        creator: The person, organization or service who is creating this Person (e.g. URL of the software)
+        source: The URL of the web resource where information about this Person is taken from
+        language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
+        format_: The mimetype of the resource indicated by `source`
+        name: The name of the person
+        family_name: The family name of the person
+        given_name: The given name of the person
+        gender: The person's gender
+        birth_date: The birth date of the person, formatted as yyyy, yyyy-mm or yyyy-mm-dd
+        death_date: The date of death of the person , formatted as yyyy, yyyy-mm or yyyy-mm-dd
+        description: A biographical description of the person
+        image: URL to an image associated with the person
+        publisher: An entity responsible for making the resource available
+        honorific_prefix: An honorific prefix.
+        honorific_suffix: An honorific suffix.
+        job_title: The person's job title.
         TODO: See if there's a way of including argument lists from the `create_person` method to not duplicate info
     Returns:
         The string for the mutation for updating the person.

@@ -14,7 +14,7 @@ def query_person(identifier: str=None,title: str=None, contributor: str=None, cr
                            honorific_prefix: str = None, honorific_suffix: str = None, job_title: str = None):
     """Returns a mutation for creating a Person
     Arguments:
-        identifier: The identifier of the person in the CE to be updated
+        identifier: The identifier of the person in the CE to query
         title: The title of the resource indicated by `source`
         contributor: The main URL of the site where the information about this Person was taken from
         creator: The person, organization or service who is creating this Person (e.g. URL of the software)
@@ -22,17 +22,17 @@ def query_person(identifier: str=None,title: str=None, contributor: str=None, cr
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
         format_: The mimetype of the resource indicated by `source`
         name: The name of the person
-        family_name (optional): The family name of the person
-        given_name (optional): The given name of the person
-        gender (optional): The person's gender
-        birth_date (optional): The birth date of the person, formatted as yyyy, yyyy-mm or yyyy-mm-dd
-        death_date (optional): The date of death of the person , formatted as yyyy, yyyy-mm or yyyy-mm-dd
-        description (optional): A biographical description of the person
-        image (optional): URL to an image associated with the person
-        publisher (optional): An entity responsible for making the resource available
-        honorific_prefix (optional): An honorific prefix.
-        honorific_suffix (optional): An honorific suffix.
-        job_title (optional): The person's job title.
+        family_name : The family name of the person
+        given_name: The given name of the person
+        gender: The person's gender
+        birth_date: The birth date of the person, formatted as yyyy, yyyy-mm or yyyy-mm-dd
+        death_date: The date of death of the person , formatted as yyyy, yyyy-mm or yyyy-mm-dd
+        description: A biographical description of the person
+        image: URL to an image associated with the person
+        publisher: An entity responsible for making the resource available
+        honorific_prefix: An honorific prefix.
+        honorific_suffix: An honorific suffix.
+        job_title: The person's job title.
     Returns:
         The string for the mutation for creating the person.
     Raises:
