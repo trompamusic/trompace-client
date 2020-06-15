@@ -1,4 +1,3 @@
 QUERY = '''query {{
   {query}
 }}'''
-

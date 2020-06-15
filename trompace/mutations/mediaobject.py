@@ -1,16 +1,16 @@
 # Generate GraphQL queries for mutations pertaining to media object objects.
-from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
-from trompace.mutations.templates import format_mutation, format_link_mutation
 from trompace import StringConstant, _Neo4jDate, filter_none_args
 from trompace.constants import SUPPORTED_LANGUAGES
+from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
+from trompace.mutations.templates import format_mutation, format_link_mutation
 
 
-def mutation_create_media_object(name: str, description: str, date: str, creator: str, contributor: str, format_: str, encodingFormat: str, source: str, subject: str, \
-    contentUrl:str, language: str, title:str=None):
-
+def mutation_create_media_object(name: str, description: str, date: str, creator: str, contributor: str, format_: str,
+                                 encodingFormat: str, source: str, subject: str, \
+                                 contentUrl: str, language: str, title: str = None):
     """Returns a mutation for creating a media object object
     Arguments:
-        name: The name of the media object.  
+        name: The name of the media object.
         description: An account of the media object.
         date: The date associated with the media object.
         creator: The person, organization or service who created the thing the web resource is about.
@@ -19,10 +19,10 @@ def mutation_create_media_object(name: str, description: str, date: str, creator
         encodingFormat: A MimeType of the format of object encoded by the media object.
         source: The URL of the web resource to be represented by the node.
         subject: The subject of the media object.
-        contentUrl: The URL of the content encoded by the media object. 
+        contentUrl: The URL of the content encoded by the media object.
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
         inLanguage: The language of the media object. Currently supported languages are en,es,ca,nl,de,fr
-        title: The title of the page from which the media object information was extracted.  
+        title: The title of the page from which the media object information was extracted.
     Returns:
         The string for the mutation for creating the media object.
     Raises:
@@ -52,17 +52,18 @@ def mutation_create_media_object(name: str, description: str, date: str, creator
         "language": StringConstant(language.lower())
     }
 
-
     args = filter_none_args(args)
 
     return format_mutation("CreateMediaObject", args)
 
 
-def mutation_update_media_object(identifier: str, name: str=None, title:str=None, description: str=None, date: str=None, creator: str=None, contributor: str=None,\
-    format_: str=None, encodingFormat: str=None, source: str=None, subject: str=None, contentUrl:str=None, language: str=None):
+def mutation_update_media_object(identifier: str, name: str = None, title: str = None, description: str = None,
+                                 date: str = None, creator: str = None, contributor: str = None, \
+                                 format_: str = None, encodingFormat: str = None, source: str = None,
+                                 subject: str = None, contentUrl: str = None, language: str = None):
     """Returns a mutation for updating a media object object.
     Arguments:
-        name: The name of the media object.  
+        name: The name of the media object.
         description: An account of the media object.
         date: The date associated with the media object.
         creator: The person, organization or service who created the thing the web resource is about.
@@ -71,10 +72,10 @@ def mutation_update_media_object(identifier: str, name: str=None, title:str=None
         encodingFormat: A MimeType of the format of object encoded by the media object.
         source: The URL of the web resource to be represented by the node.
         subject: The subject of the media object.
-        contentUrl: The URL of the content encoded by the media object. 
+        contentUrl: The URL of the content encoded by the media object.
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
         inLanguage: The language of the media object. Currently supported languages are en,es,ca,nl,de,fr
-        title: The title of the page from which the media object information was extracted.  
+        title: The title of the page from which the media object information was extracted.
     Returns:
         The string for the mutation for updating the media object.
     Raises:
@@ -85,7 +86,6 @@ def mutation_update_media_object(identifier: str, name: str=None, title:str=None
 
     if encodingFormat is not None and "/" not in encodingFormat:
         raise NotAMimeTypeException(encodingFormat)
-
 
     args = {
         "identifier": identifier,
@@ -113,7 +113,6 @@ def mutation_update_media_object(identifier: str, name: str=None, title:str=None
     return format_mutation("UpdateMediaObject", args)
 
 
-
 def mutation_delete_media_object(identifier: str):
     """Returns a mutation for deleting a media object object based on the identifier.
     Arguments:
@@ -123,8 +122,6 @@ def mutation_delete_media_object(identifier: str):
     """
 
     return format_mutation("DeleteMediaObject", {"identifier": identifier})
-
-
 
 
 def mutation_merge_media_object_work_example(media_object_identifier: str, work_identifier: str):
@@ -157,7 +154,7 @@ def mutation_merge_media_object_encoding(media_object_identifier_1: str, media_o
         media_object_identifier_1: The unique identifier of the media object that is encoding the other.
         media_object_identifier_2: The unique identifier of the media object being encoded.
     Returns:
-        The string for the mutation for merging a media object as an encoding of another media object. 
+        The string for the mutation for merging a media object as an encoding of another media object.
     """
 
     return format_link_mutation("MergeMediaObjectEncoding", media_object_identifier_1, media_object_identifier_2)
@@ -169,8 +166,7 @@ def mutation_remove_media_object_encoding(media_object_identifier_1: str, media_
         media_object_identifier_1: The unique identifier of the media object that is encoding the other.
         media_object_identifier_2: The unique identifier of the media object being encoded.
     Returns:
-        The string for the mutation for removing a media object as an encoding of another media object. 
+        The string for the mutation for removing a media object as an encoding of another media object.
     """
 
     return format_link_mutation("RemoveMediaObjectEncoding", media_object_identifier_1, media_object_identifier_2)
-

@@ -1,0 +1,13 @@
+mutation {
+  MergeMusicCompositionComposer(
+    from: {identifier: "ff562d2e-2265-4f61-b340-561c92e797e9"}
+    to: {identifier: "cd79f87e-39f3-44bc-ae2f-b9854ab6df3b"}
+  ) {
+    from {
+      identifier
+    }
+    to {
+      identifier
+    }
+  }
+}

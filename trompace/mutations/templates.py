@@ -2,10 +2,8 @@
 
 from typing import Dict, Any
 
-from trompace.mutations import MUTATION
 from trompace import make_parameters
-
-
+from trompace.mutations import MUTATION
 
 MUTATION_TEMPLATE = '''{mutationname}(
 {parameters}
@@ -26,7 +24,6 @@ LINK_MUTATION_TEMPLATE = '''{mutationname}(
   }}'''
 
 
-
 def format_mutation(mutationname: str, args: Dict[str, Any]):
     """Create a mutation to send to the Contributor Environment.
     Arguments:
@@ -39,7 +36,8 @@ def format_mutation(mutationname: str, args: Dict[str, Any]):
     formatted_mutation = MUTATION_TEMPLATE.format(mutationname=mutationname, parameters=make_parameters(**args))
     return MUTATION.format(mutation=formatted_mutation)
 
-def format_link_mutation(mutationname: str, identifier_1: str, identifier_2:str):
+
+def format_link_mutation(mutationname: str, identifier_1: str, identifier_2: str):
     """Create a mutation with link between two identifiers to send to the Contributor Environment.
     Arguments:
         mutationname: the name of the mutation to generate
@@ -48,7 +46,9 @@ def format_link_mutation(mutationname: str, identifier_1: str, identifier_2:str)
     Returns:
         A formatted mutation
     """
-    return MUTATION.format(mutation=LINK_MUTATION_TEMPLATE.format(mutationname=mutationname,identifier_1=identifier_1, identifier_2=identifier_2 ))
+    return MUTATION.format(mutation=LINK_MUTATION_TEMPLATE.format(mutationname=mutationname, identifier_1=identifier_1,
+                                                                  identifier_2=identifier_2))
+
 
 def mutation_create(args, mutation_string: str):
     """Returns a mutation for creating an object.
@@ -92,8 +92,6 @@ def mutation_delete(identifier: str, mutation_string: str):
 
     delete_mutation = mutation_string.format(parameters=make_parameters(**args))
     return MUTATION.format(mutation=delete_mutation)
-
-
 
 
 def mutation_link(identifier_1: str, identifier_2: str, mutation_string: str):

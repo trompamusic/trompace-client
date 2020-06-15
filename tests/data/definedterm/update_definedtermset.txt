@@ -1,0 +1,9 @@
+mutation {
+  UpdateDefinedTermSet(
+identifier: "f65d0bce-061a-4a6f-baa0-f8c3a292cc41"
+        name: "Bowing direction"
+        modified: {formatted: "2020-03-24T20:11:20+00:00"}
+) {
+identifier
+}
+}

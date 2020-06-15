@@ -1,0 +1,7 @@
+mutation {
+  DeleteDefinedTerm(
+identifier: "5bd8a1c8-4e9e-4640-ae4b-134680af9acf"
+) {
+identifier
+}
+}

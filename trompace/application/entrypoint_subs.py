@@ -4,10 +4,10 @@ import argparse
 import asyncio
 import configparser
 
+from trompace import StringConstant
 from trompace.application.application import create_entrypointcontrolaction_CE, create_property_CE, \
     create_propertyvalue_CE, create_application_CE, subscribe_controlaction
 from trompace.exceptions import IDNotFoundException, ConfigRequirementException
-from trompace import StringConstant
 
 
 async def main(app_config_file, ep_config_file):

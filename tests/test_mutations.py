@@ -72,3 +72,9 @@ class TestMakeParameters(unittest.TestCase):
         made_params = make_parameters(**params)
         expected = '''date: { year: 2020 month: 1 day: 15 }'''
         self.assertEqual(expected, made_params, "Year, month, day and more values did not output a date")
+
+        # Date formatted as a string
+        params = {"date": _Neo4jDate("2020-01-15")}
+        made_params = make_parameters(**params)
+        expected = '''date: { year: 2020 month: 1 day: 15 }'''
+        self.assertEqual(expected, made_params, "Year, month, day and more values did not output a date")

@@ -41,7 +41,7 @@ ADD_CONTROLACTION_PROPERTY = '''AddActionInterfaceThingInterface(
             __typename
       }}
       to {{
-           __typename 
+           __typename
            ... on Property{{  
             identifier
         }}
@@ -71,9 +71,8 @@ def mutation_create_property(title: str, name: str, description: str, rangeInclu
 
 
 def mutation_create_propertyvaluespecification(name: str, description: str, defaultValue: str, valueMaxLength: int,
-                                               valueMinLength: int
-                                               , multipleValues: bool, valueName: str, valuePattern: str,
-                                               valueRequired: bool):
+                                               valueMinLength: int, multipleValues: bool, valueName: str,
+                                               valuePattern: str, valueRequired: bool):
     """Returns a mutation for creating a property value specification
     Each PropertyValueSpecification defines a scalar input parameter that the Component user should be prompted with when preparing
     the request for an algorithm process job. There are numerous properties that can be used to set requirements, type and limits for a scalar parameter.

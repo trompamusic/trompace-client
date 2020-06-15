@@ -1,0 +1,17 @@
+mutation {
+  CreateMusicComposition(
+title: "Das Lied von der Erde: I. Das Trinklied vom Jammer der Erde"
+        contributor: "https://musicbrainz.org"
+        creator: "https://www.upf.edu"
+        format: "text/html"
+        subject: "Music Composition"
+        source: "https://musicbrainz.org/work/ff15c2ab-0775-3757-975a-331357299635"
+        language: de
+        inLanguage: "de"
+        name: "Das Lied von der Erde: I. Das Trinklied vom Jammer der Erde"
+        description: "First composition of a song-cycle by Mahler"
+        position: 1
+) {
+identifier
+}
+}

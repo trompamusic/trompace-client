@@ -1,0 +1,9 @@
+mutation {
+  UpdateRating(
+identifier: "60ab3727-5972-4785-867f-2d050b0acde0"
+        ratingValue: 4
+        modified: {formatted: "2020-04-09T12:20:39+00:00"}
+) {
+identifier
+}
+}

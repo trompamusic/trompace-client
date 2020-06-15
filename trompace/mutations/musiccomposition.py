@@ -1,36 +1,49 @@
 # Generate GraphQL queries for mutations pertaining to music composition objects.
+from trompace import StringConstant, filter_none_args, docstring_interpolate
+from trompace.constants import SUPPORTED_LANGUAGES
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
 from trompace.mutations.templates import format_mutation, format_link_mutation
-from trompace import StringConstant, _Neo4jDate, filter_none_args
-from trompace.constants import SUPPORTED_LANGUAGES
 
-def mutation_create_music_composition(title: str, contributor: str, creator: str, subject:str, source: str, 
-                           language: str, inLanguage:str, format_:str="text/html", name: str=None, description: str=None):
 
-    """Returns a mutation for creating a music composition object
-    Arguments:
-        title: The title of the page from which the music composition information was extracted.      
-        contributor: A person, an organization, or a service responsible for contributing the music composition to the web resource. This can be either a name or a base URL.
-        creator: The person, organization or service who created the thing the web resource is about.
+MUSICCOMPOSITION_ARGS_DOCS = """title: The title of the resource indicated by `source`
+        contributor: The main URL of the site where the information about this MusicComposition was taken from
+        creator: The person, organization or service who is creating this MusicComposition (e.g. URL of the software)
+        source: The URL of the web resource where information about this MusicComposition is taken from
+        format_: The mimetype of the resource indicated by `source`
         subject: The subject of the music composition.
-        source: The URL of the web resource to be represented by the node.
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
-        inLanguage: The language of the music composition. Currently supported languages are en,es,ca,nl,de,fr
-        formatin: A MimeType of the format of the page describing the music composition, default is "text/html"
+        inlanguage: The language of the music composition. Currently supported languages are en,es,ca,nl,de,fr
         name: The name of the music composition.
         description: An account of the music composition.
+        position: In the case that this is a movement of a larger work (e.g. a Symphony), the position of this
+                  MusicComposition in the larger one.
+"""
 
+
+@docstring_interpolate("musiccomposition_args", MUSICCOMPOSITION_ARGS_DOCS)
+def mutation_create_music_composition(title: str, contributor: str, creator: str, source: str, format_: str,
+                                      subject: str = None, language: str = None, inlanguage: str = None,
+                                      name: str = None, description: str = None, position: int = None):
+    """Returns a mutation for creating a music composition object
+
+    Args:
+        {musiccomposition_args}
 
     Returns:
         The string for the mutation for creating the music composition.
+
     Raises:
-        UnsupportedLanguageException if the input language or inLanguage is not one of the supported languages.
+        UnsupportedLanguageException: if ``language`` or ``inlanguage`` are not one of the supported languages.
+        NotAMimeTypeException: if ``format_`` is not a valid mimetype
     """
-    if language not in SUPPORTED_LANGUAGES:
+    if language and language not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
 
+    if inlanguage and inlanguage not in SUPPORTED_LANGUAGES:
+        raise UnsupportedLanguageException(inlanguage)
+
     if "/" not in format_:
-        raise NotAMimeTypeException(formatin)
+        raise NotAMimeTypeException(format_)
 
     args = {
         "title": title,
@@ -40,77 +53,69 @@ def mutation_create_music_composition(title: str, contributor: str, creator: str
         "subject": subject,
         "source": source,
         "language": StringConstant(language.lower()),
-        "inLanguage": inLanguage,
+        "inLanguage": inlanguage,
+        "name": name,
+        "description": description,
+        "position": position
     }
-    if name:
-        args["name"] = name
-    if description:
-        args["description"] = description
 
     args = filter_none_args(args)
 
     return format_mutation("CreateMusicComposition", args)
 
 
-def mutation_update_music_composition(identifier: str, title: str=None, contributor: str=None, creator: str=None, subject:str=None, source: str=None,
-                           language: str=None, inLanguage:str=None, format_:str=None, name: str=None, description: str=None):
-    """Returns a mutation for updating a music composition object.
-    Arguments:
-        title: The title of the page from which the music composition information was extracted.      
-        contributor: A person, an organization, or a service responsible for contributing the music composition to the web resource. This can be either a name or a base URL.
-        creator: The person, organization or service who created the thing the web resource is about.
-        subject: The subject of the music composition.
-        source: The URL of the web resource to be represented by the node.
-        language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
-        inLanguage: The language of the music composition. Currently supported languages are en,es,ca,nl,de,fr
-        format_: A MimeType of the format of the page describing the music composition, default is "text/html"
-        name: The name of the music composition.
-        description: An account of the music composition.
+@docstring_interpolate("musiccomposition_args", MUSICCOMPOSITION_ARGS_DOCS)
+def mutation_update_music_composition(identifier: str, title: str = None, contributor: str = None, creator: str = None,
+                                      source: str = None, format_: str = None,
+                                      subject: str = None, language: str = None, inlanguage: str = None,
+                                      name: str = None, description: str = None, position: int = None):
+    """Returns a mutation for updating a MusicComposition object.
+    
+    Args:
+        identifier: The identifier of the MusicComposition in the CE to be updated
+        {musiccomposition_args}
+
     Returns:
         The string for the mutation for updating the music composition.
     Raises:
-        Assertion error if the input language or inLanguage is not one of the supported languages.
+        UnsupportedLanguageException: if ``language`` or ``inlanguage`` are not one of the supported languages.
+        NotAMimeTypeException: if ``format_`` is not a valid mimetype
     """
-        
 
+    if language and language not in SUPPORTED_LANGUAGES:
+        raise UnsupportedLanguageException(language)
 
-    args = {"identifier": identifier}
-    if title:
-        args["title"] = title
-    if contributor:
-        args["contributor"] = contributor
-    if creator:
-        args["creator"] = creator
-    if subject:
-        args["subject"] = subject
-    if source:
-        args["source"] = source
-    if language:
-        if language not in SUPPORTED_LANGUAGES:
-            raise UnsupportedLanguageException(language)
-        else:
-            args["language"] = StringConstant(language.lower())
-    if inLanguage:
-        if inLanguage not in SUPPORTED_LANGUAGES:
-            raise UnsupportedLanguageException(inLanguage)
-        else:
-            args["inLanguage"] = StringConstant(inLanguage.lower())
-    if format_:
-        args["format"] = format_
-    if name:
-        args["name"] = name
-    if description:
-        args["description"] = description
+    if inlanguage and inlanguage not in SUPPORTED_LANGUAGES:
+        raise UnsupportedLanguageException(inLanguage)
+
+    if format_ and "/" not in format_:
+        raise NotAMimeTypeException(format_)
+
+    args = {"identifier": identifier,
+            "title": title,
+            "contributor": contributor,
+            "creator": creator,
+            "subject": subject,
+            "source": source,
+            "inLanguage": inlanguage,
+            "format": format_,
+            "name": name,
+            "description": description,
+            "position": position}
+
+    if language is not None:
+        args["language"] = StringConstant(language.lower())
+
     args = filter_none_args(args)
 
     return format_mutation("UpdateMusicComposition", args)
 
 
-
 def mutation_delete_music_composition(identifier: str):
-    """Returns a mutation for deleting a music composition object based on the identifier.
-    Arguments:
-        identifier: The unique identifier of the music composition object.
+    """Returns a mutation for deleting a MusicComposition.
+
+    Args:
+        identifier: The identifier of the MusicComposition.
     Returns:
         The string for the mutation for deleting the music composition object based on the identifier.
     """
@@ -118,56 +123,115 @@ def mutation_delete_music_composition(identifier: str):
     return format_mutation("DeleteMusicComposition", {"identifier": identifier})
 
 
+def mutation_merge_music_composition_included_composition(main_identifier, part_identifier):
+    """Returns a mutation for adding a MusicComposition as an included composition of another MusicComposition
+    (https://schema.org/includedComposition). For example, the first movement of a composition could be
+    represented as an includedComposition of a main symphony.
+
+    Args:
+        main_identifier: The identifier of a main MusicComposition.
+        part_identifier: The identifier of a MusicComposition which is an included part of the main MusicComposition
+    """
+    return format_link_mutation("MergeMusicCompositionIncludedComposition", main_identifier, part_identifier)
 
 
-def mutation_add_broad_match_music_composition(from_identifier: str, to_identifier: str):
-    """Returns a mutation for creating a broad match between two music comosition objects.
-    Arguments:
-        from_identifier: The unique identifier of the digital document object from which to create the broad match.
-        to_identifier: The unique identifier of the digital document object to which the broad match should be created.
-    Returns:
-        The string for the mutation for creating the broad match between the two documents.
+def mutation_remove_music_composition_included_composition(main_identifier, part_identifier):
+    """Returns a mutation for removing a MusicComposition as an included composition of another MusicComposition
+    (https://schema.org/includedComposition).
+
+    Args:
+        main_identifier: The identifier of a main MusicComposition.
+        part_identifier: The identifier of a MusicComposition which is an included part of the main MusicComposition
+    """
+    return format_link_mutation("RemoveMusicCompositionIncludedComposition", main_identifier, part_identifier)
+
+
+def mutation_merge_music_composition_has_part(main_identifier, part_identifier):
+    """Returns a mutation for adding a MusicComposition as a part of another MusicComposition
+    (https://schema.org/hasPart). For example, the first movement of a composition could be
+    represented as a hasPart of a main symphony.
+
+    Args:
+        main_identifier: The identifier of a main MusicComposition.
+        part_identifier: The identifier of a MusicComposition which is a part of the main MusicComposition
+    """
+    return format_link_mutation("MergeMusicCompositionHasPart", main_identifier, part_identifier)
+
+
+def mutation_remove_music_composition_has_part(main_identifier, part_identifier):
+    """Returns a mutation for removing a MusicComposition as a part of another MusicComposition
+    (https://schema.org/hasPart).
+
+    Args:
+        main_identifier: The identifier of a main MusicComposition.
+        part_identifier: The identifier of a MusicComposition which is a part of the main MusicComposition
+    """
+    return format_link_mutation("RemoveMusicCompositionHasPart", main_identifier, part_identifier)
+
+
+def mutation_merge_music_composition_composer(composition_identifier, person_identifier):
+    """Returns a mutation for adding a Person as the composer of a MusicComposition
+    (https://schema.org/composer).
+
+    Args:
+        composition_identifier: The identifier of a MusicComposition.
+        person_identifier: The identifier of a Person who composed the MusicComposition
+    """
+    return format_link_mutation("MergeMusicCompositionComposer", composition_identifier, person_identifier)
+
+
+def mutation_remove_music_composition_composer(composition_identifier, person_identifier):
+    """Returns a mutation for removing a Person as the composer of a MusicComposition
+    (https://schema.org/composer).
+
+    Args:
+        composition_identifier: The identifier of a MusicComposition.
+        person_identifier: The identifier of a Person who composed the MusicComposition
+    """
+    return format_link_mutation("RemoveMusicCompositionComposer", composition_identifier, person_identifier)
+
+
+def mutation_merge_music_composition_exact_match(from_identifier, to_identifier):
+    """Returns a mutation for indicating that two MusicComposition objects represent the same composition
+    (http://www.w3.org/2004/02/skos/core#exactMatch).
+
+    Args:
+        from_identifier: The identifier of one MusicComposition.
+        to_identifier: The identifier of another MusicComposition.
+    """
+    return format_link_mutation("MergeMusicCompositionExactMatch", from_identifier, to_identifier)
+
+
+def mutation_remove_music_composition_exact_match(from_identifier, to_identifier):
+    """Returns a mutation for removing two MusicComposition representing the same composition
+    (http://www.w3.org/2004/02/skos/core#exactMatch).
+
+    Args:
+        from_identifier: The identifier of one MusicComposition.
+        to_identifier: The identifier of another MusicComposition.
+    """
+    return format_link_mutation("RemoveMusicCompositionExactMatch", from_identifier, to_identifier)
+
+
+def mutation_merge_music_composition_work_example(music_composition_id: str, creativework_id: str):
+    """Returns a mutation for adding a CreativeWork as an example of a MusicComposition
+    (https://schema.org/workExample).
+
+    Args:
+        music_composition_id: The identifier of a MusicComposition.
+        creativework_id: The identifier of a CreativeWork which is an example of the MusicComposition
     """
 
-    return format_link_mutation("AddMusicCompositionBroadMatch", from_identifier, to_identifier)
+    return format_link_mutation("MergeMusicCompositionWorkExample", music_composition_id, creativework_id)
 
 
-def mutation_remove_broad_match_music_composition(from_identifier: str, to_identifier: str):
-    """Returns a mutation for removing a broad match between two music composition objects.
-    Arguments:
-        from_identifier: The unique identifier of the music composition object from which to remove the broad match.
-        to_identifier: The unique identifier of the digital document object to which the broad match should be removed.
-    Returns:
-        The string for the mutation for removing the broad match between the music compositions.
+def mutation_remove_music_composition_work_example(music_composition_id: str, creativework_id: str):
+    """Returns a mutation for removing a CreativeWork as an example of a MusicComposition
+    (https://schema.org/workExample).
+
+    Args:
+        music_composition_id: The identifier of a MusicComposition.
+        creativework_id: The identifier of a CreativeWork which is an example of the MusicComposition
     """
 
-    return format_link_mutation("RemoveMusicCompositionBroadMatch", from_identifier, to_identifier)
-
-
-
-
-def mutation_merge_music_composition_work_example_composition(music_composition_id: str, composition_id: str):
-    """Returns a mutation for merging a music composition as an example of a composition.
-    Merging means that the connection will be added only if it does not exist.
-
-    Arguments:
-        music_composition_id: The unique identifier of the music composition object.
-        composition_id: The unique identifier of the composition object.
-    Returns:
-        The string for the mutation for merging the music composition as an example of the composition.
-    """
-
-    return format_link_mutation("MergeMusicCompositionExampleOfWork", music_composition_id, composition_id)
-
-def mutation_remove_music_composition_work_example_composition(music_composition_id: str, composition_id: str):
-    """Returns a mutation for removing a music composition as an example of a composition.
-    Arguments:
-        music_composition_id: The unique identifier of the music composition object.
-        composition_id: The unique identifier of the composition object.
-    Returns:
-        The string for the mutation for removing the music composition as an example of the composition.
-    """
-
-    return format_link_mutation("RemoveMusicCompositionExampleOfWork", music_composition_id, composition_id)
-
-
+    return format_link_mutation("RemoveMusicCompositionWorkExample", music_composition_id, creativework_id)

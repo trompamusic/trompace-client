@@ -6,6 +6,7 @@ title: "A. J. Fynn"
         source: "https://www.cpdl.org/wiki/index.php/A._J._Fynn"
         format: "text/html"
         description: "Born circa 1860Died circa 1920A. J. Fynn was an early 20th Century scholar in literature and anthropology"
+        gender: male
         language: en
 ) {
 identifier
