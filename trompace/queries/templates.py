@@ -7,9 +7,8 @@ from typing import Dict, Any
 from trompace.queries import QUERY
 from trompace import make_parameters
 
-QUERY_TEMPLATE = '''{queryname}(
-{parameters}
-) {{
+QUERY_TEMPLATE = '''{queryname}{parameters}
+{{
 identifier
 name
 publisher
@@ -19,18 +18,6 @@ source
 description
 language
 }}'''
-
-QUERY_ALL_TEMPLATE = '''{queryname}{{
-identifier
-name
-publisher
-contributor
-creator
-source
-description
-language
-}}'''
-
 
 
 def format_query(queryname: str, args: Dict[str, Any]):
@@ -42,8 +29,8 @@ def format_query(queryname: str, args: Dict[str, Any]):
         A formatted query
     """
     if args:
-    	formatted_query = QUERY_TEMPLATE.format(queryname=queryname, parameters=make_parameters(**args))
+    	formatted_query = QUERY_TEMPLATE.format(queryname=queryname, parameters="({})".format(make_parameters(**args)))
     else:
-    	formatted_query = QUERY_ALL_TEMPLATE.format(queryname=queryname)
+    	formatted_query = QUERY_TEMPLATE.format(queryname=queryname, parameters="")
     return QUERY.format(query=formatted_query)
 
