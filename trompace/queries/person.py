@@ -11,8 +11,9 @@ def query_person(identifier: str=None,title: str=None, contributor: str=None, cr
                            family_name: str = None, given_name: str = None, gender: str = None,
                            birth_date: str = None, death_date: str = None,
                            description: str = None, image: str = None, publisher: str = None,
-                           honorific_prefix: str = None, honorific_suffix: str = None, job_title: str = None):
-    """Returns a mutation for creating a Person
+                           honorific_prefix: str = None, honorific_suffix: str = None, job_title: str = None,\
+                            return_items_list: list=None):
+    """Returns a query for querying the database for a person object.
     Arguments:
         identifier: The identifier of the person in the CE to query
         title: The title of the resource indicated by `source`
@@ -45,6 +46,8 @@ def query_person(identifier: str=None,title: str=None, contributor: str=None, cr
 
     if format_ and "/" not in format_:
         raise NotAMimeTypeException(format_)
+    if not return_items_list:
+        return_items_list = ["identifier", "name"]
 
     args = {
         "identifier": identifier,
@@ -73,4 +76,4 @@ def query_person(identifier: str=None,title: str=None, contributor: str=None, cr
 
     args = filter_none_args(args)
 
-    return format_query("Person", args)
+    return format_query("Person", args, return_items_list)

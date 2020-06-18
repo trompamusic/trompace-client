@@ -93,7 +93,7 @@ def mutation_update_person(identifier: str, title: str = None, contributor: str 
     """Returns a mutation for updating a Person
 
     Args:
-        identifier: The identifier of the person in the CE to be update
+        identifier: The identifier of the person in the CE to be updated
         {person_args}
     Returns:
         The string for the mutation for updating the person.

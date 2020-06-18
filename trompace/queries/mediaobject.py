@@ -5,10 +5,10 @@ from trompace import StringConstant, _Neo4jDate, filter_none_args
 from trompace.constants import SUPPORTED_LANGUAGES
 
 
-def query_mediaobject(identifier: str=None, name: str=None, description: str=None, date: str=None, creator: str=None, contributor: str=None, format_: str=None,\
- encodingFormat: str=None, source: str=None, subject: str=None, contentUrl:str=None, language: str=None, title:str=None):
+def query_mediaobject(identifier: str=None, creator: str=None, contributor: str=None,\
+ encodingFormat: str=None, source: str=None, contentUrl:str=None, return_items_list: list=None):
 
-    """Returns a mutation for creating a media object object
+    """Returns a query for querying the database for a media object.
     Arguments:
         identifier: The identifier of the media object in the CE to be updated
         name: The name of the media object.  
@@ -30,35 +30,22 @@ def query_mediaobject(identifier: str=None, name: str=None, description: str=Non
         UnsupportedLanguageException if the input language is not one of the supported languages.
     """
 
-    if language and language.lower() not in SUPPORTED_LANGUAGES:
-        raise UnsupportedLanguageException(language)
-
-    if format_ and "/" not in format_:
-        raise NotAMimeTypeException(format_)
 
 
     if encodingFormat and "/" not in encodingFormat:
         raise NotAMimeTypeException(encodingFormat)
-
+        
+    if not return_items_list:
+        return_items_list = ["identifier", "name"]
     args = {
         "identifier": identifier,
-        "name": name,
-        "title": title,
-        "description": description,
         "creator": creator,
         "contributor": contributor,
-        "format": format_,
         "encodingFormat": encodingFormat,
         "source": source,
-        "subject": subject,
         "contentUrl": contentUrl,
     }
 
-    if language is not None:
-        args["language"] = StringConstant(language.lower())
-    if date is not None:
-        args["date"] = _Neo4jDate(date)
-
     args = filter_none_args(args)
 
-    return format_query("MediaObject", args)
+    return format_query("MediaObject", args, return_items_list)

@@ -3,11 +3,5 @@ query {
 {
 identifier
 name
-publisher
-contributor
-creator
-source
-description
-language
 }
 }

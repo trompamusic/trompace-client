@@ -18,13 +18,11 @@ class TestPerson(unittest.TestCase):
     def test_query(self):
         expected = util.read_file(self.data_dir, "query_person_parameter.txt")
         created_person = person_query.query_person(identifier="ff59650b-1d47-4ea5-b356-31fddeb48315")
-        print(created_person)
         self.assertEqual(created_person, expected)
 
     def test_query_all(self):
         expected = util.read_file(self.data_dir, "query_person.txt")
         created_person = person_query.query_person()
-        print(created_person)
         self.assertEqual(created_person, expected)
 
     def test_create(self):
