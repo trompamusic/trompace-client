@@ -1,5 +1,5 @@
 # Generate GraphQL queries for mutations pertaining to media object objects.
-from trompace import StringConstant, _Neo4jDate, filter_none_args
+from trompace import StringConstant, _Neo4jDate, filter_none_args, docstring_interpolate
 from trompace.constants import SUPPORTED_LANGUAGES
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
 from trompace.mutations.templates import format_mutation, format_link_mutation
@@ -67,7 +67,7 @@ def mutation_update_media_object(identifier: str, name: str = None, title: str =
     """Returns a mutation for updating a media object object.
     Arguments:
         identifier: The identifier of the media object in the CE to be updated.
-        {media_object_args}
+        {mediaobject_args}
     Returns:
         The string for the mutation for updating the media object.
     Raises:

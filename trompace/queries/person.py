@@ -2,7 +2,7 @@
 
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
 from trompace.queries.templates import format_query
-from trompace import StringConstant, _Neo4jDate, filter_none_args
+from trompace import StringConstant, _Neo4jDate, filter_none_args, docstring_interpolate
 from trompace.constants import SUPPORTED_LANGUAGES
 
 PERSON_ARGS_DOCS = """identifier: The identifier of the person in the CE.

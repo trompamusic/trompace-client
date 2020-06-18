@@ -1,7 +1,7 @@
 # Generate GraphQL queries for queries pertaining to media objects.
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
 from trompace.queries.templates import format_query
-from trompace import StringConstant, _Neo4jDate, filter_none_args
+from trompace import StringConstant, _Neo4jDate, filter_none_args, docstring_interpolate
 from trompace.constants import SUPPORTED_LANGUAGES
 
 MEDIAOBJECT_ARGS_DOCS = """identifier: The identifier of the media object in the CE.
