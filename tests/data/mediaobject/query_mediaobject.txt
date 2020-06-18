@@ -1,5 +1,6 @@
 query {
-  MediaObject{
+  MediaObject
+{
 identifier
 name
 publisher
