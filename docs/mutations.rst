@@ -14,3 +14,9 @@ MusicComposition
 
 .. automodule:: trompace.mutations.musiccomposition
    :members:
+
+MediaObject
+----------------
+
+.. automodule:: trompace.mutations.mediaobject
+   :members:

@@ -4,13 +4,7 @@ from trompace.constants import SUPPORTED_LANGUAGES
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
 from trompace.mutations.templates import format_mutation, format_link_mutation
 
-
-def mutation_create_media_object(name: str, description: str, date: str, creator: str, contributor: str, format_: str,
-                                 encodingFormat: str, source: str, subject: str, \
-                                 contentUrl: str, language: str, title: str = None):
-    """Returns a mutation for creating a media object object
-    Arguments:
-        name: The name of the media object.
+MEDIAOBJECT_ARGS_DOCS = """name: The name of the media object.
         description: An account of the media object.
         date: The date associated with the media object.
         creator: The person, organization or service who created the thing the web resource is about.
@@ -22,7 +16,16 @@ def mutation_create_media_object(name: str, description: str, date: str, creator
         contentUrl: The URL of the content encoded by the media object.
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
         inLanguage: The language of the media object. Currently supported languages are en,es,ca,nl,de,fr
-        title: The title of the page from which the media object information was extracted.
+        title: The title of the resource indicated by `source`"""
+
+
+@docstring_interpolate("mediaobject_args", MEDIAOBJECT_ARGS_DOCS)
+def mutation_create_media_object(name: str, description: str, date: str, creator: str, contributor: str, format_: str,
+                                 encodingFormat: str, source: str, subject: str, \
+                                 contentUrl: str, language: str, title: str = None):
+    """Returns a mutation for creating a media object object
+    Arguments:
+        {mediaobject_args}
     Returns:
         The string for the mutation for creating the media object.
     Raises:
@@ -56,26 +59,15 @@ def mutation_create_media_object(name: str, description: str, date: str, creator
 
     return format_mutation("CreateMediaObject", args)
 
-
+@docstring_interpolate("mediaobject_args", MEDIAOBJECT_ARGS_DOCS)
 def mutation_update_media_object(identifier: str, name: str = None, title: str = None, description: str = None,
                                  date: str = None, creator: str = None, contributor: str = None, \
                                  format_: str = None, encodingFormat: str = None, source: str = None,
                                  subject: str = None, contentUrl: str = None, language: str = None):
     """Returns a mutation for updating a media object object.
     Arguments:
-        name: The name of the media object.
-        description: An account of the media object.
-        date: The date associated with the media object.
-        creator: The person, organization or service who created the thing the web resource is about.
-        contributor: A person, an organization, or a service responsible for contributing the media object to the web resource. This can be either a name or a base URL.
-        format_: A MimeType of the format of the page describing the media object.
-        encodingFormat: A MimeType of the format of object encoded by the media object.
-        source: The URL of the web resource to be represented by the node.
-        subject: The subject of the media object.
-        contentUrl: The URL of the content encoded by the media object.
-        language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
-        inLanguage: The language of the media object. Currently supported languages are en,es,ca,nl,de,fr
-        title: The title of the page from which the media object information was extracted.
+        identifier: The identifier of the person in the CE to be updated
+        {media_object_args}
     Returns:
         The string for the mutation for updating the media object.
     Raises:
