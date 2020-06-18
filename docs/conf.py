@@ -21,7 +21,7 @@ project = 'TROMPA CE client'
 copyright = '2020, MTG-UPF'
 author = 'MTG-UPF'
 
-
+master_doc = 'index'
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
