@@ -66,7 +66,7 @@ def mutation_update_media_object(identifier: str, name: str = None, title: str =
                                  subject: str = None, contentUrl: str = None, language: str = None):
     """Returns a mutation for updating a media object object.
     Arguments:
-        identifier: The identifier of the person in the CE to be updated
+        identifier: The identifier of the media object in the CE to be updated.
         {media_object_args}
     Returns:
         The string for the mutation for updating the media object.

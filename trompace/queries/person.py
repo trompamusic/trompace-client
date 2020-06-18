@@ -5,7 +5,28 @@ from trompace.queries.templates import format_query
 from trompace import StringConstant, _Neo4jDate, filter_none_args
 from trompace.constants import SUPPORTED_LANGUAGES
 
+PERSON_ARGS_DOCS = """identifier: The identifier of the person in the CE.
+        title: The title of the resource indicated by `source`
+        contributor: The main URL of the site where the information about this Person was taken from
+        creator: The person, organization or service who is creating this Person (e.g. URL of the software)
+        source: The URL of the web resource where information about this Person is taken from
+        language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
+        format_: The mimetype of the resource indicated by `source`
+        name: The name of the person
+        family_name (optional): The family name of the person
+        given_name (optional): The given name of the person
+        gender (optional): The person's gender
+        birth_date (optional): The birth date of the person, formatted as yyyy, yyyy-mm or yyyy-mm-dd
+        death_date (optional): The date of death of the person , formatted as yyyy, yyyy-mm or yyyy-mm-dd
+        description (optional): A biographical description of the person
+        image (optional): URL to an image associated with the person
+        publisher (optional): An entity responsible for making the resource available
+        honorific_prefix (optional): An honorific prefix.
+        honorific_suffix (optional): An honorific suffix.
+        job_title (optional): The person's job title."""
 
+
+@docstring_interpolate("person_args", PERSON_ARGS_DOCS)
 def query_person(identifier: str=None,title: str=None, contributor: str=None, creator: str=None, source: str=None,
                            language: str = None, format_: str = None, name: str = None,
                            family_name: str = None, given_name: str = None, gender: str = None,
@@ -15,25 +36,7 @@ def query_person(identifier: str=None,title: str=None, contributor: str=None, cr
                             return_items_list: list=None):
     """Returns a query for querying the database for a person object.
     Arguments:
-        identifier: The identifier of the person in the CE to query
-        title: The title of the resource indicated by `source`
-        contributor: The main URL of the site where the information about this Person was taken from
-        creator: The person, organization or service who is creating this Person (e.g. URL of the software)
-        source: The URL of the web resource where information about this Person is taken from
-        language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
-        format_: The mimetype of the resource indicated by `source`
-        name: The name of the person
-        family_name : The family name of the person
-        given_name: The given name of the person
-        gender: The person's gender
-        birth_date: The birth date of the person, formatted as yyyy, yyyy-mm or yyyy-mm-dd
-        death_date: The date of death of the person , formatted as yyyy, yyyy-mm or yyyy-mm-dd
-        description: A biographical description of the person
-        image: URL to an image associated with the person
-        publisher: An entity responsible for making the resource available
-        honorific_prefix: An honorific prefix.
-        honorific_suffix: An honorific suffix.
-        job_title: The person's job title.
+        {person_args}
     Returns:
         The string for the mutation for creating the person.
     Raises:
