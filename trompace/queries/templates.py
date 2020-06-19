@@ -23,11 +23,9 @@ def format_query(queryname: str, args: Dict[str, Any], return_items_list: list):
         A formatted query
     """
 
+    parameters = ""
     if args:
-    	formatted_query = QUERY_TEMPLATE.format(queryname=queryname,\
-         parameters="({})".format(make_parameters(**args)),\
-          return_items="\n".join(return_items_list))
-    else:
-    	formatted_query = QUERY_TEMPLATE.format(queryname=queryname, parameters="",\
-            return_items="\n".join(return_items_list))
+        parameters="({})".format(make_parameters(**args))
+    
+    formatted_query = QUERY_TEMPLATE.format(queryname=queryname, parameters=parameters, return_items="\n".join(return_items_list))
     return QUERY.format(query=formatted_query)
