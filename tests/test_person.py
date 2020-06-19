@@ -22,7 +22,7 @@ class TestPerson(unittest.TestCase):
             creator="https://www.upf.edu", source="https://www.cpdl.org/wiki/index.php/A._J._Fynn",
             language="en", format_="text/html", gender="male",
             description="Born circa 1860Died circa 1920A. J. Fynn was an early 20th Century scholar\
-            in literature and anthropology")
+ in literature and anthropology")
         self.assertEqual(created_person, expected)
 
     def test_create_invalid_values(self):
