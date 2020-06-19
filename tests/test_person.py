@@ -68,7 +68,7 @@ class TestPerson(unittest.TestCase):
 
     def test_invalid_language(self):
         with self.assertRaises(UnsupportedLanguageException):
-           person.mutation_update_person('2eeca6dd-c62c-490e-beb0-2e3899fca74f',language="ja")
+            person.mutation_update_person('2eeca6dd-c62c-490e-beb0-2e3899fca74f', language="ja")
         with self.assertRaises(UnsupportedLanguageException):
             person.mutation_create_person(title="A. J. Fynn", contributor="https://www.cpdl.org",
                                                 creator="https://www.upf.edu", source="https://www.cpdl.org/wiki/index.php/A._J._Fynn",
@@ -77,7 +77,7 @@ class TestPerson(unittest.TestCase):
 
     def test_invalid_format(self):
         with self.assertRaises(NotAMimeTypeException):
-            person.mutation_update_person('2eeca6dd-c62c-490e-beb0-2e3899fca74f',format_="test,html")
+            person.mutation_update_person('2eeca6dd-c62c-490e-beb0-2e3899fca74f', format_="test,html")
         with self.assertRaises(NotAMimeTypeException):
             person.mutation_create_person(title="A. J. Fynn", contributor="https://www.cpdl.org",
                                                 creator="https://www.upf.edu", source="https://www.cpdl.org/wiki/index.php/A._J._Fynn",
@@ -99,4 +99,3 @@ class TestPerson(unittest.TestCase):
                                                                   "b10ac895-beb8-489e-8168-3e786d1aeb0e")
 
         self.assertEqual(actual, expected)
-

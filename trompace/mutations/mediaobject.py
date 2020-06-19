@@ -21,7 +21,7 @@ MEDIAOBJECT_ARGS_DOCS = """name: The name of the media object.
 
 @docstring_interpolate("mediaobject_args", MEDIAOBJECT_ARGS_DOCS)
 def mutation_create_media_object(name: str, description: str, date: str, creator: str, contributor: str, format_: str,
-                                 encodingFormat: str, source: str, subject: str, \
+                                 encodingFormat: str, source: str, subject: str,
                                  contentUrl: str, language: str, title: str = None):
     """Returns a mutation for creating a media object object
     Arguments:
@@ -59,9 +59,10 @@ def mutation_create_media_object(name: str, description: str, date: str, creator
 
     return format_mutation("CreateMediaObject", args)
 
+
 @docstring_interpolate("mediaobject_args", MEDIAOBJECT_ARGS_DOCS)
 def mutation_update_media_object(identifier: str, name: str = None, title: str = None, description: str = None,
-                                 date: str = None, creator: str = None, contributor: str = None, \
+                                 date: str = None, creator: str = None, contributor: str = None,
                                  format_: str = None, encodingFormat: str = None, source: str = None,
                                  subject: str = None, contentUrl: str = None, language: str = None):
     """Returns a mutation for updating a media object object.
