@@ -21,7 +21,8 @@ class TestPerson(unittest.TestCase):
             title="A. J. Fynn", contributor="https://www.cpdl.org",
             creator="https://www.upf.edu", source="https://www.cpdl.org/wiki/index.php/A._J._Fynn",
             language="en", format_="text/html", gender="male",
-            description="Born circa 1860Died circa 1920A. J. Fynn was an early 20th Century scholar in literature and anthropology")
+            description="Born circa 1860Died circa 1920A. J. Fynn was an early 20th Century scholar\
+            in literature and anthropology")
         self.assertEqual(created_person, expected)
 
     def test_create_invalid_values(self):
@@ -71,18 +72,22 @@ class TestPerson(unittest.TestCase):
             person.mutation_update_person('2eeca6dd-c62c-490e-beb0-2e3899fca74f', language="ja")
         with self.assertRaises(UnsupportedLanguageException):
             person.mutation_create_person(title="A. J. Fynn", contributor="https://www.cpdl.org",
-                                                creator="https://www.upf.edu", source="https://www.cpdl.org/wiki/index.php/A._J._Fynn",
-                                                language="ja", format_="text/html",
-                                                description="Born circa 1860Died circa 1920A. J. Fynn was an early 20th Century scholar in literature and anthropology")
+                                        creator="https://www.upf.edu",
+                                        source="https://www.cpdl.org/wiki/index.php/A._J._Fynn",
+                                        language="ja", format_="text/html",
+                                        description="Born circa 1860Died circa 1920A. J. Fynn was\
+                                        an early 20th Century scholar in literature and anthropology")
 
     def test_invalid_format(self):
         with self.assertRaises(NotAMimeTypeException):
             person.mutation_update_person('2eeca6dd-c62c-490e-beb0-2e3899fca74f', format_="test,html")
         with self.assertRaises(NotAMimeTypeException):
             person.mutation_create_person(title="A. J. Fynn", contributor="https://www.cpdl.org",
-                                                creator="https://www.upf.edu", source="https://www.cpdl.org/wiki/index.php/A._J._Fynn",
-                                                language="en", format_="text,html",
-                                                description="Born circa 1860Died circa 1920A. J. Fynn was an early 20th Century scholar in literature and anthropology")
+                                        creator="https://www.upf.edu",
+                                        source="https://www.cpdl.org/wiki/index.php/A._J._Fynn",
+                                        language="en", format_="text,html",
+                                        description="Born circa 1860Died circa 1920A. J. Fynn was\
+                                        an early 20th Century scholar in literature and anthropology")
 
     def test_person_add_exact_match_person(self):
         expected = util.read_file(self.data_dir, "merge_person_exactmatch.txt")

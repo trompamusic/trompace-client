@@ -7,9 +7,9 @@ from trompace.constants import SUPPORTED_LANGUAGES
 
 
 def query_person(identifier: str = None, contributor: str = None, creator: str = None,
-                    source: str = None, language: str = None, format_: str = None,
-                    name: str = None, family_name: str = None, given_name: str = None,
-                    return_items_list: list = ["identifier", "name"]):
+                source: str = None, language: str = None, format_: str = None,
+                name: str = None, family_name: str = None, given_name: str = None,
+                return_items_list: list = ["identifier", "name"]):
 
     """Returns a query for querying the database for a person object.
     Arguments:
