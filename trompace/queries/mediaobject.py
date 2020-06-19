@@ -6,8 +6,8 @@ from trompace.constants import SUPPORTED_LANGUAGES
 
 
 def query_mediaobject(identifier: str = None, creator: str = None, contributor: str = None,
-                        encodingFormat: str = None, source: str = None, contentUrl:str = None,
-                        return_items_list: list = ["identifier", "name"]):
+                    encodingFormat: str = None, source: str = None, contentUrl: str = None,
+                    return_items_list: list = ["identifier", "name"]):
 
     """Returns a query for querying the database for a media object.
     Arguments:
@@ -24,7 +24,6 @@ def query_mediaobject(identifier: str = None, creator: str = None, contributor: 
     Raises:
         UnsupportedLanguageException if the input language is not one of the supported languages.
     """
-
 
     if encodingFormat and "/" not in encodingFormat:
         raise NotAMimeTypeException(encodingFormat)
