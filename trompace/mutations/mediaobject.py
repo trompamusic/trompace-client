@@ -22,7 +22,7 @@ MEDIAOBJECT_ARGS_DOCS = """name: The name of the media object.
 @docstring_interpolate("mediaobject_args", MEDIAOBJECT_ARGS_DOCS)
 def mutation_create_media_object(name: str, description: str, date: str, creator: str, contributor: str, format_: str,
                                  encodingFormat: str, source: str, subject: str,
-                                 contentUrl: str, language: str, title: str = None):
+                                 contentUrl: str, language: str, inLanguage:str, title: str = None):
     """Returns a mutation for creating a media object object
     Arguments:
         {mediaobject_args}
@@ -52,6 +52,7 @@ def mutation_create_media_object(name: str, description: str, date: str, creator
         "source": source,
         "subject": subject,
         "contentUrl": contentUrl,
+        "inLanguage": inLanguage,
         "language": StringConstant(language.lower())
     }
 
@@ -64,7 +65,7 @@ def mutation_create_media_object(name: str, description: str, date: str, creator
 def mutation_update_media_object(identifier: str, name: str = None, title: str = None, description: str = None,
                                  date: str = None, creator: str = None, contributor: str = None,
                                  format_: str = None, encodingFormat: str = None, source: str = None,
-                                 subject: str = None, contentUrl: str = None, language: str = None):
+                                 subject: str = None, contentUrl: str = None, language: str = None, inLanguage:str = None):
     """Returns a mutation for updating a media object object.
     Arguments:
         identifier: The identifier of the media object in the CE to be updated.
@@ -92,6 +93,7 @@ def mutation_update_media_object(identifier: str, name: str = None, title: str =
         "source": source,
         "subject": subject,
         "contentUrl": contentUrl,
+        "inLanguage": inLanguage,
     }
     if date:
         args["date"] = _Neo4jDate(date)
