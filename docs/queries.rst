@@ -9,6 +9,12 @@ Person
 .. automodule:: trompace.queries.person
    :members:
 
+MusicComposition
+----------------
+
+.. automodule:: trompace.queries.musiccomposition
+   :members:
+
 MediaObject
 ----------------
 
