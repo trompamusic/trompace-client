@@ -6,7 +6,7 @@ from trompace.constants import SUPPORTED_LANGUAGES
 
 
 def query_mediaobject(identifier: str = None, creator: str = None, contributor: str = None,
-                encodingFormat: str = None, source: str = None, contentUrl: str = None,
+                encodingFormat: str = None, source: str = None, contentUrl: str = None, inLanguage:str = None, 
                 return_items_list: list = ["identifier", "name"]):
 
     """Returns a query for querying the database for a media object.
@@ -18,6 +18,7 @@ def query_mediaobject(identifier: str = None, creator: str = None, contributor: 
         encodingFormat: A MimeType of the format of object encoded by the media object.
         source: The URL of the web resource to be represented by the node.
         contentUrl: The URL of the content encoded by the media object.
+        inLanguage: The language of the media object. Currently supported languages are en,es,ca,nl,de,fr.
         return_item_list: A list of item fields that the query must return.
     Returns:
         The string for the quereing the media object.
@@ -35,6 +36,7 @@ def query_mediaobject(identifier: str = None, creator: str = None, contributor: 
         "encodingFormat": encodingFormat,
         "source": source,
         "contentUrl": contentUrl,
+        "inLanguage": inLanguage
     }
 
     args = filter_none_args(args)

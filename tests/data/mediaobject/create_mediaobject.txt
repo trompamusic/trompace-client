@@ -10,6 +10,7 @@ name: "Rossinyol"
         source: "https://www.cpdl.org/wiki/index.php/Rossinyol"
         subject: "Catalan choir piece"
         contentUrl: "https://www.cpdl.org/wiki/index.php/Rossinyol"
+        inLanguage: "ca"
         language: en
 ) {
 identifier
