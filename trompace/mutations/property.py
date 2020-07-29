@@ -2,7 +2,7 @@
 from typing import List
 
 from trompace import StringConstant
-from .templates import mutation_create, mutation_link
+from .templates import mutation_create, mutation_link, format_link_mutation
 
 CREATE_PROPERTY = '''CreateProperty(
         {parameters}
@@ -14,38 +14,6 @@ CREATE_PROPERTYVALUESPECIFICATION = '''CreatePropertyValueSpecification(
         {parameters}
         ) {{
       identifier
-    }}'''
-
-ADD_CONTROLACTION_PROPERTYVALUESPECIFICATION = '''AddActionInterfaceThingInterface(
-    from: {{identifier: "{identifier_1}", type: ControlAction}}
-    to: {{identifier: "{identifier_2}", type: PropertyValueSpecification}}
-    field: object
-    ){{
-        from {{
-            __typename
-      }}
-      to {{
-           __typename
-           ... on PropertyValueSpecification{{
-            identifier
-        }}
-      }}
-    }}'''
-
-ADD_CONTROLACTION_PROPERTY = '''AddActionInterfaceThingInterface(
-    from: {{identifier: "{identifier_1}", type: ControlAction}}
-    to: {{identifier: "{identifier_2}", type: Property}}
-    field: object
-    ){{
-        from {{
-            __typename
-      }}
-      to {{
-           __typename
-           ... on Property{{  
-            identifier
-        }}
-      }}
     }}'''
 
 
@@ -116,7 +84,7 @@ def mutation_add_controlaction_propertyvaluespecification(controlaction_id: str,
         The string for the mutation foradding a control action to a property value specification.
     """
 
-    return mutation_link(controlaction_id, propertyvaluespecification_id, ADD_CONTROLACTION_PROPERTYVALUESPECIFICATION)
+    return format_link_mutation("MergeControlActionAdditionalProperty", controlaction_id, property_id)
 
 
 def mutation_add_controlaction_property(controlaction_id: str, property_id: str):
@@ -127,5 +95,5 @@ def mutation_add_controlaction_property(controlaction_id: str, property_id: str)
     Returns:
         The string for the mutation foradding a control action to a property.
     """
+    return format_link_mutation("MergeControlActionAdditionalProperty", controlaction_id, property_id)
 
-    return mutation_link(controlaction_id, property_id, ADD_CONTROLACTION_PROPERTY)
