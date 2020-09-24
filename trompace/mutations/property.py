@@ -84,7 +84,7 @@ def mutation_add_controlaction_propertyvaluespecification(controlaction_id: str,
         The string for the mutation foradding a control action to a property value specification.
     """
 
-    return format_link_mutation("MergeControlActionAdditionalProperty", controlaction_id, property_id)
+    return format_link_mutation("MergeControlActionAdditionalProperty", controlaction_id, propertyvaluespecification_id)
 
 
 def mutation_add_controlaction_property(controlaction_id: str, property_id: str):
