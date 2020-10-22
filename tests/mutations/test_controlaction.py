@@ -54,7 +54,7 @@ class TestControlAction(CeTestCase):
                                                         error="Failed to do a thing")
 
     def test_add_entrypoint_controlaction(self):
-        expected = self.read_file(os.path.join(self.data_dir, "EXPECTED_ADD_CONTROLACTION_ENTRYPOINT.txt"))
+        expected = self.read_file(os.path.join(self.data_dir, "add_entrypoint_controlaction.txt"))
 
         created_match = controlaction.mutation_add_entrypoint_controlaction("ff562d2e-2265-4f61-b340-561c92e797e9",
                                                                             "59ce8093-5e0e-4d59-bfa6-805edb11e396")

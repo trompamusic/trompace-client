@@ -14,7 +14,7 @@ class TestProperty(CeTestCase):
         self.data_dir = os.path.join(self.test_directory, "data", "property")
 
     def test_create(self):
-        expected = self.read_file(os.path.join(self.data_dir, "EXPECTED_PROPERTY.txt"))
+        expected = self.read_file(os.path.join(self.data_dir, "create_propery.txt"))
 
         created_property = mutation_create_property("MusicXML file", "targetFile",
                                                     "Select a MusicXML file to be converted.",
@@ -22,7 +22,7 @@ class TestProperty(CeTestCase):
         self.assertEqual(created_property, expected)
 
     def test_create_propertyvaluespecification(self):
-        expected = self.read_file(os.path.join(self.data_dir, "EXPECTED_PROPERTYVALUESPECIFICATION.txt"))
+        expected = self.read_file(os.path.join(self.data_dir, "create_propertyvaluespecification.txt"))
 
         created_propertyvaluespecification = mutation_create_propertyvaluespecification("Result name",
                                                                                         "What name would you like to give.",
@@ -31,7 +31,7 @@ class TestProperty(CeTestCase):
         self.assertEqual(created_propertyvaluespecification, expected)
 
     def test_add_controlaction_propertyvaluespecification(self):
-        expected = self.read_file(os.path.join(self.data_dir, "EXPECTED_ADD_CONTROLACTION_PROPERTYVALUESPECIFICATION.txt"))
+        expected = self.read_file(os.path.join(self.data_dir, "add_controlaction_propertyvaluespecification.txt"))
 
         created_match = mutation_add_controlaction_propertyvaluespecification("ff562d2e-2265-4f61-b340-561c92e797e9",
                                                                               "59ce8093-5e0e-4d59-bfa6-805edb11e396")

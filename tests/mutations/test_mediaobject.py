@@ -10,7 +10,7 @@ class TestDocument(CeTestCase):
 
     def setUp(self) -> None:
         super()
-        self.data_dir = os.path.join(os.path.dirname(__file__), "data", "mediaobject")
+        self.data_dir = os.path.join(self.test_directory, "data", "mediaobject")
 
     def test_create(self):
         expected = self.read_file(os.path.join(self.data_dir, "create_mediaobject.txt"))

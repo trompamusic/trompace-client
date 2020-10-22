@@ -12,7 +12,7 @@ class TestEntryPoint(CeTestCase):
         self.data_dir = os.path.join(self.test_directory, "data", "entrypoint")
 
     def test_create(self):
-        expected = self.read_file(os.path.join(self.data_dir, "EXPECTED_ENTRYPOINT.txt"))
+        expected = self.read_file(os.path.join(self.data_dir, "create_entrypoint.txt"))
 
         created_entrypoint = mutation_create_entry_point(name="Verovio MusicXML Converter",
                                                          contributor="https://www.verovio.org",

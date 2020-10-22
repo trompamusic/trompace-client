@@ -12,7 +12,7 @@ class TestApplication(CeTestCase):
         self.data_dir = os.path.join(self.test_directory, "data", "application")
 
     def test_create(self):
-        expected = self.read_file(os.path.join(self.data_dir, "EXPECTED_APPLICATION.txt"))
+        expected = self.read_file(os.path.join(self.data_dir, "create_softwareapplication.txt"))
 
         created_application = mutation_create_application("Verovio MusicXML Converter",
                                                           contributor="https://www.verovio.org",
@@ -24,7 +24,7 @@ class TestApplication(CeTestCase):
         self.assertEqual(created_application, expected)
 
     def test_add_entrypoint_application(self):
-        expected = self.read_file(os.path.join(self.data_dir, "EXPECTED_ADD_ENTRYPOINT_APPLICATION.txt"))
+        expected = self.read_file(os.path.join(self.data_dir, "add_endtrypoint_application.txt"))
 
         created_add_entrypoint = mutation_add_entrypoint_application('2eeca6dd-c62c-490e-beb0-2e3899fca74f',
                                                                      '59ce8093-5e0e-4d59-bfa6-805edb11e396')
