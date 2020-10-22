@@ -26,7 +26,7 @@ def mutation_create_digitaldocument(title: str, contributor: str, creator: str, 
 
     Returns:
         The string for the mutation for creating the digital document.
-        
+
     Raises:
         UnsupportedLanguageException if the input language is not one of the supported languages.
         NotAMimeTypeException: if ``format_`` is not a valid mimetype.
