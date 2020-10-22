@@ -16,23 +16,28 @@ class TestDefinedTerm(CeTestCase):
     def test_create_defined_term_set(self):
         expected = self.read_file("create_definedtermset.txt")
 
-        create_dts = definedterm.create_defined_term_set("https://trompamusic.eu/user/mozart", "Bowing direction",
-                                                         "https://vocab.trompamusic.eu/vocab#TagCollection")
+        create_dts = definedterm.create_defined_term_set(
+            creator="https://trompamusic.eu/user/mozart",
+            name="Bowing direction",
+            additionaltype="https://vocab.trompamusic.eu/vocab#TagCollection")
         assert create_dts == expected
 
     @freeze_time("2020-04-09T10:57:55")
     def test_create_defined_term(self):
         expected = self.read_file("create_definedterm.txt")
 
-        create_dt = definedterm.create_defined_term("https://trompamusic.eu/user/mozart", "up",
-                                                    "https://vocab.trompamusic.eu/vocab#TagCollectionElement")
+        create_dt = definedterm.create_defined_term(
+            creator="https://trompamusic.eu/user/mozart",
+            termcode="up",
+            additionaltype="https://vocab.trompamusic.eu/vocab#TagCollectionElement")
         assert create_dt == expected
 
     def test_defined_term_add_to_defined_term_set(self):
         expected = self.read_file("definedterm_addto_definedtermset.txt")
 
-        add = definedterm.defined_term_add_to_defined_term_set("f65d0bce-061a-4a6f-baa0-f8c3a292cc41",
-                                                               "5bd8a1c8-4e9e-4640-ae4b-134680af9acf")
+        add = definedterm.defined_term_add_to_defined_term_set(
+            defined_term_set="f65d0bce-061a-4a6f-baa0-f8c3a292cc41",
+            defined_term="5bd8a1c8-4e9e-4640-ae4b-134680af9acf")
         assert add == expected
 
     @freeze_time("2020-03-24T20:11:20")

@@ -23,7 +23,7 @@ ADD_ENTRYPOINT_APPLICATION = '''AddEntryPointActionApplication(
     }}'''
 
 
-def mutation_create_application(application_name: str, contributor: str, creator: str, source: str, subject: str,
+def mutation_create_application(*, application_name: str, contributor: str, creator: str, source: str, subject: str,
                                 description: str, language: str, formatin="html/text", identifier=None):
     """Returns a mutation for creating a software application object
     Arguments:

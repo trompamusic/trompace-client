@@ -17,7 +17,7 @@ DIGITALDOCUMENT_ARGS_DOCS = """title: The title of the resource indicated by `so
 
 
 @docstring_interpolate("digitaldocument_args", DIGITALDOCUMENT_ARGS_DOCS)
-def mutation_create_digitaldocument(title: str, contributor: str, creator: str, source: str, format_: str,
+def mutation_create_digitaldocument(*, title: str, contributor: str, creator: str, source: str, format_: str,
                                     subject: str = None, language: str = None, description: str = None):
     """Returns a mutation for creating a digital document object.
 
@@ -55,7 +55,7 @@ def mutation_create_digitaldocument(title: str, contributor: str, creator: str, 
 
 
 @docstring_interpolate("digitaldocument_args", DIGITALDOCUMENT_ARGS_DOCS)
-def mutation_update_digitaldocument(identifier: str, title: str = None, contributor: str = None,
+def mutation_update_digitaldocument(identifier: str, *, title: str = None, contributor: str = None,
                                     creator: str = None, source: str = None, format_: str = None,
                                     subject: str = None, language: str = None, description: str = None):
     """Returns a mutation for updating a digital document object.

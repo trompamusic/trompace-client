@@ -21,7 +21,7 @@ MUSICCOMPOSITION_ARGS_DOCS = """title: The title of the resource indicated by `s
 
 
 @docstring_interpolate("musiccomposition_args", MUSICCOMPOSITION_ARGS_DOCS)
-def mutation_create_music_composition(title: str, contributor: str, creator: str, source: str, format_: str,
+def mutation_create_music_composition(*, title: str, contributor: str, creator: str, source: str, format_: str,
                                       subject: str = None, language: str = None, inlanguage: str = None,
                                       name: str = None, description: str = None, position: int = None):
     """Returns a mutation for creating a music composition object
@@ -65,7 +65,7 @@ def mutation_create_music_composition(title: str, contributor: str, creator: str
 
 
 @docstring_interpolate("musiccomposition_args", MUSICCOMPOSITION_ARGS_DOCS)
-def mutation_update_music_composition(identifier: str, title: str = None, contributor: str = None, creator: str = None,
+def mutation_update_music_composition(identifier: str, *, title: str = None, contributor: str = None, creator: str = None,
                                       source: str = None, format_: str = None,
                                       subject: str = None, language: str = None, inlanguage: str = None,
                                       name: str = None, description: str = None, position: int = None):

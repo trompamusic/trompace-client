@@ -16,15 +16,21 @@ class TestRating(CeTestCase):
     def test_create_rating_basic(self):
         expected = self.read_file("create_rating_basic.txt")
 
-        create_rating = rating.create_rating("https://trompamusic.eu/user/mozart", 5, 5)
+        create_rating = rating.create_rating(
+            creator="https://trompamusic.eu/user/mozart",
+            ratingvalue=5, bestrating=5)
         assert create_rating == expected
 
     @freeze_time("2020-04-09T11:03:20")
     def test_create_rating_complete(self):
         expected = self.read_file("create_rating_complete.txt")
 
-        create_rating = rating.create_rating("https://trompamusic.eu/user/beethoven", 4, 5, worstrating=1,
-                                             additionaltype="https://vocab.trompamusic.eu/vocab#PerformanceFeedback")
+        create_rating = rating.create_rating(
+            creator="https://trompamusic.eu/user/beethoven",
+            ratingvalue=4,
+            bestrating=5,
+            worstrating=1,
+            additionaltype="https://vocab.trompamusic.eu/vocab#PerformanceFeedback")
         assert create_rating == expected
 
     @freeze_time("2020-04-09T12:20:39")

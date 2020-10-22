@@ -6,7 +6,7 @@ from trompace import filter_none_args
 from trompace.mutations.templates import format_mutation
 
 
-def create_rating(creator: str, ratingvalue: int, bestrating: int, *, worstrating: int = None,
+def create_rating(*, creator: str, ratingvalue: int, bestrating: int, worstrating: int = None,
                   additionaltype: str = None):
     """Return a mutation for making a Rating.
     A Rating (https://schema.org/Rating) is an evaluation on a numeric scale,

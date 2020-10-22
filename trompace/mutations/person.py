@@ -26,7 +26,7 @@ PERSON_ARGS_DOCS = """title: The title of the resource indicated by `source`
 
 
 @docstring_interpolate("person_args", PERSON_ARGS_DOCS)
-def mutation_create_person(title: str, contributor: str, creator: str, source: str, format_: str,
+def mutation_create_person(*, title: str, contributor: str, creator: str, source: str, format_: str,
                            language: str = None, name: str = None,
                            family_name: str = None, given_name: str = None, gender: str = None,
                            birth_date: str = None, death_date: str = None,
@@ -84,7 +84,7 @@ def mutation_create_person(title: str, contributor: str, creator: str, source: s
 
 
 @docstring_interpolate("person_args", PERSON_ARGS_DOCS)
-def mutation_update_person(identifier: str, title: str = None, contributor: str = None, creator: str = None,
+def mutation_update_person(identifier: str, *, title: str = None, contributor: str = None, creator: str = None,
                            source: str = None, language: str = None, format_: str = None, name: str = None,
                            family_name: str = None, given_name: str = None, gender: str = None,
                            birth_date: str = None, death_date: str = None,
