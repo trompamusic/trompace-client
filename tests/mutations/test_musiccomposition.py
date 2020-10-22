@@ -24,6 +24,14 @@ class TestMusicComposition(CeTestCase):
         )
         assert created_musiccomposition == expected
 
+    def test_create_no_language(self):
+        """A musiccomposition can be missing a language value, and this should generate a valid mutation"""
+        musiccomposition.mutation_create_music_composition(
+            title="Das Lied von der Erde", contributor="https://www.cpdl.org", creator="https://www.upf.edu",
+            source="https://www.cpdl.org/Das_Lied_von_der_Erde", format_="text/html", subject="Music Composition",
+            inlanguage="de", name="The Song of the Earth"
+        )
+
     def test_create_all_arguments(self):
         created_musiccomposition = musiccomposition.mutation_create_music_composition(
             title="Das Lied von der Erde: I. Das Trinklied vom Jammer der Erde", contributor="https://musicbrainz.org",

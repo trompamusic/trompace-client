@@ -52,12 +52,13 @@ def mutation_create_music_composition(*, title: str, contributor: str, creator: 
         "format": format_,
         "subject": subject,
         "source": source,
-        "language": StringConstant(language.lower()),
         "inLanguage": inlanguage,
         "name": name,
         "description": description,
         "position": position
     }
+    if language is not None:
+        args["language"] = StringConstant(language.lower())
 
     args = filter_none_args(args)
 
@@ -101,8 +102,8 @@ def mutation_update_music_composition(identifier: str, *, title: str = None, con
             "format": format_,
             "name": name,
             "description": description,
-            "position": position}
-
+            "position": position
+    }
     if language is not None:
         args["language"] = StringConstant(language.lower())
 
