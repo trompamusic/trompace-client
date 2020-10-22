@@ -1,19 +1,18 @@
 # Tests for mutations pertaining to entry points.
 import os
-import unittest
 
-from tests import util
+from tests import CeTestCase
 from trompace.mutations.entrypoint import mutation_create_entry_point
 
 
-class TestEntryPoint(unittest.TestCase):
+class TestEntryPoint(CeTestCase):
 
     def setUp(self) -> None:
         super()
-        self.data_dir = os.path.join(os.path.dirname(__file__), "data", "entrypoint")
+        self.data_dir = os.path.join(self.test_directory, "data", "entrypoint")
 
     def test_create(self):
-        expected = util.read_file(self.data_dir, "EXPECTED_ENTRYPOINT.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "EXPECTED_ENTRYPOINT.txt"))
 
         created_entrypoint = mutation_create_entry_point(name="Verovio MusicXML Converter",
                                                          contributor="https://www.verovio.org",

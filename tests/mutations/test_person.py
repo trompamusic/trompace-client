@@ -1,21 +1,20 @@
 # Tests for mutations pertaining to person objects.
 import os
-import unittest
 
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
 
 from trompace.mutations import person
-from tests import util
+from tests import CeTestCase
 
 
-class TestPerson(unittest.TestCase):
+class TestPerson(CeTestCase):
 
     def setUp(self) -> None:
         super()
-        self.data_dir = os.path.join(os.path.dirname(__file__), "data", "person")
+        self.data_dir = os.path.join(self.test_directory, "data", "person")
 
     def test_create(self):
-        expected = util.read_file(self.data_dir, "create_person.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "create_person.txt"))
 
         created_person = person.mutation_create_person(
             title="A. J. Fynn", contributor="https://www.cpdl.org",
@@ -54,14 +53,14 @@ class TestPerson(unittest.TestCase):
             )
 
     def test_update(self):
-        expected = util.read_file(self.data_dir, "update_person.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "update_person.txt"))
 
         created_update = person.mutation_update_person('2eeca6dd-c62c-490e-beb0-2e3899fca74f',
                                                        title="A. J. Fynn")
         self.assertEqual(created_update, expected)
 
     def test_delete(self):
-        expected = util.read_file(self.data_dir, "delete_person.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "delete_person.txt"))
 
         created_delete = person.mutation_delete_person('2eeca6dd-c62c-490e-beb0-2e3899fca74f')
 
@@ -90,7 +89,7 @@ class TestPerson(unittest.TestCase):
                                         an early 20th Century scholar in literature and anthropology")
 
     def test_person_add_exact_match_person(self):
-        expected = util.read_file(self.data_dir, "merge_person_exactmatch.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "merge_person_exactmatch.txt"))
 
         actual = person.mutation_person_add_exact_match_person("d3f968f4-90cd-4764-93bc-6fadcc2a35e6",
                                                                "b10ac895-beb8-489e-8168-3e786d1aeb0e")
@@ -98,7 +97,7 @@ class TestPerson(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_person_remove_exact_match_person(self):
-        expected = util.read_file(self.data_dir, "remove_person_exactmatch.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "remove_person_exactmatch.txt"))
 
         actual = person.mutation_person_remove_exact_match_person("d3f968f4-90cd-4764-93bc-6fadcc2a35e6",
                                                                   "b10ac895-beb8-489e-8168-3e786d1aeb0e")

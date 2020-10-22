@@ -10,7 +10,7 @@ class TestRating(CeTestCase):
 
     def setUp(self) -> None:
         super()
-        self.data_dir = os.path.join(os.path.dirname(__file__), "data", "rating")
+        self.data_dir = os.path.join(self.test_directory, "data", "rating")
 
     @freeze_time("2020-04-09T10:57:55")
     def test_create_rating_basic(self):

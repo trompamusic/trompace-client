@@ -1,19 +1,18 @@
 # Tests for mutations pertaining to software applications.
 import os
-import unittest
 
-from tests import util
+from tests import CeTestCase
 from trompace.mutations.application import mutation_create_application, mutation_add_entrypoint_application
 
 
-class TestApplication(unittest.TestCase):
+class TestApplication(CeTestCase):
 
     def setUp(self) -> None:
         super()
-        self.data_dir = os.path.join(os.path.dirname(__file__), "data", "application")
+        self.data_dir = os.path.join(self.test_directory, "data", "application")
 
     def test_create(self):
-        expected = util.read_file(self.data_dir, "EXPECTED_APPLICATION.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "EXPECTED_APPLICATION.txt"))
 
         created_application = mutation_create_application("Verovio MusicXML Converter",
                                                           contributor="https://www.verovio.org",
@@ -25,7 +24,7 @@ class TestApplication(unittest.TestCase):
         self.assertEqual(created_application, expected)
 
     def test_add_entrypoint_application(self):
-        expected = util.read_file(self.data_dir, "EXPECTED_ADD_ENTRYPOINT_APPLICATION.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "EXPECTED_ADD_ENTRYPOINT_APPLICATION.txt"))
 
         created_add_entrypoint = mutation_add_entrypoint_application('2eeca6dd-c62c-490e-beb0-2e3899fca74f',
                                                                      '59ce8093-5e0e-4d59-bfa6-805edb11e396')

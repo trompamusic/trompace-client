@@ -10,7 +10,7 @@ class TestDefinedTerm(CeTestCase):
 
     def setUp(self) -> None:
         super()
-        self.data_dir = os.path.join(os.path.dirname(__file__), "data", "definedterm")
+        self.data_dir = os.path.join(self.test_directory, "data", "definedterm")
 
     @freeze_time("2020-04-09T10:57:55")
     def test_create_defined_term_set(self):
