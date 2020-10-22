@@ -21,8 +21,8 @@ MEDIAOBJECT_ARGS_DOCS = """name: The name of the media object.
 
 @docstring_interpolate("mediaobject_args", MEDIAOBJECT_ARGS_DOCS)
 def mutation_create_media_object(name: str, description: str, date: str, creator: str, contributor: str, format_: str,
-                                 encodingFormat: str, source: str, subject: str,
-                                 contentUrl: str, language: str, inLanguage:str, title: str = None): 
+                                 encodingformat: str, source: str, subject: str,
+                                 contenturl: str, language: str, inlanguage: str, title: str = None):
     """Returns a mutation for creating a media object object
     Arguments:
         {mediaobject_args}
@@ -37,8 +37,8 @@ def mutation_create_media_object(name: str, description: str, date: str, creator
     if "/" not in format_:
         raise NotAMimeTypeException(format_)
 
-    if "/" not in encodingFormat:
-        raise NotAMimeTypeException(encodingFormat)
+    if "/" not in encodingformat:
+        raise NotAMimeTypeException(encodingformat)
 
     args = {
         "name": name,
@@ -48,11 +48,11 @@ def mutation_create_media_object(name: str, description: str, date: str, creator
         "creator": creator,
         "contributor": contributor,
         "format": format_,
-        "encodingFormat": encodingFormat,
+        "encodingFormat": encodingformat,
         "source": source,
         "subject": subject,
-        "contentUrl": contentUrl,
-        "inLanguage": inLanguage,
+        "contentUrl": contenturl,
+        "inLanguage": inlanguage,
         "language": StringConstant(language.lower())
     }
 
@@ -64,8 +64,8 @@ def mutation_create_media_object(name: str, description: str, date: str, creator
 @docstring_interpolate("mediaobject_args", MEDIAOBJECT_ARGS_DOCS)
 def mutation_update_media_object(identifier: str, name: str = None, title: str = None, description: str = None,
                                  date: str = None, creator: str = None, contributor: str = None,
-                                 format_: str = None, encodingFormat: str = None, source: str = None,
-                                 subject: str = None, contentUrl: str = None, language: str = None, inLanguage:str = None): 
+                                 format_: str = None, encodingformat: str = None, source: str = None,
+                                 subject: str = None, contenturl: str = None, language: str = None, inlanguage:str = None):
     """Returns a mutation for updating a media object object.
     Arguments:
         identifier: The identifier of the media object in the CE to be updated.
@@ -78,8 +78,11 @@ def mutation_update_media_object(identifier: str, name: str = None, title: str =
     if format_ is not None and "/" not in format_:
         raise NotAMimeTypeException(format_)
 
-    if encodingFormat is not None and "/" not in encodingFormat:
-        raise NotAMimeTypeException(encodingFormat)
+    if encodingformat is not None and "/" not in encodingformat:
+        raise NotAMimeTypeException(encodingformat)
+
+    if language is not None and language not in SUPPORTED_LANGUAGES:
+        raise UnsupportedLanguageException(language)
 
     args = {
         "identifier": identifier,
@@ -89,19 +92,16 @@ def mutation_update_media_object(identifier: str, name: str = None, title: str =
         "creator": creator,
         "contributor": contributor,
         "format": format_,
-        "encodingFormat": encodingFormat,
+        "encodingFormat": encodingformat,
         "source": source,
         "subject": subject,
-        "contentUrl": contentUrl,
-        "inLanguage": inLanguage,
+        "contentUrl": contenturl,
+        "inLanguage": inlanguage,
     }
     if date:
         args["date"] = _Neo4jDate(date)
     if language:
-        if language is not None and language not in SUPPORTED_LANGUAGES:
-            raise UnsupportedLanguageException(language)
-        else:
-            args["language"] = StringConstant(language.lower())
+        args["language"] = StringConstant(language.lower())
 
     args = filter_none_args(args)
 

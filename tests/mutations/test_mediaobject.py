@@ -15,10 +15,9 @@ class TestDocument(CeTestCase):
     def test_create(self):
         expected = self.read_file(os.path.join(self.data_dir, "create_mediaobject.txt"))
 
-        created_mediaobject = mediaobject.mutation_create_media_object(name="Rossinyol", description="Traditional choir piece", date="1972", creator="trompamusic.eu",\
-        contributor="www.upf.edu", format_="text/html", encodingFormat="text/html", source="https://www.cpdl.org/wiki/index.php/Rossinyol", subject="Catalan choir piece", \
-        contentUrl="https://www.cpdl.org/wiki/index.php/Rossinyol", language="en", inLanguage="ca")
-        print(created_mediaobject)
+        created_mediaobject = mediaobject.mutation_create_media_object(name="Rossinyol", description="Traditional choir piece", date="1972", creator="trompamusic.eu", \
+                                                                       contributor="www.upf.edu", format_="text/html", encodingformat="text/html", source="https://www.cpdl.org/wiki/index.php/Rossinyol", subject="Catalan choir piece", \
+                                                                       contenturl="https://www.cpdl.org/wiki/index.php/Rossinyol", language="en", inlanguage="ca")
         self.assertEqual(created_mediaobject, expected)
 
     def test_update_name(self):
@@ -31,9 +30,9 @@ class TestDocument(CeTestCase):
     def test_update_all(self):
         expected = self.read_file(os.path.join(self.data_dir, "update_mediaobject_all.txt"))
 
-        created_update = mediaobject.mutation_update_media_object('2eeca6dd-c62c-490e-beb0-2e3899fca74f',name="Rossinyol", description="Traditional choir piece",\
-        date="1972", creator="trompamusic.eu", contributor="www.upf.edu", format_="text/html", encodingFormat="text/html",\
-        source="https://www.cpdl.org/wiki/index.php/Rossinyol", subject="Catalan choir piece", contentUrl="https://www.cpdl.org/wiki/index.php/Rossinyol", language="en")
+        created_update = mediaobject.mutation_update_media_object('2eeca6dd-c62c-490e-beb0-2e3899fca74f', name="Rossinyol", description="Traditional choir piece", \
+                                                                  date="1972", creator="trompamusic.eu", contributor="www.upf.edu", format_="text/html", encodingformat="text/html", \
+                                                                  source="https://www.cpdl.org/wiki/index.php/Rossinyol", subject="Catalan choir piece", contenturl="https://www.cpdl.org/wiki/index.php/Rossinyol", language="en")
         print(created_update)
         self.assertEqual(created_update, expected)
 
@@ -63,26 +62,26 @@ class TestDocument(CeTestCase):
         with self.assertRaises(UnsupportedLanguageException):
             mediaobject.mutation_update_media_object('2eeca6dd-c62c-490e-beb0-2e3899fca74f',language="ja")
         with self.assertRaises(UnsupportedLanguageException):
-            mediaobject.mutation_create_media_object(name="Rossinyol", description="Traditional choir piece", date="1972", creator="trompamusic.eu",\
-        contributor="www.upf.edu", format_="text/html", encodingFormat="text/html", source="https://www.cpdl.org/wiki/index.php/Rossinyol", subject="Catalan choir piece", \
-        contentUrl="https://www.cpdl.org/wiki/index.php/Rossinyol", language="ja", inLanguage="ca")
+            mediaobject.mutation_create_media_object(name="Rossinyol", description="Traditional choir piece", date="1972", creator="trompamusic.eu", \
+                                                     contributor="www.upf.edu", format_="text/html", encodingformat="text/html", source="https://www.cpdl.org/wiki/index.php/Rossinyol", subject="Catalan choir piece", \
+                                                     contenturl="https://www.cpdl.org/wiki/index.php/Rossinyol", language="ja", inlanguage="ca")
 
 
     def test_invalid_format(self):
         with self.assertRaises(NotAMimeTypeException):
             mediaobject.mutation_update_media_object('2eeca6dd-c62c-490e-beb0-2e3899fca74f',format_="test,html")
         with self.assertRaises(NotAMimeTypeException):
-            mediaobject.mutation_update_media_object('2eeca6dd-c62c-490e-beb0-2e3899fca74f',encodingFormat="test,html")
+            mediaobject.mutation_update_media_object('2eeca6dd-c62c-490e-beb0-2e3899fca74f', encodingformat="test,html")
         with self.assertRaises(NotAMimeTypeException):
-            mediaobject.mutation_update_media_object('2eeca6dd-c62c-490e-beb0-2e3899fca74f',name="Rossinyol", description="Traditional choir piece",\
-        date="1972", creator="trompamusic.eu", contributor="www.upf.edu", format_="text,html", encodingFormat="text/html",\
-        source="https://www.cpdl.org/wiki/index.php/Rossinyol", subject="Catalan choir piece", contentUrl="https://www.cpdl.org/wiki/index.php/Rossinyol",\
-        language="en", inLanguage="ca")
+            mediaobject.mutation_update_media_object('2eeca6dd-c62c-490e-beb0-2e3899fca74f', name="Rossinyol", description="Traditional choir piece", \
+                                                     date="1972", creator="trompamusic.eu", contributor="www.upf.edu", format_="text,html", encodingformat="text/html", \
+                                                     source="https://www.cpdl.org/wiki/index.php/Rossinyol", subject="Catalan choir piece", contenturl="https://www.cpdl.org/wiki/index.php/Rossinyol", \
+                                                     language="en", inlanguage="ca")
         with self.assertRaises(NotAMimeTypeException):
-            mediaobject.mutation_update_media_object('2eeca6dd-c62c-490e-beb0-2e3899fca74f',name="Rossinyol", description="Traditional choir piece",\
-        date="1972", creator="trompamusic.eu", contributor="www.upf.edu", format_="text/html", encodingFormat="text,html",\
-        source="https://www.cpdl.org/wiki/index.php/Rossinyol", subject="Catalan choir piece", contentUrl="https://www.cpdl.org/wiki/index.php/Rossinyol", language="en",\
-        inLanguage="ca")
+            mediaobject.mutation_update_media_object('2eeca6dd-c62c-490e-beb0-2e3899fca74f', name="Rossinyol", description="Traditional choir piece", \
+                                                     date="1972", creator="trompamusic.eu", contributor="www.upf.edu", format_="text/html", encodingformat="text,html", \
+                                                     source="https://www.cpdl.org/wiki/index.php/Rossinyol", subject="Catalan choir piece", contenturl="https://www.cpdl.org/wiki/index.php/Rossinyol", language="en", \
+                                                     inlanguage="ca")
 
     def test_merge_exampleOf(self):
         expected = self.read_file(os.path.join(self.data_dir, "merge_object_encoding.txt"))
