@@ -23,4 +23,4 @@ class TestEntryPoint(CeTestCase):
                                                          actionPlatform="TROMPA algorithm proof of concept.",
                                                          contentType=["html/json"],
                                                          encodingType=["html/text"])
-        self.assertEqual(created_entrypoint, expected)
+        assert created_entrypoint == expected

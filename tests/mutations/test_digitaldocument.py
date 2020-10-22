@@ -24,7 +24,7 @@ class TestDigitalDocument(CeTestCase):
             title="A Document", contributor="https://www.cpdl.org", creator="https://www.upf.edu",
             source="https://www.cpdl.org/A_Document", format_="text/html", subject="A document about a topic",
             language="en", description="This is a document")
-        self.assertEqual(created_document, expected)
+        assert created_document == expected
 
     def test_update(self):
         expected = self.read_file(os.path.join(self.data_dir, "update_digitaldocument.txt"))
@@ -32,10 +32,10 @@ class TestDigitalDocument(CeTestCase):
         created_update = digitaldocument.mutation_update_digitaldocument(
             '2eeca6dd-c62c-490e-beb0-2e3899fca74f',
             source="https://www.cpdl.org/A_Different_Document")
-        self.assertEqual(created_update, expected)
+        assert created_update == expected
 
     def test_delete(self):
         expected = self.read_file(os.path.join(self.data_dir, "delete_digitaldocument.txt"))
 
         created_delete = digitaldocument.mutation_delete_digitaldocument('2eeca6dd-c62c-490e-beb0-2e3899fca74f')
-        self.assertEqual(created_delete, expected)
+        assert created_delete == expected

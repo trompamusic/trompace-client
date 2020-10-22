@@ -15,9 +15,9 @@ class TestPerson(CeTestCase):
     def test_query(self):
         expected = self.read_file(os.path.join(self.data_dir, "query_person_parameter.txt"))
         created_person = person.query_person(identifier="ff59650b-1d47-4ea5-b356-31fddeb48315")
-        self.assertEqual(created_person, expected)
+        assert created_person == expected
 
     def test_query_all(self):
         expected = self.read_file(os.path.join(self.data_dir, "query_person.txt"))
         created_person = person.query_person()
-        self.assertEqual(created_person, expected)
+        assert created_person == expected

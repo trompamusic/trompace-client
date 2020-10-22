@@ -13,10 +13,10 @@ class TestDocument(CeTestCase):
     def test_query(self):
         expected = self.read_file(os.path.join(self.data_dir, "query_mediaobject_parameter.txt"))
         created_mediaobject = mediaobject.query_mediaobject(identifier="ff59650b-1d47-4ea5-b356-31fddeb48315")
-        self.assertEqual(created_mediaobject, expected)
+        assert created_mediaobject == expected
 
     def test_query_all(self):
         expected = self.read_file(os.path.join(self.data_dir, "query_mediaobject.txt"))
 
         created_mediaobject = mediaobject.query_mediaobject()
-        self.assertEqual(created_mediaobject, expected)
+        assert created_mediaobject == expected

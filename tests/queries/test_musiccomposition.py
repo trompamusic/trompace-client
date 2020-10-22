@@ -15,10 +15,10 @@ class TestDocument(CeTestCase):
     def test_query(self):
         expected = self.read_file(os.path.join(self.data_dir, "query_musiccomposition_parameter.txt"))
         created_musiccomposition = musiccomposition.query_musiccomposition(identifier="ff59650b-1d47-4ea5-b356-31fddeb48315")
-        self.assertEqual(created_musiccomposition, expected)
+        assert created_musiccomposition == expected
 
     def test_query_all(self):
         expected = self.read_file(os.path.join(self.data_dir, "query_musiccomposition.txt"))
 
         created_musiccomposition = musiccomposition.query_musiccomposition()
-        self.assertEqual(created_musiccomposition, expected)
+        assert created_musiccomposition == expected
