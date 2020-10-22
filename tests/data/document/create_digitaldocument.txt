@@ -1,16 +1,14 @@
 mutation {
   CreateDigitalDocument(
-        title: "A Document"
-        name: "A Document"
-        publisher: "https://www.cpdl.org"
+title: "A Document"
         contributor: "https://www.cpdl.org"
-        creator: "https://www.cpdl.org/A_Document"
-        source: "https://www.upf.edu"
-        subject: "Document"
-        description: "This is a document"
+        creator: "https://www.upf.edu"
+        source: "https://www.cpdl.org/A_Document"
         format: "text/html"
+        subject: "A document about a topic"
+        description: "This is a document"
         language: en
-  ) {
-    identifier
-  }
+) {
+identifier
+}
 }
