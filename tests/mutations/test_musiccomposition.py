@@ -1,27 +1,36 @@
 # Tests for mutations pertaining to music composition objects.
 import os
-import unittest
+
+import pytest
 
 from trompace.mutations import musiccomposition
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
-from tests import util
+from tests import CeTestCase
 
 
-class TestMusicComposition(unittest.TestCase):
+class TestMusicComposition(CeTestCase):
 
     def setUp(self) -> None:
         super()
-        self.data_dir = os.path.join(os.path.dirname(__file__), "data", "musiccomposition")
+        self.data_dir = os.path.join(self.test_directory, "data", "musiccomposition")
 
     def test_create(self):
-        expected = util.read_file(self.data_dir, "create_musiccomposition.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "create_musiccomposition.txt"))
 
         created_musiccomposition = musiccomposition.mutation_create_music_composition(
             title="Das Lied von der Erde", contributor="https://www.cpdl.org", creator="https://www.upf.edu",
             source="https://www.cpdl.org/Das_Lied_von_der_Erde", format_="text/html", subject="Music Composition",
             language="en", inlanguage="de", name="The Song of the Earth"
         )
-        self.assertEqual(created_musiccomposition, expected)
+        assert created_musiccomposition == expected
+
+    def test_create_no_language(self):
+        """A musiccomposition can be missing a language value, and this should generate a valid mutation"""
+        musiccomposition.mutation_create_music_composition(
+            title="Das Lied von der Erde", contributor="https://www.cpdl.org", creator="https://www.upf.edu",
+            source="https://www.cpdl.org/Das_Lied_von_der_Erde", format_="text/html", subject="Music Composition",
+            inlanguage="de", name="The Song of the Earth"
+        )
 
     def test_create_all_arguments(self):
         created_musiccomposition = musiccomposition.mutation_create_music_composition(
@@ -32,118 +41,118 @@ class TestMusicComposition(unittest.TestCase):
             description="First composition of a song-cycle by Mahler", position=1
         )
 
-        expected = util.read_file(self.data_dir, "create_musiccomposition_complete.txt")
-        self.assertEqual(created_musiccomposition, expected)
+        expected = self.read_file(os.path.join(self.data_dir, "create_musiccomposition_complete.txt"))
+        assert created_musiccomposition == expected
 
     def test_update_name(self):
-        expected = util.read_file(self.data_dir, "update_composition_name.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "update_composition_name.txt"))
 
         created_update = musiccomposition.mutation_update_music_composition(
             identifier='2eeca6dd-c62c-490e-beb0-2e3899fca74f',
             name="The Song Of The Earth")
-        self.assertEqual(created_update, expected)
+        assert created_update == expected
 
     def test_update_all(self):
-        expected = util.read_file(self.data_dir, "update_composition_all.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "update_composition_all.txt"))
 
         created_update = musiccomposition.mutation_update_music_composition(
             identifier='2eeca6dd-c62c-490e-beb0-2e3899fca74f', title="Das Lied von der Erde",
             contributor="https://www.cpdl.org", creator="https://www.upf.edu",
             source="https://www.cpdl.org/Das_Lied_von_der_Erde", subject="Music Composition",
             language="en", inlanguage="en", name="The Song of the Earth", position=2)
-        self.assertEqual(created_update, expected)
+        assert created_update == expected
 
     def test_invalid_language(self):
-        with self.assertRaises(UnsupportedLanguageException):
+        with pytest.raises(UnsupportedLanguageException):
             musiccomposition.mutation_update_music_composition('2eeca6dd-c62c-490e-beb0-2e3899fca74f', language="ja")
 
     def test_invalid_format(self):
-        with self.assertRaises(NotAMimeTypeException):
+        with pytest.raises(NotAMimeTypeException):
             musiccomposition.mutation_update_music_composition('2eeca6dd-c62c-490e-beb0-2e3899fca74f',
                                                                format_="test,html")
 
     def test_delete(self):
-        expected = util.read_file(self.data_dir, "delete_musiccomposition.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "delete_musiccomposition.txt"))
 
         created_delete = musiccomposition.mutation_delete_music_composition('2eeca6dd-c62c-490e-beb0-2e3899fca74f')
-        self.assertEqual(created_delete, expected)
+        assert created_delete == expected
 
     def test_merge_exampleOf(self):
-        expected = util.read_file(self.data_dir, "merge_music_composition_work_example.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "merge_music_composition_work_example.txt"))
 
         created_match = musiccomposition.mutation_merge_music_composition_work_example(
             "ff562d2e-2265-4f61-b340-561c92e797e9",
             "59ce8093-5e0e-4d59-bfa6-805edb11e396")
-        self.assertEqual(created_match, expected)
+        assert created_match == expected
 
     def test_remove_exampleOf(self):
-        expected = util.read_file(self.data_dir, "remove_music_composition_work_example.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "remove_music_composition_work_example.txt"))
 
         created_match = musiccomposition.mutation_remove_music_composition_work_example(
             "ff562d2e-2265-4f61-b340-561c92e797e9",
             "59ce8093-5e0e-4d59-bfa6-805edb11e396")
-        self.assertEqual(created_match, expected)
+        assert created_match == expected
 
     def test_merge_music_composition_included_composition(self):
-        expected = util.read_file(self.data_dir, "merge_music_composition_included_composition.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "merge_music_composition_included_composition.txt"))
         created = musiccomposition.mutation_merge_music_composition_included_composition(
             "ff562d2e-2265-4f61-b340-561c92e797e9",
             "59ce8093-5e0e-4d59-bfa6-805edb11e396"
         )
-        self.assertEqual(created, expected)
+        assert created == expected
 
     def test_remove_music_composition_included_composition(self):
-        expected = util.read_file(self.data_dir, "remove_music_composition_included_composition.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "remove_music_composition_included_composition.txt"))
         created = musiccomposition.mutation_remove_music_composition_included_composition(
             "ff562d2e-2265-4f61-b340-561c92e797e9",
             "59ce8093-5e0e-4d59-bfa6-805edb11e396"
         )
-        self.assertEqual(created, expected)
+        assert created == expected
 
     def test_merge_music_composition_has_part(self):
-        expected = util.read_file(self.data_dir, "merge_music_composition_has_part.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "merge_music_composition_has_part.txt"))
         created = musiccomposition.mutation_merge_music_composition_has_part(
             "ff562d2e-2265-4f61-b340-561c92e797e9",
             "59ce8093-5e0e-4d59-bfa6-805edb11e396"
         )
-        self.assertEqual(created, expected)
+        assert created == expected
 
     def test_remove_music_composition_has_part(self):
-        expected = util.read_file(self.data_dir, "remove_music_composition_has_part.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "remove_music_composition_has_part.txt"))
         created = musiccomposition.mutation_remove_music_composition_has_part(
             "ff562d2e-2265-4f61-b340-561c92e797e9",
             "59ce8093-5e0e-4d59-bfa6-805edb11e396"
         )
-        self.assertEqual(created, expected)
+        assert created == expected
 
     def test_merge_music_composition_composer(self):
-        expected = util.read_file(self.data_dir, "merge_music_composition_composer.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "merge_music_composition_composer.txt"))
         created = musiccomposition.mutation_merge_music_composition_composer(
             "ff562d2e-2265-4f61-b340-561c92e797e9",
             "cd79f87e-39f3-44bc-ae2f-b9854ab6df3b"
         )
-        self.assertEqual(created, expected)
+        assert created == expected
 
     def test_remove_music_composition_composer(self):
-        expected = util.read_file(self.data_dir, "remove_music_composition_composer.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "remove_music_composition_composer.txt"))
         created = musiccomposition.mutation_remove_music_composition_composer(
             "ff562d2e-2265-4f61-b340-561c92e797e9",
             "cd79f87e-39f3-44bc-ae2f-b9854ab6df3b"
         )
-        self.assertEqual(created, expected)
+        assert created == expected
 
     def test_merge_music_composition_exact_match(self):
-        expected = util.read_file(self.data_dir, "merge_music_composition_exact_match.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "merge_music_composition_exact_match.txt"))
         created = musiccomposition.mutation_merge_music_composition_exact_match(
             "ff562d2e-2265-4f61-b340-561c92e797e9",
             "ccd75459-db61-425f-b587-2dc96bf169df"
         )
-        self.assertEqual(created, expected)
+        assert created == expected
 
     def test_remove_music_composition_exact_match(self):
-        expected = util.read_file(self.data_dir, "remove_music_composition_exact_match.txt")
+        expected = self.read_file(os.path.join(self.data_dir, "remove_music_composition_exact_match.txt"))
         created = musiccomposition.mutation_remove_music_composition_exact_match(
             "ff562d2e-2265-4f61-b340-561c92e797e9",
             "ccd75459-db61-425f-b587-2dc96bf169df"
         )
-        self.assertEqual(created, expected)
+        assert created == expected

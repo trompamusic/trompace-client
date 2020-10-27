@@ -19,7 +19,7 @@ ADD_DEF_TERM_DEF_TERMSET = '''AddDefinedTermSetHasDefinedTerm (
 }}'''
 
 
-def create_defined_term_set(creator: str, name: str, additionaltype: str):
+def create_defined_term_set(*, creator: str, name: str, additionaltype: str):
     """Return a mutation for making a DefinedTermSet.
     A DefinedTermSet (https://schema.org/DefinedTermSet) is a group of defined terms, e.g. categories or labels.
 
@@ -40,7 +40,7 @@ def create_defined_term_set(creator: str, name: str, additionaltype: str):
     return format_mutation(mutationname="CreateDefinedTermSet", args=params)
 
 
-def create_defined_term(creator: str, termcode: str, additionaltype: str):
+def create_defined_term(*, creator: str, termcode: str, additionaltype: str):
     """Return a mutation for making a DefinedTerm.
     A DefinedTerm (https://schema.org/DefinedTerm) is a word, name, acronym, phrase, etc. with a formal definition.
     It is part of a DefinedTermSet.
@@ -82,7 +82,7 @@ def update_defined_term_set(identifier: str, *, creator: str = None, name: str =
     return format_mutation(mutationname="UpdateDefinedTermSet", args=params)
 
 
-def update_defined_term(identifier: str, creator: str = None, termcode: str = None):
+def update_defined_term(identifier: str, *, creator: str = None, termcode: str = None):
     """Return a mutation for updating a DefinedTerm.
 
     TODO: Copy arguments from create_
@@ -128,7 +128,7 @@ def delete_defined_term(identifier: str):
     return format_mutation(mutationname="DeleteDefinedTerm", args=params)
 
 
-def defined_term_add_to_defined_term_set(defined_term_set: str, defined_term: str):
+def defined_term_add_to_defined_term_set(*, defined_term_set: str, defined_term: str):
     """Return a mutation for adding a DefinedTerm to a DefinedTermSet.
 
     Arguments:

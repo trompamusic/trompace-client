@@ -4,6 +4,10 @@ import unittest
 
 class CeTestCase(unittest.TestCase):
 
+    @property
+    def test_directory(self):
+        return os.path.dirname(__file__)
+
     data_dir = ""
 
     def read_file(self, filename):

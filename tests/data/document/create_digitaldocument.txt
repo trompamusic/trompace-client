@@ -1,0 +1,14 @@
+mutation {
+  CreateDigitalDocument(
+title: "A Document"
+        contributor: "https://www.cpdl.org"
+        creator: "https://www.upf.edu"
+        source: "https://www.cpdl.org/A_Document"
+        format: "text/html"
+        subject: "A document about a topic"
+        description: "This is a document"
+        language: en
+) {
+identifier
+}
+}

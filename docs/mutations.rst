@@ -3,10 +3,16 @@ Mutations
 
 Mutations are queries used to create or update data in the CE.
 
-Person
-------
+DigitalDocument
+---------------
 
-.. automodule:: trompace.mutations.person
+.. automodule:: trompace.mutations.digitaldocument
+   :members:
+
+MediaObject
+-----------
+
+.. automodule:: trompace.mutations.mediaobject
    :members:
 
 MusicComposition
@@ -15,8 +21,8 @@ MusicComposition
 .. automodule:: trompace.mutations.musiccomposition
    :members:
 
-MediaObject
-----------------
+Person
+------
 
-.. automodule:: trompace.mutations.mediaobject
+.. automodule:: trompace.mutations.person
    :members:

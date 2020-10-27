@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 setup(
     name="trompace-client",
     author="Music Technology Group, Universitat Pompeu Fabra",
-    install_requires=['requests', 'asyncio', 'aiohttp', 'websockets', 'aiofiles'],
+    install_requires=['requests', 'asyncio', 'aiohttp', 'websockets', 'aiofiles', 'pyjwt'],
     description="A python library to read from and write to the Trompa CE",
     long_description=long_description,
     long_description_content_type="text/markdown",
