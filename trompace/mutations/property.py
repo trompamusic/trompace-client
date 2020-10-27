@@ -2,7 +2,7 @@
 from typing import List
 
 from trompace import StringConstant
-from .templates import mutation_create, mutation_link
+from .templates import mutation_create, mutation_link, format_link_mutation
 
 CREATE_PROPERTY = '''CreateProperty(
         {parameters}
@@ -116,8 +116,7 @@ def mutation_add_controlaction_propertyvaluespecification(controlaction_id: str,
         The string for the mutation foradding a control action to a property value specification.
     """
 
-    return mutation_link(controlaction_id, propertyvaluespecification_id, ADD_CONTROLACTION_PROPERTYVALUESPECIFICATION)
-
+    return format_link_mutation("MergePropertyValueSpecificationPotentialAction", controlaction_id, propertyvaluespecification_id)
 
 def mutation_add_controlaction_property(controlaction_id: str, property_id: str):
     """Returns a mutation for adding a control action to a property value specification.
@@ -128,4 +127,4 @@ def mutation_add_controlaction_property(controlaction_id: str, property_id: str)
         The string for the mutation foradding a control action to a property.
     """
 
-    return mutation_link(controlaction_id, property_id, ADD_CONTROLACTION_PROPERTY)
+    return format_link_mutation("MergeControlActionAdditionalProperty", controlaction_id, property_id)
