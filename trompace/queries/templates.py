@@ -16,7 +16,7 @@ QUERY_TEMPLATE = '''{queryname}{parameters}
 def format_query(queryname: str, args: Dict[str, Any], return_items_list: list):
     """Create a query to send to the Contributor Environment.
     Arguments:
-        mqueryname: the name of the query to generate
+        queryname: the name of the query to generate
         args: a dictionary of field: value pairs to add to the query.
         return_items_list: A list of items for the query to return.
     Returns:

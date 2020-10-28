@@ -5,9 +5,9 @@ from trompace import StringConstant, _Neo4jDate, filter_none_args, docstring_int
 from trompace.constants import SUPPORTED_LANGUAGES
 
 
-def query_musiccomposition(identifier: str = None, title: str = None, contributor: str = None, creator: str = None, inlanguage: str = None,
-							name: str = None, position: int = None, return_items_list: list = ["identifier", "name"]):
-
+def query_musiccomposition(identifier: str = None, title: str = None, contributor: str = None, creator: str = None,
+                           source: str = None, inlanguage: str = None, name: str = None, position: int = None,
+                           return_items_list: list = ["identifier", "name"]):
     """Returns a query for querying the database for a music composition.
     Arguments:
         identifier: The identifier of the music composition in the CE.
@@ -15,11 +15,12 @@ def query_musiccomposition(identifier: str = None, title: str = None, contributo
         creator: The person, organization or service who created the thing the web resource is about.
         contributor: A person, an organization, or a service responsible for contributing\
                   the music composition to the web resource. This can be either a name or a base URL.
+        source: The source URL that an item comes from
         inlanguage: The language of the music composition. Currently supported languages are en,es,ca,nl,de,fr
         name: The name of the music composition.
         position: In the case that this is a movement of a larger work (e.g. a Symphony), the position of this
                   MusicComposition in the larger one.
-        return_item_list: A list of item fields that the query must return.
+        return_items_list: A list of item fields that the query must return.
     Returns:
         The string for the quereing the music composition.
     Raises:
@@ -32,6 +33,7 @@ def query_musiccomposition(identifier: str = None, title: str = None, contributo
     args = {
         "identifier": identifier,
         "title": title,
+        "source": source,
         "contributor": contributor,
         "creator": creator,
         "inLanguage": inlanguage,

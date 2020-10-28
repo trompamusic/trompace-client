@@ -12,7 +12,7 @@ MUSICCOMPOSITION_ARGS_DOCS = """title: The title of the resource indicated by `s
         format_: The mimetype of the resource indicated by `source`
         subject: The subject of the music composition.
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
-        inlanguage: The language of the music composition. Currently supported languages are en,es,ca,nl,de,fr
+        inlanguage: The language of the music composition.
         name: The name of the music composition.
         description: An account of the music composition.
         position: In the case that this is a movement of a larger work (e.g. a Symphony), the position of this
@@ -33,14 +33,11 @@ def mutation_create_music_composition(*, title: str, contributor: str, creator: 
         The string for the mutation for creating the music composition.
 
     Raises:
-        UnsupportedLanguageException: if ``language`` or ``inlanguage`` are not one of the supported languages.
+        UnsupportedLanguageException: if ``language`` is not one of the supported languages.
         NotAMimeTypeException: if ``format_`` is not a valid mimetype
     """
     if language and language not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
-
-    if inlanguage and inlanguage not in SUPPORTED_LANGUAGES:
-        raise UnsupportedLanguageException(inlanguage)
 
     if "/" not in format_:
         raise NotAMimeTypeException(format_)
@@ -79,15 +76,12 @@ def mutation_update_music_composition(identifier: str, *, title: str = None, con
     Returns:
         The string for the mutation for updating the music composition.
     Raises:
-        UnsupportedLanguageException: if ``language`` or ``inlanguage`` are not one of the supported languages.
+        UnsupportedLanguageException: if ``language`` is not one of the supported languages.
         NotAMimeTypeException: if ``format_`` is not a valid mimetype
     """
 
     if language and language not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
-
-    if inlanguage and inlanguage not in SUPPORTED_LANGUAGES:
-        raise UnsupportedLanguageException(inLanguage)
 
     if format_ and "/" not in format_:
         raise NotAMimeTypeException(format_)

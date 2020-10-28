@@ -45,7 +45,6 @@ class TrompaConfig:
         self._set_jwt()
 
     def _set_logging(self):
-        print("setting up logging")
         section_logging = self.config["logging"]
         level = section_logging.get("level").upper()
         ch = logging.StreamHandler()

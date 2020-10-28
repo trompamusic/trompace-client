@@ -6,8 +6,8 @@ from trompace.constants import SUPPORTED_LANGUAGES
 
 
 def query_mediaobject(identifier: str = None, creator: str = None, contributor: str = None,
-                encodingFormat: str = None, source: str = None, contentUrl: str = None, inLanguage:str = None, 
-                return_items_list: list = ["identifier", "name"]):
+                      encodingformat: str = None, source: str = None, contenturl: str = None, inlanguage:str = None,
+                      return_items_list: list = ["identifier", "name"]):
 
     """Returns a query for querying the database for a media object.
     Arguments:
@@ -15,28 +15,28 @@ def query_mediaobject(identifier: str = None, creator: str = None, contributor: 
         creator: The person, organization or service who created the thing the web resource is about.
         contributor: A person, an organization, or a service responsible for contributing\
          the media object to the web resource. This can be either a name or a base URL.
-        encodingFormat: A MimeType of the format of object encoded by the media object.
+        encodingformat: A MimeType of the format of object encoded by the media object.
         source: The URL of the web resource to be represented by the node.
-        contentUrl: The URL of the content encoded by the media object.
-        inLanguage: The language of the media object. Currently supported languages are en,es,ca,nl,de,fr.
-        return_item_list: A list of item fields that the query must return.
+        contenturl: The URL of the content encoded by the media object.
+        inlanguage: The language of the media object. Currently supported languages are en,es,ca,nl,de,fr.
+        return_items_list: A list of item fields that the query must return.
     Returns:
         The string for the quereing the media object.
     Raises:
         UnsupportedLanguageException if the input language is not one of the supported languages.
     """
 
-    if encodingFormat and "/" not in encodingFormat:
-        raise NotAMimeTypeException(encodingFormat)
+    if encodingformat and "/" not in encodingformat:
+        raise NotAMimeTypeException(encodingformat)
 
     args = {
         "identifier": identifier,
         "creator": creator,
         "contributor": contributor,
-        "encodingFormat": encodingFormat,
+        "encodingFormat": encodingformat,
         "source": source,
-        "contentUrl": contentUrl,
-        "inLanguage": inLanguage
+        "contentUrl": contenturl,
+        "inLanguage": inlanguage
     }
 
     args = filter_none_args(args)
