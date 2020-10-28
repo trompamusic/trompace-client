@@ -63,9 +63,11 @@ class TrompaConfig:
         if server.getboolean("secure"):
             self.host = "https://{}".format(host)
             self.websocket_host = "wss://{}/graphql".format(host)
+            self.secure = True
         else:
             self.host = "http://{}".format(host)
             self.websocket_host = "ws://{}/graphql".format(host)
+            self.secure = False
 
     def _set_jwt(self):
         auth = self.config["auth"]
