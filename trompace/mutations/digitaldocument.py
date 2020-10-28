@@ -12,7 +12,7 @@ DIGITALDOCUMENT_ARGS_DOCS = """title: The title of the resource indicated by `so
         format_: The mimetype of the resource indicated by `source`
         subject (optional): The subject of the music composition.
         language (optional): The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
-        description (optional): An account of the music composition.
+        description (optional): A description about the item referred to by source.
 """
 
 

@@ -27,7 +27,6 @@ def query_person(identifier: str = None, contributor: str = None, creator: str =
         NotAMimeTypeException if `format_` is not a valid mimetype.
     """
 
-
     args = {
         "identifier": identifier,
         "contributor": contributor,

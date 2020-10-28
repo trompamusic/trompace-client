@@ -11,18 +11,23 @@ MEDIAOBJECT_ARGS_DOCS = """name: The name of the media object.
         contributor: A person, an organization, or a service responsible for contributing the media object to the web resource. This can be either a name or a base URL.
         format_: A MimeType of the format of the page describing the media object.
         encodingFormat: A MimeType of the format of object encoded by the media object.
-        source: The URL of the web resource to be represented by the node.
+        source: The URL of the web resource about this media object. If no such resource is available, use the
+                same value as contentUrl.
         subject: The subject of the media object.
         contentUrl: The URL of the content encoded by the media object.
+        url: 
+        license: 
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
-        inLanguage: The language of the media object. Currently supported languages are en,es,ca,nl,de,fr
+        inLanguage: The language of the media object.
         title: The title of the resource indicated by `source`"""
 
 
 @docstring_interpolate("mediaobject_args", MEDIAOBJECT_ARGS_DOCS)
-def mutation_create_media_object(*, name: str, description: str, date: str, creator: str, contributor: str, format_: str,
-                                 encodingformat: str, source: str, subject: str,
-                                 contenturl: str, language: str, inlanguage: str, title: str = None):
+def mutation_create_media_object(*, title: str, contributor: str, creator: str, source: str, format_: str,
+                                 name: str = None, description: str = None, date: str = None,
+                                 encodingformat: str = None, embedurl: str = None, url: str = None,
+                                 contenturl: str = None, language: str = None, inlanguage: str = None,
+                                 license: str = None):
     """Returns a mutation for creating a media object object.
 
     Arguments:
@@ -34,30 +39,35 @@ def mutation_create_media_object(*, name: str, description: str, date: str, crea
     Raises:
         UnsupportedLanguageException if the input language is not one of the supported languages.
     """
-    if language not in SUPPORTED_LANGUAGES:
+    if language is not None and language not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
 
     if "/" not in format_:
         raise NotAMimeTypeException(format_)
 
-    if "/" not in encodingformat:
+    if encodingformat is not None and "/" not in encodingformat:
         raise NotAMimeTypeException(encodingformat)
 
     args = {
-        "name": name,
         "title": title,
-        "description": description,
-        "date": _Neo4jDate(date),
-        "creator": creator,
         "contributor": contributor,
-        "format": format_,
-        "encodingFormat": encodingformat,
+        "creator": creator,
         "source": source,
-        "subject": subject,
+        "format": format_,
+        "name": name,
+        "description": description,
+        "encodingFormat": encodingformat,
+        "embedUrl": embedurl,
+        "url": url,
+        "license": license,
         "contentUrl": contenturl,
         "inLanguage": inlanguage,
-        "language": StringConstant(language.lower())
     }
+
+    if date is not None:
+        args["date"] = _Neo4jDate(date)
+    if language is not None:
+        args["language"] = StringConstant(language.lower())
 
     args = filter_none_args(args)
 
@@ -67,7 +77,7 @@ def mutation_create_media_object(*, name: str, description: str, date: str, crea
 @docstring_interpolate("mediaobject_args", MEDIAOBJECT_ARGS_DOCS)
 def mutation_update_media_object(identifier: str, *, name: str = None, title: str = None, description: str = None,
                                  date: str = None, creator: str = None, contributor: str = None,
-                                 format_: str = None, encodingformat: str = None, source: str = None,
+                                 format_: str = None, encodingformat: str = None, source: str = None, license: str = None,
                                  subject: str = None, contenturl: str = None, language: str = None, inlanguage:str = None):
     """Returns a mutation for updating a media object object.
 
@@ -102,6 +112,7 @@ def mutation_update_media_object(identifier: str, *, name: str = None, title: st
         "source": source,
         "subject": subject,
         "contentUrl": contenturl,
+        "license": license,
         "inLanguage": inlanguage,
     }
     if date:
