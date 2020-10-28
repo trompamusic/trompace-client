@@ -1,4 +1,5 @@
 import configparser
+import datetime
 import logging
 import os
 
@@ -116,8 +117,10 @@ class TrompaConfig:
             self._set_jwt_token(token)
             self._save_jwt_token(token)
         elif self.jwt_token_encoded:
+            token = jwt.decode(self.jwt_token_encoded, verify=False)
+            now = datetime.datetime.now(datetime.timezone.utc).timestamp()
+            expired = token.get('exp', 0) < now
             # check if it's expiring
-            expired = True
             if expired:
                 trompace.logger.debug("token is expiring, renewing")
                 # TODO: Duplicate
