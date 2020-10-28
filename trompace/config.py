@@ -68,6 +68,9 @@ class TrompaConfig:
             self.websocket_host = "ws://{}/graphql".format(host)
 
     def _set_jwt(self):
+        server = self.config["server"]
+        host = server.get("host")
+
         auth = self.config["auth"]
         if "id" not in auth or "key" not in auth or "scopes" not in auth:
             raise ValueError("Cannot find 'auth.id' or 'auth.key' or 'auth.scopes' option")
@@ -83,11 +86,11 @@ class TrompaConfig:
         else:
             cache_dir = auth.get("token_cache_dir")
 
-        jwt_cache_file = ".trompace-client-jwt-token-cache"
+        jwt_cache_file = f".trompace-client-jwt-token-cache-{host}"
         self.jwt_key_cache = os.path.join(cache_dir, jwt_cache_file)
 
         if os.path.exists(self.jwt_key_cache):
-            trompace.logger.debug("found a cached token, reading from file")
+            trompace.logger.debug(f"found a cached token, reading from file {jwt_cache_file}")
             with open(self.jwt_key_cache) as fp:
                 token = fp.read()
                 self._set_jwt_token(token)
