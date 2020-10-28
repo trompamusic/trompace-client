@@ -1,16 +1,15 @@
 mutation {
   CreateMediaObject(
-name: "Rossinyol"
-        description: "Traditional choir piece"
-        date: { year: 1972 }
-        creator: "trompamusic.eu"
+title: "Rossinyol"
         contributor: "www.upf.edu"
-        format: "text/html"
-        encodingFormat: "text/html"
+        creator: "trompamusic.eu"
         source: "https://www.cpdl.org/wiki/index.php/Rossinyol"
-        subject: "Catalan choir piece"
+        format: "text/html"
+        description: "Traditional choir piece"
+        encodingFormat: "text/html"
         contentUrl: "https://www.cpdl.org/wiki/index.php/Rossinyol"
         inLanguage: "ca"
+        date: { year: 1972 }
         language: en
 ) {
 identifier
