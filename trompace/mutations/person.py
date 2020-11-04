@@ -2,7 +2,7 @@
 
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
 from trompace.mutations.templates import format_mutation, format_link_mutation
-from trompace import StringConstant, _Neo4jDate, filter_none_args, docstring_interpolate
+from trompace import StringConstant, _Neo4jDate, check_required_args, filter_none_args, docstring_interpolate
 from trompace.constants import SUPPORTED_LANGUAGES, SUPPORTED_GENDER
 
 PERSON_ARGS_DOCS = """title: The title of the resource indicated by `source`
@@ -44,6 +44,7 @@ def mutation_create_person(*, title: str, contributor: str, creator: str, source
         NotAMimeTypeException: if ``format_`` is not a valid mimetype.
     """
 
+    check_required_args(title=title, contributor=contributor, creator=creator, source=source, format_=format_)
     if language and language.lower() not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
 

@@ -1,5 +1,5 @@
 # Generate GraphQL queries for mutations pertaining to media object objects.
-from trompace import StringConstant, _Neo4jDate, filter_none_args, docstring_interpolate
+from trompace import StringConstant, _Neo4jDate, check_required_args, filter_none_args, docstring_interpolate
 from trompace.constants import SUPPORTED_LANGUAGES
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
 from trompace.mutations.templates import format_mutation, format_link_mutation
@@ -39,6 +39,7 @@ def mutation_create_media_object(*, title: str, contributor: str, creator: str, 
     Raises:
         UnsupportedLanguageException if the input language is not one of the supported languages.
     """
+    check_required_args(title=title, contributor=contributor, creator=creator, source=source, format_=format_)
     if language is not None and language not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
 

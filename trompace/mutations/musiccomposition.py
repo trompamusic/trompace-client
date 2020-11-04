@@ -1,5 +1,5 @@
 # Generate GraphQL queries for mutations pertaining to music composition objects.
-from trompace import StringConstant, filter_none_args, docstring_interpolate
+from trompace import StringConstant, check_required_args, filter_none_args, docstring_interpolate
 from trompace.constants import SUPPORTED_LANGUAGES
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
 from trompace.mutations.templates import format_mutation, format_link_mutation
@@ -36,6 +36,7 @@ def mutation_create_music_composition(*, title: str, contributor: str, creator: 
         UnsupportedLanguageException: if ``language`` is not one of the supported languages.
         NotAMimeTypeException: if ``format_`` is not a valid mimetype
     """
+    check_required_args(title=title, contributor=contributor, creator=creator, source=source, format_=format_)
     if language and language not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
 

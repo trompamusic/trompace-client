@@ -2,7 +2,7 @@ import datetime
 
 import pytz
 
-from trompace import filter_none_args
+from trompace import check_required_args, filter_none_args
 from trompace.mutations import MUTATION
 from trompace.mutations.templates import format_mutation
 
@@ -31,6 +31,7 @@ def create_defined_term_set(*, creator: str, name: str, additionaltype: str):
     Returns:
         A GraphQL Mutation to create a DefinedTermSet in the Trompa CE
     """
+    check_required_args(creator=creator, name=name, additionaltype=additionaltype)
     utcnow = datetime.datetime.now(pytz.UTC)
 
     params = {"additionalType": additionaltype,
@@ -53,6 +54,7 @@ def create_defined_term(*, creator: str, termcode: str, additionaltype: str):
     Returns:
         A GraphQL Mutation to create a DefinedTerm in the Trompa CE
     """
+    check_required_args(creator=creator, termcode=termcode, additionaltype=additionaltype)
     utcnow = datetime.datetime.now(pytz.UTC)
 
     params = {"additionalType": additionaltype,

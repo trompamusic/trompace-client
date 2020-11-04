@@ -24,6 +24,12 @@ def filter_none_args(args):
     return {k: v for k, v in args.items() if v is not None}
 
 
+def check_required_args(**kwargs):
+    for arg, val in kwargs.items():
+        if val is None:
+            raise ValueError(f"required argument '{arg}' must not be None")
+
+
 class StringConstant:
     """Some values in GraphQL are constants, not strings, and so they shouldn't
     be encoded or have quotes put around them. Use this to represent a constant
