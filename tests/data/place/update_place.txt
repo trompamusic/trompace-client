@@ -1,0 +1,9 @@
+mutation {
+  UpdatePlace(
+identifier: "cf515c79-c32f-43c8-a9ef-39f5daa7f847"
+        name: "Another place"
+        title: "Another place"
+) {
+identifier
+}
+}
