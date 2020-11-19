@@ -13,9 +13,9 @@ CREATE_ENTRYPOINT = '''CreateEntryPoint(
         }}'''
 
 
-def mutation_create_entry_point(*, name: str, contributor: str, subject: str,
-                                description: str, creator: str, source: str, language: str, actionPlatform: str,
-                                contentType: List, encodingType: list, formatin="text/html", identifier=None):
+def mutation_create_entry_point(*, name: str, contributor: str, subject: str, creator: str, source: str, language: str,
+                                actionPlatform: str, contentType: List, encodingType: list, formatin="text/html",
+                                identifier = None, description: str = None):
     """Returns a mutation for creating an entry point object
     Arguments:
         name: The name of the entry point.
