@@ -17,17 +17,18 @@ class TestProperty(CeTestCase):
         expected = self.read_file(os.path.join(self.data_dir, "create_propery.txt"))
 
         created_property = mutation_create_property("MusicXML file", "targetFile",
-                                                    "Select a MusicXML file to be converted.",
-                                                    [StringConstant("DigitalDocument")])
+                                                    [StringConstant("DigitalDocument")],
+                                                    description="Select a MusicXML file to be converted.")
         assert created_property == expected
 
     def test_create_propertyvaluespecification(self):
         expected = self.read_file(os.path.join(self.data_dir, "create_propertyvaluespecification.txt"))
 
-        created_propertyvaluespecification = mutation_create_propertyvaluespecification("Result name",
-                                                                                        "What name would you like to give.",
-                                                                                        "", 100, 4, False, "resultName",
-                                                                                        "String", True)
+        created_propertyvaluespecification = mutation_create_propertyvaluespecification(
+            name="Result name", defaultValue="", valueMaxLength=100, valueMinLength=4, multipleValues=False,
+            valueName="resultName", valuePattern="String", valueRequired=True,
+            description="What name would you like to give."
+        )
         assert created_propertyvaluespecification == expected
 
     def test_add_controlaction_propertyvaluespecification(self):
