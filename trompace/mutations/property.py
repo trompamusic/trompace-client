@@ -2,51 +2,7 @@
 from typing import List
 
 from trompace import StringConstant
-from .templates import mutation_create, mutation_link, format_link_mutation
-
-CREATE_PROPERTY = '''CreateProperty(
-        {parameters}
-        ) {{
-      identifier
-    }}'''
-
-CREATE_PROPERTYVALUESPECIFICATION = '''CreatePropertyValueSpecification(
-        {parameters}
-        ) {{
-      identifier
-    }}'''
-
-ADD_CONTROLACTION_PROPERTYVALUESPECIFICATION = '''AddActionInterfaceThingInterface(
-    from: {{identifier: "{identifier_1}", type: ControlAction}}
-    to: {{identifier: "{identifier_2}", type: PropertyValueSpecification}}
-    field: object
-    ){{
-        from {{
-            __typename
-      }}
-      to {{
-           __typename
-           ... on PropertyValueSpecification{{
-            identifier
-        }}
-      }}
-    }}'''
-
-ADD_CONTROLACTION_PROPERTY = '''AddActionInterfaceThingInterface(
-    from: {{identifier: "{identifier_1}", type: ControlAction}}
-    to: {{identifier: "{identifier_2}", type: Property}}
-    field: object
-    ){{
-        from {{
-            __typename
-      }}
-      to {{
-           __typename
-           ... on Property{{  
-            identifier
-        }}
-      }}
-    }}'''
+from .templates import mutation_create, mutation_link, format_link_mutation, format_mutation
 
 
 def mutation_create_property(title: str, name: str, description: str, rangeIncludes: List[StringConstant]):
@@ -67,8 +23,7 @@ def mutation_create_property(title: str, name: str, description: str, rangeInclu
         "description": description,
         "rangeIncludes": rangeIncludes
     }
-    return mutation_create(args, CREATE_PROPERTY)
-
+    return format_mutation("CreateProperty", args)
 
 def mutation_create_propertyvaluespecification(name: str, description: str, defaultValue: str, valueMaxLength: int,
                                                valueMinLength: int, multipleValues: bool, valueName: str,
@@ -104,28 +59,6 @@ def mutation_create_propertyvaluespecification(name: str, description: str, defa
         "valuePattern": StringConstant(valuePattern),
         "valueRequired": valueRequired
     }
-    return mutation_create(args, CREATE_PROPERTYVALUESPECIFICATION)
+    return format_mutation("CreatePropertyValueSpecification", args)
 
 
-def mutation_add_controlaction_propertyvaluespecification(controlaction_id: str, propertyvaluespecification_id: str):
-    """Returns a mutation for adding a control action to a property value specification.
-    Arguments:
-        controlaction_id: The unique identifier of the control action.
-        propertyvaluespecification_id: The unique identifier of the property value specification.
-    Returns:
-        The string for the mutation foradding a control action to a property value specification.
-    """
-
-    return format_link_mutation("AddControlActionObject", controlaction_id, propertyvaluespecification_id)
-
-def mutation_add_controlaction_property(controlaction_id: str, property_id: str):
-    """Returns a mutation for adding a control action to a property value specification.
-    Arguments:
-        controlaction_id: The unique identifier of the control action.
-        property_id: The unique identifier of the property.
-    Returns:
-        The string for the mutation foradding a control action to a property.
-    """
-
-   # return format_link_mutation("MergeControlActionAdditionalProperty", controlaction_id, property_id)
-    return format_link_mutation("AddControlActionObject", controlaction_id, property_id)
