@@ -4,6 +4,7 @@ from trompace import StringConstant
 from trompace.mutations.templates import mutation_create, mutation_link, format_link_mutation, format_mutation
 from trompace.constants import ActionStatusType
 import trompace.exceptions
+from typing import List
 
 CREATE_CONTROLACTION = '''CreateControlAction(
         {parameters}
@@ -92,7 +93,7 @@ def mutation_modify_controlaction(controlaction_id: str, actionstatus: ActionSta
     return mutation_create(args, UPDATE_CONTROLACTION)
 
 
-def mutation_add_controlaction_propertyvaluespecification(controlaction_id: str, propertyvaluespecification_id: str):
+def mutation_add_propertyvaluespecification_potentialaction(propertyvaluespecification_id: str, controlaction_id: str):
     """Returns a mutation for adding a control action to a property value specification.
     Arguments:
         controlaction_id: The unique identifier of the control action.
@@ -101,9 +102,9 @@ def mutation_add_controlaction_propertyvaluespecification(controlaction_id: str,
         The string for the mutation foradding a control action to a property value specification.
     """
     return format_link_mutation("MergePropertyValueSpecificationPotentialAction", controlaction_id, propertyvaluespecification_id)
-    #return format_link_mutation("AddControlActionObject", controlaction_id, propertyvaluespecification_id)
 
-def mutation_add_controlaction_property(controlaction_id: str, property_id: str):
+
+def mutation_add_controlaction_additionalproperty(controlaction_id: str, property_id: str):
     """Returns a mutation for adding a control action to a property value specification.
     Arguments:
         controlaction_id: The unique identifier of the control action.
@@ -112,7 +113,7 @@ def mutation_add_controlaction_property(controlaction_id: str, property_id: str)
         The string for the mutation foradding a control action to a property.
     """
     return format_link_mutation("MergeControlActionAdditionalProperty", controlaction_id, property_id)
-    # return format_link_mutation("AddControlActionObject", controlaction_id, property_id)
+
 
 def mutation_add_controlaction_object(controlaction_id: str, object_id: str):
     """Returns a mutation for adding a control action to an object, either a property value specification or a property
@@ -124,16 +125,15 @@ def mutation_add_controlaction_object(controlaction_id: str, object_id: str):
     """
     return format_link_mutation("AddControlActionObject", controlaction_id, object_id)
 
-def mutation_request_controlaction(controlaction_id: str, entrypoint_id:str, properties: list,
-                                   propertyValues: list):
 
+def mutation_request_controlaction(controlaction_id: str, entrypoint_id: str, properties: list,
+                                   propertyValues: list):
     args = {
-        "controlAction":{
+        "controlAction": {
             "potentialActionIdentifier": controlaction_id,
             "entryPointIdentifier": entrypoint_id,
             "propertyObject": properties,
             "propertyValueObject": propertyValues
         }
     }
-
     return format_mutation("RequestControlAction", args)

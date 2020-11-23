@@ -66,7 +66,6 @@ def make_parameters(**kwargs):
         elif isinstance(v, datetime.datetime):
             value = f"{{formatted: {encoder.encode(v.isoformat())}}}"
         elif isinstance(v, list):
-            #value = "[{}]".format(", ".join(item for item in encode_list(v, encoder)))
             value = "[{}]".format(", ".join(item for item in encode_list(v, encoder)))
         elif isinstance(v, dict):
             value = "{"+make_parameters(**v)+"}"
