@@ -101,7 +101,7 @@ def mutation_add_propertyvaluespecification_potentialaction(propertyvaluespecifi
     Returns:
         The string for the mutation foradding a control action to a property value specification.
     """
-    return format_link_mutation("MergePropertyValueSpecificationPotentialAction", controlaction_id, propertyvaluespecification_id)
+    return format_link_mutation("MergePropertyValueSpecificationPotentialAction", propertyvaluespecification_id, controlaction_id)
 
 
 def mutation_add_controlaction_additionalproperty(controlaction_id: str, property_id: str):
