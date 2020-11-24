@@ -61,3 +61,10 @@ class TestControlAction(CeTestCase):
         created_match = controlaction.mutation_add_entrypoint_controlaction("ff562d2e-2265-4f61-b340-561c92e797e9",
                                                                             "59ce8093-5e0e-4d59-bfa6-805edb11e396")
         assert created_match == expected
+
+    def test_add_controlaction_propertyvaluespecification(self):
+        expected = self.read_file(os.path.join(self.data_dir, "add_controlaction_propertyvaluespecification.txt"))
+
+        created_match = controlaction.mutation_add_controlaction_propertyvaluespecification("ff562d2e-2265-4f61-b340-561c92e797e9",
+                                                                              "59ce8093-5e0e-4d59-bfa6-805edb11e396")
+        assert created_match == expected
