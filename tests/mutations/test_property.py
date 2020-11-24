@@ -18,7 +18,8 @@ class TestProperty(CeTestCase):
         created_property = mutation_create_property("MusicXML file", "targetFile",
                                                     "Select a MusicXML file to be converted.",
                                                     [StringConstant("DigitalDocument")])
-        assert created_property == expected
+
+        assert self.compare_queries(created_property, expected)
 
     def test_create_propertyvaluespecification(self):
         expected = self.read_file(os.path.join(self.data_dir, "create_propertyvaluespecification.txt"))
@@ -27,5 +28,7 @@ class TestProperty(CeTestCase):
                                                                                         "What name would you like to give.",
                                                                                         "", 100, 4, False, "resultName",
                                                                                         "String", True)
-        assert created_propertyvaluespecification == expected
+
+        assert self.compare_queries(created_propertyvaluespecification, expected)
+
 
