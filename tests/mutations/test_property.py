@@ -3,8 +3,7 @@ import os
 
 from tests import CeTestCase
 from trompace import StringConstant
-from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, \
-    mutation_add_controlaction_propertyvaluespecification
+from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification
 
 
 class TestProperty(CeTestCase):
@@ -19,7 +18,7 @@ class TestProperty(CeTestCase):
         created_property = mutation_create_property("MusicXML file", "targetFile",
                                                     [StringConstant("DigitalDocument")],
                                                     description="Select a MusicXML file to be converted.")
-        assert created_property == expected
+        self.assert_queries_equal(created_property, expected)
 
     def test_create_propertyvaluespecification(self):
         expected = self.read_file(os.path.join(self.data_dir, "create_propertyvaluespecification.txt"))
@@ -29,11 +28,5 @@ class TestProperty(CeTestCase):
             valueName="resultName", valuePattern="String", valueRequired=True,
             description="What name would you like to give."
         )
-        assert created_propertyvaluespecification == expected
 
-    def test_add_controlaction_propertyvaluespecification(self):
-        expected = self.read_file(os.path.join(self.data_dir, "add_controlaction_propertyvaluespecification.txt"))
-
-        created_match = mutation_add_controlaction_propertyvaluespecification("ff562d2e-2265-4f61-b340-561c92e797e9",
-                                                                              "59ce8093-5e0e-4d59-bfa6-805edb11e396")
-        assert created_match == expected
+        self.assert_queries_equal(created_propertyvaluespecification, expected)

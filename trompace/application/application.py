@@ -10,10 +10,14 @@ from trompace.exceptions import QueryException, ValueNotFound
 from trompace.mutations.application import mutation_create_application, mutation_add_entrypoint_application
 from trompace.mutations.controlaction import mutation_create_controlaction, mutation_add_entrypoint_controlaction, \
     mutation_modify_controlaction
-from trompace.mutations.digitaldocument import mutation_create_document, mutation_add_digital_document_controlaction
+from trompace.mutations.digitaldocument import mutation_create_digitaldocument
+
+from trompace.mutations.digitaldocument import mutation_create_digitaldocument
 from trompace.mutations.entrypoint import mutation_create_entry_point
-from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification, \
-    mutation_add_controlaction_propertyvaluespecification, mutation_add_controlaction_property
+from trompace.mutations.property import mutation_create_property, mutation_create_propertyvaluespecification
+from trompace.mutations.controlaction import mutation_add_controlaction_propertyvaluespecification, \
+    mutation_add_controlaction_property, mutation_add_controlaction_object
+
 from trompace.subscriptions.controlaction import subscription_controlaction
 
 
@@ -284,13 +288,13 @@ async def handle_control_action(identifier, command_line, properties, property_v
 
     # TODO: How to get the right output file name (possibly one of the property value specifications) and the right source path?
 
-    create_doc_query = mutation_create_document(property_values['outputName'], "UPF", "IPF", "www.upf.edu",
+    create_doc_query = mutation_create_digitaldocument(property_values['outputName'], "UPF", "IPF", "www.upf.edu",
                                                 "./dummy_path",
                                                 "output of test algorithm", "test subject", "en")
     resp = await submit_query(create_doc_query)
     created_doc_id = resp['data']['CreateDigitalDocument']['identifier']
 
-    query_add_doc = mutation_add_digital_document_controlaction(created_doc_id, identifier)
+    query_add_doc = mutation_add_controlaction_object(created_doc_id, identifier)
 
     resp = await submit_query(query_add_doc)
 
@@ -316,7 +320,7 @@ async def get_control_all_actions():
 
     print("Found the following actions: ")
 
-    print_dict(entry_point_ids)
+  #  print_dict(entry_point_ids)
 
 
 async def get_control_action_id(control_id, properties, property_values):

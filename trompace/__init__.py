@@ -46,6 +46,8 @@ def encode_list(thelist, encoder):
     for item in thelist:
         if isinstance(item, StringConstant):
             yield item.value
+        elif isinstance(item, dict):
+            yield "{" + make_parameters(**item) + "}"
         else:
             yield encoder.encode(item)
 
@@ -71,6 +73,8 @@ def make_parameters(**kwargs):
             value = f"{{formatted: {encoder.encode(v.isoformat())}}}"
         elif isinstance(v, list):
             value = "[{}]".format(", ".join(item for item in encode_list(v, encoder)))
+        elif isinstance(v, dict):
+            value = "{" + make_parameters(**v) + "}"
         else:
             value = encoder.encode(v)
         parts.append("{}: {}".format(k, value))

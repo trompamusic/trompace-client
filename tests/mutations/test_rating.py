@@ -19,7 +19,7 @@ class TestRating(CeTestCase):
         create_rating = rating.create_rating(
             creator="https://trompamusic.eu/user/mozart",
             ratingvalue=5, bestrating=5)
-        assert create_rating == expected
+        self.assert_queries_equal(create_rating, expected)
 
     @freeze_time("2020-04-09T11:03:20")
     def test_create_rating_complete(self):
@@ -31,13 +31,13 @@ class TestRating(CeTestCase):
             bestrating=5,
             worstrating=1,
             additionaltype="https://vocab.trompamusic.eu/vocab#PerformanceFeedback")
-        assert create_rating == expected
+        self.assert_queries_equal(create_rating, expected)
 
     @freeze_time("2020-04-09T12:20:39")
     def test_update_rating_single(self):
         expected = self.read_file("update_rating_basic.txt")
         update_rating = rating.update_rating("60ab3727-5972-4785-867f-2d050b0acde0", ratingvalue=4)
-        assert update_rating == expected
+        self.assert_queries_equal(update_rating, expected)
 
     @freeze_time("2020-04-09T12:21:27")
     def test_update_rating_complete(self):
@@ -46,10 +46,10 @@ class TestRating(CeTestCase):
                                              creator="https://trompamusic.eu/user/mahler",
                                              ratingvalue=7, bestrating=10, worstrating=1,
                                              additionaltype="https://vocab.trompamusic.eu/vocab#PerformanceFeedback")
-        assert update_rating == expected
+        self.assert_queries_equal(update_rating, expected)
 
     def test_delete_rating(self):
         expected = self.read_file("delete_rating.txt")
         delete_rating = rating.delete_rating("c9e0b0d0-d3b8-47c6-a4a4-4b9aa11969d1")
 
-        assert delete_rating == expected
+        self.assert_queries_equal(delete_rating, expected)

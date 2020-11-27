@@ -24,7 +24,7 @@ class TestPerson(CeTestCase):
             language="en", format_="text/html", gender="male",
             description="Born circa 1860Died circa 1920A. J. Fynn was an early 20th Century scholar\
  in literature and anthropology")
-        assert created_person == expected
+        self.assert_queries_equal(created_person, expected)
 
     def test_create_invalid_values(self):
         """Passing invalid values to language, format_, or gender cause exceptions"""
@@ -59,14 +59,13 @@ class TestPerson(CeTestCase):
 
         created_update = person.mutation_update_person('2eeca6dd-c62c-490e-beb0-2e3899fca74f',
                                                        title="A. J. Fynn")
-        assert created_update == expected
+        self.assert_queries_equal(created_update, expected)
 
     def test_delete(self):
         expected = self.read_file(os.path.join(self.data_dir, "delete_person.txt"))
 
         created_delete = person.mutation_delete_person('2eeca6dd-c62c-490e-beb0-2e3899fca74f')
-
-        assert created_delete == expected
+        self.assert_queries_equal(created_delete, expected)
 
     def test_invalid_language(self):
         with pytest.raises(UnsupportedLanguageException):
@@ -96,7 +95,7 @@ class TestPerson(CeTestCase):
         actual = person.mutation_person_add_exact_match_person("d3f968f4-90cd-4764-93bc-6fadcc2a35e6",
                                                                "b10ac895-beb8-489e-8168-3e786d1aeb0e")
 
-        assert actual == expected
+        self.assert_queries_equal(actual, expected)
 
     def test_person_remove_exact_match_person(self):
         expected = self.read_file(os.path.join(self.data_dir, "remove_person_exactmatch.txt"))
@@ -104,4 +103,4 @@ class TestPerson(CeTestCase):
         actual = person.mutation_person_remove_exact_match_person("d3f968f4-90cd-4764-93bc-6fadcc2a35e6",
                                                                   "b10ac895-beb8-489e-8168-3e786d1aeb0e")
 
-        assert actual == expected
+        self.assert_queries_equal(actual, expected)
