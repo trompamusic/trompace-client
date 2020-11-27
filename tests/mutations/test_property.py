@@ -19,7 +19,7 @@ class TestProperty(CeTestCase):
                                                     "Select a MusicXML file to be converted.",
                                                     [StringConstant("DigitalDocument")])
 
-        assert self.compare_queries(created_property, expected)
+        self.assert_queries_equal(created_property, expected)
 
     def test_create_propertyvaluespecification(self):
         expected = self.read_file(os.path.join(self.data_dir, "create_propertyvaluespecification.txt"))
@@ -29,6 +29,6 @@ class TestProperty(CeTestCase):
                                                                                         "", 100, 4, False, "resultName",
                                                                                         "String", True)
 
-        assert self.compare_queries(created_propertyvaluespecification, expected)
+        self.assert_queries_equal(created_propertyvaluespecification, expected)
 
 
