@@ -137,3 +137,10 @@ def mutation_request_controlaction(controlaction_id: str, entrypoint_id: str, pr
         }
     }
     return format_mutation("RequestControlAction", args)
+
+def mutation_update_controlaction(controlaction_id: str, actionStatus: trompace.StringConstant):
+    args = {
+       "identifier": controlaction_id,
+       "actionStatus": actionStatus
+    }
+    return format_mutation("UpdateControlAction", args)
