@@ -144,3 +144,7 @@ def mutation_update_controlaction(controlaction_id: str, actionStatus: trompace.
        "actionStatus": actionStatus
     }
     return format_mutation("UpdateControlAction", args)
+
+def mutation_addactioninterfance_result(controlaction_id:str, thing_id:str):
+
+    return format_link_mutation("AddActionInterfaceResult", controlaction_id, thing_id, )

@@ -12,6 +12,7 @@ QUERY_CONTROLACTION_ID = """
                 ... on PropertyValue {{
                     value
                     name
+                    title
                     nodeValue {{
                         ... on DigitalDocument {{
                             format
