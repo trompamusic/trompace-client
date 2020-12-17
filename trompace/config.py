@@ -16,6 +16,8 @@ class TrompaConfig:
     host: str = None
     websocket_host: str = None
 
+    # Is authentication required to write to the CE?
+    server_auth_required: bool = True
     # JWT identifier
     jwt_id: str = None
     # JWT key
@@ -74,6 +76,11 @@ class TrompaConfig:
         host = server.get("host")
 
         auth = self.config["auth"]
+        self.server_auth_required = auth.getboolean("required", True)
+        if not self.server_auth_required:
+            trompace.logger.debug("Auth not required, skipping setup")
+            return
+
         if "id" not in auth or "key" not in auth or "scopes" not in auth:
             raise ValueError("Cannot find 'auth.id' or 'auth.key' or 'auth.scopes' option")
 
