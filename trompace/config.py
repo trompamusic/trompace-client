@@ -88,7 +88,7 @@ class TrompaConfig:
         else:
             cache_dir = auth.get("token_cache_dir")
 
-        jwt_cache_file = f".trompace-client-jwt-token-cache-{host}"
+        jwt_cache_file = f".trompace-client-jwt-token-cache-{host.replace('/', '-')}"
         self.jwt_key_cache = os.path.join(cache_dir, jwt_cache_file)
 
         if os.path.exists(self.jwt_key_cache):
