@@ -162,7 +162,7 @@ def mutation_update_controlaction_status(controlaction_id: str, action_status: A
     return format_mutation("UpdateControlAction", args)
 
 
-def mutation_add_actioninterface_result(controlaction_id:str, thing_interface_id:str):
+def mutation_add_actioninterface_result(controlaction_id: str, thing_interface_id: str):
     """Returns a mutation for linking a control action object and a thing interface with the result relation
     Arguments:
         controlaction_id: The unique identifier of the control action.
