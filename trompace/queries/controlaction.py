@@ -26,15 +26,13 @@ QUERY_CONTROLACTION_ID = """
 """
 
 
-def query_controlaction(identifier: str = None):
+def query_controlaction(identifier: str):
 
     """Returns a query for querying the database for a controlaction object.
     Arguments:
-        identifier: The identifier of the media object in the CE.
-
-        The string for the quereing the media object.
-    Raises:
-        UnsupportedLanguageException if the input language is not one of the supported languages.
+        identifier: The identifier of the control action in the CE.
+    Returns:
+        The string for the quereing the control action.
     """
     query_ca = QUERY_CONTROLACTION_ID.format(identifier=identifier)
     return query_ca
