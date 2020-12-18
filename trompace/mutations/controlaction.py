@@ -147,7 +147,7 @@ def mutation_request_controlaction(controlaction_id: str, entrypoint_id: str, pr
     return format_mutation("RequestControlAction", args)
 
 
-def mutation_update_controlaction_status(controlaction_id: str, action_status: trompace.ActionStatusType):
+def mutation_update_controlaction_status(controlaction_id: str, action_status: ActionStatusType):
     """Returns a mutation for updating the status of a control action to an object
     Arguments:
         controlaction_id: The unique identifier of the control action.
