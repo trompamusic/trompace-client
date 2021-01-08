@@ -129,6 +129,14 @@ def mutation_add_controlaction_object(controlaction_id: str, object_id: str):
 
 def mutation_request_controlaction(controlaction_id: str, entrypoint_id: str, properties: list,
                                    propertyValues: list):
+    """Returns a mutation for requesting a control action
+        controlaction_id: The unique identifier of the control action.
+        entrypoint_id: The unique identifier of the entry point linked to this control action
+        properties: a list of the properties objects of the control action
+        propertyValues: a list of the properties objects of the control action
+    Returns:
+        The string for the mutation for requesting a control action.
+        """
     args = {
         "controlAction": {
             "potentialActionIdentifier": controlaction_id,
@@ -138,3 +146,30 @@ def mutation_request_controlaction(controlaction_id: str, entrypoint_id: str, pr
         }
     }
     return format_mutation("RequestControlAction", args)
+
+
+def mutation_update_controlaction_status(controlaction_id: str, action_status: ActionStatusType):
+    """Returns a mutation for updating the status of a control action to an object
+    Arguments:
+        controlaction_id: The unique identifier of the control action.
+        action_status: the action status enum object.
+    Returns:
+        The string for the mutation for adding a control action to an object.
+        """
+    args = {
+       "identifier": controlaction_id,
+       "actionStatus": StringConstant(str(action_status))
+    }
+    return format_mutation("UpdateControlAction", args)
+
+
+def mutation_add_actioninterface_result(controlaction_id: str, thing_interface_id: str):
+    """Returns a mutation for linking a control action object and a thing interface with the result relation
+    Arguments:
+        controlaction_id: The unique identifier of the control action.
+        thing_interface_id: the unique identifier of a thing interface object
+    Returns:
+        The string for the mutation for adding a control action to an object.
+        """
+
+    return format_link_mutation("AddActionInterfaceResult", controlaction_id, thing_interface_id)
