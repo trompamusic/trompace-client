@@ -23,8 +23,11 @@ async def submit_query_async(querystr: str, auth_required=False):
     except requests.exceptions.HTTPError:
         print("error")
         print(r.json())
-    resp = r.json()
-    if "errors" in resp.keys():
+    try:
+        resp = r.json()
+        if "errors" in resp.keys():
+            raise QueryException(resp['errors'])
+    except ValueError:
         raise QueryException(resp['errors'])
     return resp
 
@@ -47,8 +50,11 @@ def submit_query(querystr: str, auth_required=False):
     except requests.exceptions.HTTPError:
         print("error")
         print(r.json())
-    resp = r.json()
-    if "errors" in resp.keys():
+    try:
+        resp = r.json()
+        if "errors" in resp.keys():
+            raise QueryException(resp['errors'])
+    except ValueError:
         raise QueryException(resp['errors'])
     return resp
 
