@@ -1,4 +1,3 @@
-# Generate GraphQL queries for mutations pertaining to audio object objects.
 from trompace import StringConstant, _Neo4jDate, check_required_args, filter_none_args, docstring_interpolate
 from trompace.constants import SUPPORTED_LANGUAGES
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
@@ -8,25 +7,26 @@ AUDIOOBJECT_ARGS_DOCS = """name: The name of the audio object.
         description: An account of the audio object.
         date: The date associated with the audio object.
         creator: The person, organization or service who created the thing the web resource is about.
-        contributor: A person, an organization, or a service responsible for contributing the audio object to the web resource. This can be either a name or a base URL.
+        contributor: A person, an organization, or a service responsible for contributing the audio object to the web resource.
+                     This can be either a name or a base URL.
         format_: A MimeType of the format of the page describing the audio object.
-        encodingFormat: A MimeType of the format of object encoded by the audio object.
+        encodingformat: A MimeType of the format of object encoded by the audio object.
         source: The URL of the web resource about this audio object. If no such resource is available, use the
                 same value as contentUrl.
         subject: The subject of the audio object.
-        contentUrl: The URL of the content encoded by the audio object.
-        url: 
-        license: 
+        contenturl: The URL of the content encoded by the audio object.
+        url:
+        license:
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
-        inLanguage: The language of the audio object.
+        inlanguage: The language of the audio object.
         title: The title of the resource indicated by `source`"""
 
 
 @docstring_interpolate("audioobject_args", AUDIOOBJECT_ARGS_DOCS)
 def mutation_create_audio_object(*, title: str, contributor: str, creator: str, source: str, format_: str,
                                  name: str = None, description: str = None, date: str = None,
-                                 encodingFormat: str = None, embedurl: str = None, url: str = None,
-                                 contentUrl: str = None, language: str = None, inlanguage: str = None,
+                                 encodingformat: str = None, embedurl: str = None, url: str = None,
+                                 contenturl: str = None, language: str = None, inlanguage: str = None,
                                  license: str = None, subject: str = None):
     """Returns a mutation for creating a audo object object.
 
@@ -38,7 +38,9 @@ def mutation_create_audio_object(*, title: str, contributor: str, creator: str, 
 
     Raises:
         UnsupportedLanguageException if the input language is not one of the supported languages.
+        ValueError if a required argument is None
     """
+
     check_required_args(title=title, contributor=contributor, creator=creator, source=source, format_=format_)
     if language is not None and language not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
@@ -46,7 +48,7 @@ def mutation_create_audio_object(*, title: str, contributor: str, creator: str, 
     if "/" not in format_:
         raise NotAMimeTypeException(format_)
 
-    if encodingFormat is not None and "/" not in encodingFormat:
+    if encodingformat is not None and "/" not in encodingFormat:
         raise NotAMimeTypeException(encodingFormat)
 
     args = {
@@ -57,11 +59,11 @@ def mutation_create_audio_object(*, title: str, contributor: str, creator: str, 
         "format": format_,
         "name": name,
         "description": description,
-        "encodingFormat": encodingFormat,
+        "encodingFormat": encodingformat,
         "embedUrl": embedurl,
         "url": url,
         "license": license,
-        "contentUrl": contentUrl,
+        "contentUrl": contenturl,
         "inLanguage": inlanguage,
         "subject": subject
     }
@@ -79,8 +81,8 @@ def mutation_create_audio_object(*, title: str, contributor: str, creator: str, 
 @docstring_interpolate("audioobject_args", AUDIOOBJECT_ARGS_DOCS)
 def mutation_update_audio_object(identifier: str, *, name: str = None, title: str = None, description: str = None,
                                  date: str = None, creator: str = None, contributor: str = None,
-                                 format_: str = None, encodingFormat: str = None, source: str = None, license: str = None,
-                                 subject: str = None, contentUrl: str = None, language: str = None, inlanguage:str = None):
+                                 format_: str = None, encodingformat: str = None, source: str = None, license: str = None,
+                                 subject: str = None, contenturl: str = None, language: str = None, inlanguage: str = None):
     """Returns a mutation for updating a audio object object.
 
     Arguments:
@@ -91,13 +93,13 @@ def mutation_update_audio_object(identifier: str, *, name: str = None, title: st
         The string for the mutation for updating the audio object.
 
     Raises:
-        Assertion error if the input language or inLanguage is not one of the supported languages.
+        Assertion error if the input language or inlanguage is not one of the supported languages.
     """
     if format_ is not None and "/" not in format_:
         raise NotAMimeTypeException(format_)
 
-    if encodingFormat is not None and "/" not in encodingFormat:
-        raise NotAMimeTypeException(encodingFormat)
+    if encodingformat is not None and "/" not in encodingformat:
+        raise NotAMimeTypeException(encodingformat)
 
     if language is not None and language not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
@@ -110,10 +112,10 @@ def mutation_update_audio_object(identifier: str, *, name: str = None, title: st
         "creator": creator,
         "contributor": contributor,
         "format": format_,
-        "encodingFormat": encodingFormat,
+        "encodingFormat": encodingformat,
         "source": source,
         "subject": subject,
-        "contentUrl": contentUrl,
+        "contentUrl": contenturl,
         "license": license,
         "inLanguage": inlanguage,
     }
@@ -138,7 +140,6 @@ def mutation_delete_audio_object(identifier: str):
     """
 
     return format_mutation("DeleteAudioObject", {"identifier": identifier})
-
 
 
 def mutation_remove_audio_object_work_example(audio_object_identifier: str, work_identifier: str):
@@ -183,7 +184,6 @@ def mutation_remove_audio_object_encoding(audio_object_identifier_1: str, audio_
     return format_link_mutation("RemoveAudioObjectEncoding", audio_object_identifier_1, audio_object_identifier_2)
 
 
-# link AudioObject to Work (step 5)
 def mutation_merge_audio_object_work_example(audio_object_identifier: str, work_identifier: str):
     """Returns a mutation for creating merging a audio object as an example of a work.
 
