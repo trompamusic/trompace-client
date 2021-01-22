@@ -4,6 +4,7 @@ import logging
 import os
 
 from typing import List, Dict
+from urllib.parse import urlparse
 
 import requests
 
@@ -59,17 +60,24 @@ class TrompaConfig:
 
     def _set_server(self):
         server = self.config["server"]
-        if "host" not in server or "secure" not in server:
-            raise ValueError("Cannot find 'server.host' or 'server.secure' option")
+        if "host" not in server:
+            raise ValueError("Cannot find 'server.host' option")
         host = server.get("host")
-        if server.getboolean("secure"):
-            self.host = "https://{}".format(host)
-            self.websocket_host = "wss://{}/graphql".format(host)
-            self.secure = True
+        parsed = urlparse(host)
+        print(parsed)
+        hostpath = parsed.netloc + parsed.path
+        if not parsed.scheme and "secure" not in server:
+            raise ValueError("No scheme set on ")
+        elif not parsed.scheme:
+            scheme = "https" if server.getboolean("secure") else "http"
+            trompace.logger.debug("Using 'server.secure' to set http/https flag but this is deprecated")
+            trompace.logger.debug("Use a fully qualified URL in 'server.host'")
         else:
-            self.host = "http://{}".format(host)
-            self.websocket_host = "ws://{}/graphql".format(host)
-            self.secure = False
+            scheme = parsed.scheme
+        self.host = f"{scheme}://{hostpath}"
+        wss_scheme = "wss" if scheme == "https" else "ws"
+        wss_path = os.path.join(hostpath, "graphql")
+        self.websocket_host = f"{wss_scheme}://{wss_path}"
 
     def _set_jwt(self):
         server = self.config["server"]
