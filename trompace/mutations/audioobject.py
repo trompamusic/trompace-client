@@ -48,8 +48,8 @@ def mutation_create_audio_object(*, title: str, contributor: str, creator: str, 
     if "/" not in format_:
         raise NotAMimeTypeException(format_)
 
-    if encodingformat is not None and "/" not in encodingFormat:
-        raise NotAMimeTypeException(encodingFormat)
+    if encodingformat is not None and "/" not in encodingformat:
+        raise NotAMimeTypeException(encodingformat)
 
     args = {
         "title": title,

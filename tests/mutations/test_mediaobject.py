@@ -1,4 +1,3 @@
-# Tests for mutations pertaining to music composition objects.
 import os
 
 import pytest
