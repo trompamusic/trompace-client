@@ -114,7 +114,7 @@ class TrompaConfig:
 
     def _set_jwt_token(self, token):
         try:
-            decoded = jwt.decode(token, verify=False)
+            decoded = jwt.decode(token, algorithms=["HS256"], options={"verify_signature": False})
             self.jwt_token_encoded = token
             self.jwt_token_decoded = decoded
         except jwt.DecodeError:
@@ -137,7 +137,7 @@ class TrompaConfig:
             self._set_jwt_token(token)
             self._save_jwt_token(token)
         elif self.jwt_token_encoded:
-            token = jwt.decode(self.jwt_token_encoded, verify=False)
+            token = jwt.decode(self.jwt_token_encoded, algorithms=["HS256"], options={"verify_signature": False})
             now = datetime.datetime.now(datetime.timezone.utc).timestamp()
             expired = token.get('exp', 0) < now
             # check if it's expiring
