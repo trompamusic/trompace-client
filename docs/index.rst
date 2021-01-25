@@ -11,6 +11,9 @@ To install the package, use pip::
 
     pip install trompace-client
 
+
+For information about the TROMPA schema, see :ref:`schema:TROMPA Schema`
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -18,6 +21,7 @@ To install the package, use pip::
    mutations
    queries
    algorithms
+   TROMPA Schema <schema>
 
 
 Indices and tables
