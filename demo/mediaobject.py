@@ -232,19 +232,15 @@ def main(print_queries: bool, submit_queries: bool):
         creator="https://github.com/trompamusic/trompa-ce-client/tree/master/demo",
         # Who this data came from
         contributor="https://iwk.mdw.ac.at",
-        # The URL to a webpage that describes this MediaObject. CPDL Mediawiki has html pages for each file
-        # If there is no associated webpage for this object, you can set it to the same value as `url`
+        # URL on the web that matches contentUrl
         source="https://github.com/trompamusic-encodings/Beethoven_Op35_BreitkopfHaertel/blob/master/Beethoven_Op35.mei",
         # The <title> of `source`
         title="Beethoven_Op35_BreitkopfHaertel/Beethoven_Op35.mei at master · trompamusic-encodings/Beethoven_Op35_BreitkopfHaertel",
         # The mimetype of `source`
         format_="text/html",
         name="Beethoven_Op35.mei",
-        # Specifically for IMSLP, we set URL to the "permalink" of this file, which is
-        # its "reverse lookup" url, redirecting to the page of the composition with an anchor ref
-        # to the file itself. In the case of this example, this is
-        # https://imslp.org/wiki/Variations_and_Fugue_in_E-flat_major,_Op.35_(Beethoven,_Ludwig_van)#IMSLP52946
-        url="https://imslp.org/wiki/Special:ReverseLookup/52946",
+        # The page that describes the resource
+        url="https://github.com/trompamusic-encodings/Beethoven_WoO80_BreitkopfHaertel",
         contenturl="https://raw.githubusercontent.com/trompamusic-encodings/Beethoven_Op35_BreitkopfHaertel/master/Beethoven_Op35.mei"
     )
 
