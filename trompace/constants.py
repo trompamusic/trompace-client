@@ -14,3 +14,13 @@ class ActionStatusType(enum.Enum):
 
     def __str__(self):
         return self.name
+
+
+class ItemListOrderType(enum.Enum):
+    ascending = enum.auto()
+    descending = enum.auto()
+    unordered = enum.auto()
+    ordered = enum.auto()
+    
+    def __str__(self):
+        return self.name
