@@ -1,3 +1,4 @@
+from typing import Optional
 from trompace import (docstring_interpolate, filter_none_args,
                       StringConstant, check_required_args)
 from trompace.constants import ItemListOrderType
@@ -20,6 +21,7 @@ def mutation_create_itemlist(contributor: str, name: str = None,
                              ItemListOrderType.ItemListUnordered,
                              description: str = None):
     """Returns a mutation for creating an ItemList object.
+    (https://schema.org/ItemList)
 
     Arguments:
         {itemlist_args}
@@ -49,6 +51,7 @@ def mutation_update_itemlist(identifier: str, contributor: str,
                              ItemListOrderType.ItemListUnordered,
                              description: str = None):
     """Returns a mutation for updating an ItemList object.
+    (https://schema.org/ItemList)
 
     Arguments:
         identifier: The identifier of the ItemList in the CE to be updated.
@@ -76,6 +79,7 @@ def mutation_update_itemlist(identifier: str, contributor: str,
 def mutation_delete_itemlist(identifier: str):
     """Returns a mutation for deleting an ItemList object based
     on the identifier.
+    (https://schema.org/ItemList)
 
     Arguments:
         identifier: The unique identifier of the ItemList object.
@@ -99,8 +103,9 @@ LISTITEM_ARGS_DOCS = """name: The name of the ItemList object.
 
 @docstring_interpolate("listitem_args", LISTITEM_ARGS_DOCS)
 def mutation_create_listitem(contributor: str, name: str = None,
-                             description: str = None, position: int = 0):
+                             description: str = None, position: Optional[int] = None):
     """Returns a mutation for creating a ListItem object.
+    (https://schema.org/ListItem)
 
     Arguments:
         {listitem_args}
@@ -122,8 +127,9 @@ def mutation_create_listitem(contributor: str, name: str = None,
 
 @docstring_interpolate("listitem_args", LISTITEM_ARGS_DOCS)
 def mutation_update_listitem(identifier, contributor: str, name: str = None,
-                             description: str = None, position: int = 0):
+                             description: str = None, position: Optional[int] = None):
     """Returns a mutation for updating a ListItem object.
+    (https://schema.org/ListItem)
 
     Arguments:
         identifier: The identifier of the ListItem in the CE to be
@@ -149,6 +155,7 @@ def mutation_update_listitem(identifier, contributor: str, name: str = None,
 def mutation_delete_listitem(identifier: str):
     """Returns a mutation for deleting a ListItem object based on the
     identifier.
+    (https://schema.org/ListItem)
 
     Arguments:
         identifier: The unique identifier of the ListItem object.
@@ -163,6 +170,7 @@ def mutation_delete_listitem(identifier: str):
 def mutation_add_listitem_nextitem(listitem_id: str, nextitem_id: str):
     """Returns a mutation for adding a NextItem to a ListItem object
     based on the identifier.
+    (https://schema.org/nextItem)
 
     Arguments:
         listitem_id: The unique identifier of the ListItem object.
@@ -178,15 +186,16 @@ def mutation_add_listitem_nextitem(listitem_id: str, nextitem_id: str):
 
 
 def mutation_remove_listitem_nextitem(listitem_id: str, nextitem_id: str):
-    """Returns a mutation for removing a NextItem to a ListItem object
+    """Returns a mutation for removing a NextItem from a ListItem object
     based on the identifier.
+    (https://schema.org/nextItem)
 
     Arguments:
         listitem_id: The unique identifier of the ListItem object.
         nextitem_id: The unique identifier of the NextItem object.
 
     Returns:
-        The string for the mutation for removing a NextItem to a ListItem
+        The string for the mutation for removing a NextItem from a ListItem
     object based on the identifier.
     """
     check_required_args(listitem_id=listitem_id, nextitem_id=nextitem_id)
@@ -197,6 +206,7 @@ def mutation_remove_listitem_nextitem(listitem_id: str, nextitem_id: str):
 def mutation_add_listitem_item(listitem_id: str, item_id: str):
     """Returns a mutation for adding a Item to a ListItem object
     based on the identifier.
+    (https://schema.org/item)
 
     Arguments:
         listitem_id: The unique identifier of the ListItem object.
@@ -211,51 +221,54 @@ def mutation_add_listitem_item(listitem_id: str, item_id: str):
 
 
 def mutation_remove_listitem_item(listitem_id: str, item_id: str):
-    """Returns a mutation for removing a Item to a ListItem object
+    """Returns a mutation for removing a Item from a ListItem object
     based on the identifier.
+    (https://schema.org/item)
 
     Arguments:
         listitem_id: The unique identifier of the ListItem object.
         item_id: The unique identifier of the Item object.
 
     Returns:
-        The string for the mutation for removing a Item  to a ListItem
+        The string for the mutation for removing a Item from a ListItem
     object based on the identifier.
     """
     check_required_args(listitem_id=listitem_id, item_id=item_id)
     return format_link_mutation("RemoveListItemItem", listitem_id, item_id)
 
 
-def mutation_add_itemlist_itemlist_element(itemlist_id: str, listitem_id: str):
-    """Returns a mutation for adding an ListItem in an ItemList object based
+def mutation_add_itemlist_itemlist_element(itemlist_id: str, element_id: str):
+    """Returns a mutation for adding a ThingInterface in an ItemList object based
     on the identifier.
+    (https://schema.org/itemListElement)
 
     Arguments:
         itemlist_id: The unique identifier of the ItemList object.
-        listitem_id: The unique identifier of the ListItem object.
+        element_id: The unique identifier of the ThingInterface object.
 
     Returns:
-        The string for the mutation for adding an ListItem in an ItemList object
+        The string for the mutation for adding an ThingInterface in an ItemList object
         based on the identifier,
     """
-    check_required_args(itemlist_id=itemlist_id, listitem_id=listitem_id)
+    check_required_args(itemlist_id=itemlist_id, element_id=element_id)
     return format_link_mutation("MergeItemListItemListElement", itemlist_id,
-                                listitem_id)
+                                element_id)
 
 
 def mutation_remove_itemlist_itemlist_element(itemlist_id: str,
-                                              listitem_id: str):
-    """Returns a mutation for removing an ListItem in an ItemList object
+                                              element_id: str):
+    """Returns a mutation for removing a ThingInterface from an ItemList object
     based on the identifier.
+    (https://schema.org/itemListElement)
 
     Arguments:
         itemlist_id: The unique identifier of the ItemList object.
-        listitem_id: The unique identifier of the ListItem object.
+        element_id: The unique identifier of the ThingInterface object.
 
     Returns:
-        The string for the mutation for removing an ListItem from an ItemList
+        The string for the mutation for removing an ThingInterface from an ItemList
         object based on the identifier.
     """
-    check_required_args(itemlist_id=itemlist_id, listitem_id=listitem_id)
+    check_required_args(itemlist_id=itemlist_id, element_id=element_id)
     return format_link_mutation("RemoveItemListItemListElement", itemlist_id,
-                                listitem_id)
+                                element_id)
