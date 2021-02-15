@@ -35,6 +35,7 @@ class QueryException(Exception):
             error_str += "{}. {}\n".format(1, error['message'])
         super().__init__("Query error {} occurred".format(error_str))
 
-class InvalidItemListOrderTyException(Exception):
+
+class InvalidItemListOrderTypeException(Exception):
     def __init__(self, itemlistorder):
         super().__init__("ItemListOrderType {} is not a valid ItemListOrder. See trompace.constants.ItemListOrderType".format(itemlistorder))

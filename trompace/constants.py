@@ -17,10 +17,9 @@ class ActionStatusType(enum.Enum):
 
 
 class ItemListOrderType(enum.Enum):
-    ascending = enum.auto()
-    descending = enum.auto()
-    unordered = enum.auto()
-    ordered = enum.auto()
-    
+    ItemListOrderAscending = enum.auto()
+    ItemListOrderDescending = enum.auto()
+    ItemListUnordered = enum.auto()
+
     def __str__(self):
         return self.name

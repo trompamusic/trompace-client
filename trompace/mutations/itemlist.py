@@ -17,19 +17,18 @@ ITEMLIST_ARGS_DOCS = """name: The name of the ItemList object.
 @docstring_interpolate("itemlist_args", ITEMLIST_ARGS_DOCS)
 def mutation_create_itemlist(contributor: str, name: str = None,
                              itemlistorder: ItemListOrderType =
-                             ItemListOrderType.unordered,
+                             ItemListOrderType.ItemListUnordered,
                              description: str = None):
-    """Returns a mutation for creating an itemlist object.
+    """Returns a mutation for creating an ItemList object.
 
     Arguments:
         {itemlist_args}
 
     Returns:
-        The string for the mutation for creating the itemlist.
+        The string for the mutation for creating the ItemList.
     """
     if not isinstance(itemlistorder, ItemListOrderType):
-        raise trompace.exceptions.InvalidItemListOrderTyException(
-                                                            itemlistorder)
+        raise trompace.exceptions.InvalidItemListOrderTypeException(itemlistorder)
 
     args = {
         "contributor": contributor,
@@ -47,20 +46,19 @@ def mutation_create_itemlist(contributor: str, name: str = None,
 def mutation_update_itemlist(identifier: str, contributor: str,
                              name: str = None,
                              itemlistorder: ItemListOrderType =
-                             ItemListOrderType.unordered,
+                             ItemListOrderType.ItemListUnordered,
                              description: str = None):
-    """Returns a mutation for updating an itemlist object.
+    """Returns a mutation for updating an ItemList object.
 
     Arguments:
-        identifier: The identifier of the itemlist in the CE to be updated.
+        identifier: The identifier of the ItemList in the CE to be updated.
         {itemlist_args}
 
     Returns:
-        The string for the mutation for updating the itemlist.
+        The string for the mutation for updating the ItemList.
     """
     if not isinstance(itemlistorder, ItemListOrderType):
-        raise trompace.exceptions.InvalidItemListOrderTyException(
-                                                                itemlistorder)
+        raise trompace.exceptions.InvalidItemListOrderTypeException(itemlistorder)
 
     args = {
         "identifier": identifier,
@@ -76,14 +74,14 @@ def mutation_update_itemlist(identifier: str, contributor: str,
 
 
 def mutation_delete_itemlist(identifier: str):
-    """Returns a mutation for deleting an itemlist object based
+    """Returns a mutation for deleting an ItemList object based
     on the identifier.
 
     Arguments:
-        identifier: The unique identifier of the itemlist object.
+        identifier: The unique identifier of the ItemList object.
 
     Returns:
-        The string for the mutation for deleting the itemlist object
+        The string for the mutation for deleting the ItemList object
         based on the identifier.
     """
 
@@ -95,24 +93,26 @@ LISTITEM_ARGS_DOCS = """name: The name of the ItemList object.
         for contributing the ItemList to the web resource.
         This can be either a name or a base URL.
         description: The description of the ItemList object
+        position: the position of the ItemList
         """
 
 
 @docstring_interpolate("listitem_args", LISTITEM_ARGS_DOCS)
 def mutation_create_listitem(contributor: str, name: str = None,
-                             description: str = None):
-    """Returns a mutation for creating a listitem object.
+                             description: str = None, position: int = 0):
+    """Returns a mutation for creating a ListItem object.
 
     Arguments:
         {listitem_args}
 
     Returns:
-        The string for the mutation for creating the itemlist.
+        The string for the mutation for creating the ListItem.
     """
     args = {
         "contributor": contributor,
         "name": name,
         "description": description,
+        "position": position,
     }
 
     args = filter_none_args(args)
@@ -122,22 +122,23 @@ def mutation_create_listitem(contributor: str, name: str = None,
 
 @docstring_interpolate("listitem_args", LISTITEM_ARGS_DOCS)
 def mutation_update_listitem(identifier, contributor: str, name: str = None,
-                             description: str = None):
-    """Returns a mutation for updating a listitem_args object.
+                             description: str = None, position: int = 0):
+    """Returns a mutation for updating a ListItem object.
 
     Arguments:
-        identifier: The identifier of the listitem_args in the CE to be
+        identifier: The identifier of the ListItem in the CE to be
         updated.
         {listitem_args}
 
     Returns:
-        The string for the mutation for updating the listitem_args.
+        The string for the mutation for updating the ListItem.
     """
     args = {
         "identifier": identifier,
         "contributor": contributor,
         "name": name,
         "description": description,
+        "position": position,
     }
 
     args = filter_none_args(args)
@@ -146,52 +147,115 @@ def mutation_update_listitem(identifier, contributor: str, name: str = None,
 
 
 def mutation_delete_listitem(identifier: str):
-    """Returns a mutation for deleting a listitem object based on the
+    """Returns a mutation for deleting a ListItem object based on the
     identifier.
 
     Arguments:
-        identifier: The unique identifier of the listitem object.
+        identifier: The unique identifier of the ListItem object.
 
     Returns:
-        The string for the mutation for deleting the listitem object based
+        The string for the mutation for deleting the ListItem object based
         on the identifier.
     """
     return format_mutation("DeleteListItem", {"identifier": identifier})
 
 
-def mutation_add_itemlist_itemlist_element(identifier_1: str,
-                                           identifier_2: str):
-    """Returns a mutation for adding an item in an itemlist object based
-    on the identifier.
-
-    Arguments:
-        identifier_1: The unique identifier of the itemlist object.
-        identifier_2: The unique identifier of the listitem object.
-
-    Returns:
-        The string for the mutation for adding an item in an itemlist object
-        based on the identifier,
-    """
-    check_required_args(identifier_1=identifier_1, identifier_2=identifier_2)
-    return format_link_mutation("MergeItemListItemListElement", identifier_1,
-                                identifier_2)
-
-
-def mutation_remove_itemlist_itemlist_element(identifier_1: str,
-                                              identifier_2: str):
-    """Returns a mutation for removing an item in an itemlist object
+def mutation_add_listitem_nextitem(listitem_id: str, nextitem_id: str):
+    """Returns a mutation for adding a NextItem to a ListItem object
     based on the identifier.
 
     Arguments:
-        identifier_1: The unique identifier of the itemlist object.
-        identifier_2: The unique identifier of the listitem object.
+        listitem_id: The unique identifier of the ListItem object.
+        nextitem_id: The unique identifier of the NextItem object.
 
     Returns:
-        The string for the mutation for removing an item from an itemlist
+        The string for the mutation for adding a NextItem to a ListItem object
+    based on the identifier.
+    """
+    check_required_args(listitem_id=listitem_id, nextitem_id=nextitem_id)
+    return format_link_mutation("MergeListItemNextItem", listitem_id,
+                                nextitem_id)
+
+
+def mutation_remove_listitem_nextitem(listitem_id: str, nextitem_id: str):
+    """Returns a mutation for removing a NextItem to a ListItem object
+    based on the identifier.
+
+    Arguments:
+        listitem_id: The unique identifier of the ListItem object.
+        nextitem_id: The unique identifier of the NextItem object.
+
+    Returns:
+        The string for the mutation for removing a NextItem to a ListItem
+    object based on the identifier.
+    """
+    check_required_args(listitem_id=listitem_id, nextitem_id=nextitem_id)
+    return format_link_mutation("RemoveListItemNextItem", listitem_id,
+                                nextitem_id)
+
+
+def mutation_add_listitem_item(listitem_id: str, item_id: str):
+    """Returns a mutation for adding a Item to a ListItem object
+    based on the identifier.
+
+    Arguments:
+        listitem_id: The unique identifier of the ListItem object.
+        item_id: The unique identifier of the Item object.
+
+    Returns:
+        The string for the mutation for adding a Item to a ListItem object
+    based on the identifier.
+    """
+    check_required_args(listitem_id=listitem_id, item_id=item_id)
+    return format_link_mutation("MergeListItemItem", listitem_id, item_id)
+
+
+def mutation_remove_listitem_item(listitem_id: str, item_id: str):
+    """Returns a mutation for removing a Item to a ListItem object
+    based on the identifier.
+
+    Arguments:
+        listitem_id: The unique identifier of the ListItem object.
+        item_id: The unique identifier of the Item object.
+
+    Returns:
+        The string for the mutation for removing a Item  to a ListItem
+    object based on the identifier.
+    """
+    check_required_args(listitem_id=listitem_id, item_id=item_id)
+    return format_link_mutation("RemoveListItemItem", listitem_id, item_id)
+
+
+def mutation_add_itemlist_itemlist_element(itemlist_id: str, listitem_id: str):
+    """Returns a mutation for adding an ListItem in an ItemList object based
+    on the identifier.
+
+    Arguments:
+        itemlist_id: The unique identifier of the ItemList object.
+        listitem_id: The unique identifier of the ListItem object.
+
+    Returns:
+        The string for the mutation for adding an ListItem in an ItemList object
+        based on the identifier,
+    """
+    check_required_args(itemlist_id=itemlist_id, listitem_id=listitem_id)
+    return format_link_mutation("MergeItemListItemListElement", itemlist_id,
+                                listitem_id)
+
+
+def mutation_remove_itemlist_itemlist_element(itemlist_id: str,
+                                              listitem_id: str):
+    """Returns a mutation for removing an ListItem in an ItemList object
+    based on the identifier.
+
+    Arguments:
+        itemlist_id: The unique identifier of the ItemList object.
+        listitem_id: The unique identifier of the ListItem object.
+
+    Returns:
+        The string for the mutation for removing an ListItem from an ItemList
         object based on the identifier.
     """
-    check_required_args(identifier_1=identifier_1, identifier_2=identifier_2)
-    return format_link_mutation("RemoveItemListItemListElement", identifier_1,
-                                identifier_2)
-
-# AddListItemItem-> if you have a ListItem, it points to a Thing called 'item'
+    check_required_args(itemlist_id=itemlist_id, listitem_id=listitem_id)
+    return format_link_mutation("RemoveItemListItemListElement", itemlist_id,
+                                listitem_id)
