@@ -5,13 +5,19 @@ from typing import Dict, Any
 from trompace import make_parameters
 from trompace.mutations import MUTATION
 
+MUTATION_ALIAS_TEMPLATE = '''{mutationalias}: {mutationname}(
+{parameters}
+) {{
+identifier
+}}'''
+
 MUTATION_TEMPLATE = '''{mutationname}(
 {parameters}
 ) {{
 identifier
 }}'''
 
-LINK_MUTATION_TEMPLATE = '''{mutationname}(
+LINK_MUTATION_TEMPLATE = '''{mutationname}(MUTA
     from: {{identifier: "{identifier_1}"}}
     to: {{identifier: "{identifier_2}"}}
   ) {{
@@ -22,6 +28,47 @@ LINK_MUTATION_TEMPLATE = '''{mutationname}(
       identifier
     }}
   }}'''
+
+
+def format_sequence_mutation(mutations:list):
+    """Create a mutation sequence to send to the Contributor Environment.
+    Arguments:
+        mutations: a list of mutations [(mutationalias, mutationname, args),...]
+    Returns:
+        A formatted mutation sequence
+    """
+    formatted_mutations = []
+    for mutation in mutations:
+        mutationalias, mutationname, args = mutation
+        formatted_mutation = create_alias_mutation(mutationalias=mutationalias, mutationname=mutationname, args=args)
+        formatted_mutations.append(formatted_mutation)
+
+    return MUTATION.format(mutation="\n".join(formatted_mutations))
+
+
+def create_alias_mutation(mutationalias:str, mutationname: str, args: Dict[str, Any]):
+     """Create a mutation to send to the Contributor Environment.
+    Arguments:
+        mutationalias: the alias of the mutation to generate
+        mutationname: the name of the mutation to generate
+        args: a dictionary of field: value pairs to add to the mutation
+    Returns:
+        A mutation string
+    """
+    return MUTATION_ALIAS_TEMPLATE.format(mutationalias=mutationalias, mutationname=mutationname, parameters=make_parameters(**args))
+
+
+def format_alias_mutation(mutationalias:str, mutationname: str, args: Dict[str, Any]):
+     """Create a mutation to send to the Contributor Environment.
+    Arguments:
+        mutationalias: the alias of the mutation to generate
+        mutationname: the name of the mutation to generate
+        args: a dictionary of field: value pairs to add to the mutation
+    Returns:
+        A formatted mutation
+    """
+    formatted_mutation = MUTATION_ALIAS_TEMPLATE.format(mutationalias=mutationalias, mutationname=mutationname, parameters=make_parameters(**args))
+    return MUTATION.format(mutation=formatted_mutation)
 
 
 def format_mutation(mutationname: str, args: Dict[str, Any]):
