@@ -17,7 +17,7 @@ MUTATION_TEMPLATE = '''{mutationname}(
 identifier
 }}'''
 
-LINK_MUTATION_TEMPLATE = '''{mutationname}(MUTA
+LINK_MUTATION_TEMPLATE = '''{mutationname}(
     from: {{identifier: "{identifier_1}"}}
     to: {{identifier: "{identifier_2}"}}
   ) {{
@@ -30,7 +30,7 @@ LINK_MUTATION_TEMPLATE = '''{mutationname}(MUTA
   }}'''
 
 
-def format_sequence_mutation(mutations:list):
+def format_sequence_mutation(mutations: list):
     """Create a mutation sequence to send to the Contributor Environment.
     Arguments:
         mutations: a list of mutations [(mutationalias, mutationname, args),...]
@@ -46,8 +46,8 @@ def format_sequence_mutation(mutations:list):
     return MUTATION.format(mutation="\n".join(formatted_mutations))
 
 
-def create_alias_mutation(mutationalias:str, mutationname: str, args: Dict[str, Any]):
-     """Create a mutation to send to the Contributor Environment.
+def create_alias_mutation(mutationalias: str, mutationname: str, args: Dict[str, Any]):
+    """Create a mutation to send to the Contributor Environment.
     Arguments:
         mutationalias: the alias of the mutation to generate
         mutationname: the name of the mutation to generate
@@ -58,8 +58,8 @@ def create_alias_mutation(mutationalias:str, mutationname: str, args: Dict[str, 
     return MUTATION_ALIAS_TEMPLATE.format(mutationalias=mutationalias, mutationname=mutationname, parameters=make_parameters(**args))
 
 
-def format_alias_mutation(mutationalias:str, mutationname: str, args: Dict[str, Any]):
-     """Create a mutation to send to the Contributor Environment.
+def format_alias_mutation(mutationalias: str, mutationname: str, args: Dict[str, Any]):
+    """Create a mutation to send to the Contributor Environment.
     Arguments:
         mutationalias: the alias of the mutation to generate
         mutationname: the name of the mutation to generate
