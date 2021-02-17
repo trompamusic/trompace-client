@@ -92,12 +92,12 @@ def mutation_delete_itemlist(identifier: str):
     return format_mutation("DeleteItemList", {"identifier": identifier})
 
 
-LISTITEM_ARGS_DOCS = """name: The name of the ItemList object.
+LISTITEM_ARGS_DOCS = """name: The name of the ListItem object.
         contributor: A person, an organization, or a service responsible
-        for contributing the ItemList to the web resource.
+        for contributing the ListItem to the web resource.
         This can be either a name or a base URL.
-        description: The description of the ItemList object
-        position: the position of the ItemList
+        description: The description of the ListItem object
+        position: the position of the ListItem
         """
 
 
@@ -204,7 +204,7 @@ def mutation_remove_listitem_nextitem(listitem_id: str, nextitem_id: str):
 
 
 def mutation_add_listitem_item(listitem_id: str, item_id: str):
-    """Returns a mutation for adding a Item to a ListItem object
+    """Returns a mutation for adding an Item to a ListItem object
     based on the identifier.
     (https://schema.org/item)
 
