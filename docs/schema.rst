@@ -5,5 +5,3 @@ TROMPA Schema
    :maxdepth: 2
    :caption: TROMPA schema entities:
 
-   DigitalDocument <digitaldocument>
-   Person <person>

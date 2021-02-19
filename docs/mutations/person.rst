@@ -33,3 +33,8 @@ Relations
 ---------
 
 exactMatch: Use :meth:`trompace.mutations.person.mutation_person_add_exact_match_person`
+
+
+
+.. automodule:: trompace.mutations.person
+   :members:

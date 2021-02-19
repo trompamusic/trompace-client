@@ -18,7 +18,7 @@ For information about the TROMPA schema, see :ref:`schema:TROMPA Schema`
    :maxdepth: 2
    :caption: Contents:
 
-   mutations
+   mutations/index
    queries
    algorithms
    TROMPA Schema <schema>
