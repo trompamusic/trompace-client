@@ -64,7 +64,6 @@ class TrompaConfig:
             raise ValueError("Cannot find 'server.host' option")
         host = server.get("host")
         parsed = urlparse(host)
-        print(parsed)
         hostpath = parsed.netloc + parsed.path
         if not parsed.scheme and "secure" not in server:
             raise ValueError("No scheme set on ")
