@@ -1,5 +1,5 @@
 # Generate GraphQL queries for mutations pertaining to media object objects.
-from trompace import StringConstant, _Neo4jDate, filter_none_args, docstring_interpolate
+from trompace import StringConstant, _Neo4jDate, check_required_args, filter_none_args, docstring_interpolate
 from trompace.constants import SUPPORTED_LANGUAGES
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
 from trompace.mutations.templates import format_mutation, format_link_mutation
@@ -10,11 +10,11 @@ MEDIAOBJECT_ARGS_DOCS = """name: The name of the media object.
         creator: The person, organization or service who created the thing the web resource is about.
         contributor: A person, an organization, or a service responsible for contributing the media object to the web resource. This can be either a name or a base URL.
         format_: A MimeType of the format of the page describing the media object.
-        encodingFormat: A MimeType of the format of object encoded by the media object.
+        encodingformat: A MimeType of the format of object encoded by the media object.
         source: The URL of the web resource about this media object. If no such resource is available, use the
                 same value as contentUrl.
         subject: The subject of the media object.
-        contentUrl: The URL of the content encoded by the media object.
+        contenturl: The URL of the content encoded by the media object.
         url: 
         license: 
         language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
@@ -39,6 +39,7 @@ def mutation_create_media_object(*, title: str, contributor: str, creator: str, 
     Raises:
         UnsupportedLanguageException if the input language is not one of the supported languages.
     """
+    check_required_args(title=title, contributor=contributor, creator=creator, source=source, format_=format_)
     if language is not None and language not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
 
@@ -138,57 +139,97 @@ def mutation_delete_media_object(identifier: str):
     return format_mutation("DeleteMediaObject", {"identifier": identifier})
 
 
-def mutation_merge_media_object_work_example(media_object_identifier: str, work_identifier: str):
-    """Returns a mutation for creating merging a media object as an example of a work.
+def mutation_merge_mediaobject_example_of_work(mediaobject_identifier: str, work_identifier: str):
+    """Returns a mutation for indicating that a MediaObject is an example of a work
+    (https://schema.org/exampleOfWork).
 
     Arguments:
-        media_object_identifier: The unique identifier of the media object.
+        mediaobject_identifier: The unique identifier of the media object.
         work_identifier: The unique identifier of the work that the media object is an example of.
 
     Returns:
-        The string for the mutation for merging a media object as an example of the work.
+        A GraphQL mutation for MergeMediaObjectExampleOfWork.
     """
 
-    return format_link_mutation("MergeMediaObjectExampleOfWork", media_object_identifier, work_identifier)
+    return format_link_mutation("MergeMediaObjectExampleOfWork", mediaobject_identifier, work_identifier)
 
 
-def mutation_remove_media_object_work_example(media_object_identifier: str, work_identifier: str):
-    """Returns a mutation for creating removing a media object as an example of a work.
+def mutation_remove_mediaobject_example_of_work(mediaobject_identifier: str, work_identifier: str):
+    """Returns a mutation for removing that a MediaObject is an example of a work
+    (https://schema.org/exampleOfWork).
 
     Arguments:
-        media_object_identifier: The unique identifier of the media object.
+        mediaobject_identifier: The unique identifier of the media object.
         work_identifier: The unique identifier of the work that the media object is an example of.
 
     Returns:
-        The string for the mutation for removing a media object as an example of the work.
+        A GraphQL mutation for RemoveMediaObjectExampleOfWork.
     """
 
-    return format_link_mutation("RemoveMediaObjectExampleOfWork", media_object_identifier, work_identifier)
+    return format_link_mutation("RemoveMediaObjectExampleOfWork", mediaobject_identifier, work_identifier)
 
 
-def mutation_merge_media_object_encoding(media_object_identifier_1: str, media_object_identifier_2: str):
-    """Returns a mutation for creating merging a media object as an encoding of another media object.
+def mutation_merge_media_object_encoding(mediaobject_identifier: str, mediaobject_derivative_identifier: str):
+    """Returns a mutation for indicating that a derivative MediaObject *encodes* a primary MediaObject
+    (https://schema.org/encoding). For example a transcription of a score is an *encoding* of that score.
 
     Arguments:
-        media_object_identifier_1: The unique identifier of the media object that is encoding the other.
-        media_object_identifier_2: The unique identifier of the media object being encoded.
+        mediaobject_identifier: The unique identifier of the "main" MediaObject.
+        mediaobject_derivative_identifier: The unique identifier of the MediaObject which is the encoding.
 
     Returns:
-        The string for the mutation for merging a media object as an encoding of another media object.
+        A GraphQL mutation for MergeMediaObjectEncoding.
     """
 
-    return format_link_mutation("MergeMediaObjectEncoding", media_object_identifier_1, media_object_identifier_2)
+    return format_link_mutation("MergeMediaObjectEncoding", mediaobject_identifier, mediaobject_derivative_identifier)
 
 
-def mutation_remove_media_object_encoding(media_object_identifier_1: str, media_object_identifier_2: str):
-    """Returns a mutation for creating removing a media object as an encoding of another media object.
+def mutation_remove_media_object_encoding(mediaobject_identifier: str, mediaobject_derivative_identifier: str):
+    """Returns a mutation for removing that a derivative MediaObject *encodes* a primary MediaObject
+    (https://schema.org/encoding).
 
     Arguments:
-        media_object_identifier_1: The unique identifier of the media object that is encoding the other.
-        media_object_identifier_2: The unique identifier of the media object being encoded.
+        mediaobject_identifier: The unique identifier of the "main" MediaObject.
+        mediaobject_derivative_identifier: The unique identifier of the MediaObject which is the encoding.
 
     Returns:
-        The string for the mutation for removing a media object as an encoding of another media object.
+        A GraphQL mutation for RemoveMediaObjectEncoding.
     """
 
-    return format_link_mutation("RemoveMediaObjectEncoding", media_object_identifier_1, media_object_identifier_2)
+    return format_link_mutation("RemoveMediaObjectEncoding", mediaobject_identifier, mediaobject_derivative_identifier)
+
+
+def mutation_merge_media_object_wasderivedfrom(mediaobject_derivative_identifier: str,
+                                               mediaobject_source_identifier: str):
+    """Returns a mutation for indicating that a MediaObject *was derived from* a primary MediaObject
+    (http://www.w3.org/ns/prov#wasDerivedFrom). For example a PDF generated from a MusicXML source file
+    was derived from that source file.
+
+    Arguments:
+        mediaobject_derivative_identifier: The unique identifier of the MediaObject which is the derivative.
+        mediaobject_source_identifier: The unique identifier of the "source" MediaObject.
+
+    Returns:
+        A GraphQL mutation for MergeMediaObjectWasDerivedFrom.
+    """
+
+    return format_link_mutation("MergeMediaObjectWasDerivedFrom",
+                                mediaobject_derivative_identifier,
+                                mediaobject_source_identifier)
+
+
+def mutation_remove_media_object_wasderivedfrom(mediaobject_derivative_identifier: str, mediaobject_source_identifier: str):
+    """Returns a mutation for removing that a MediaObject *was derived from* a primary MediaObject
+    (http://www.w3.org/ns/prov#wasDerivedFrom).
+
+    Arguments:
+        mediaobject_derivative_identifier: The unique identifier of the MediaObject which is the derivative.
+        mediaobject_source_identifier: The unique identifier of the "source" MediaObject.
+
+    Returns:
+        A GraphQL mutation for RemoveMediaObjectWasDerivedFrom.
+    """
+
+    return format_link_mutation("RemoveMediaObjectWasDerivedFrom",
+                                mediaobject_derivative_identifier,
+                                mediaobject_source_identifier)

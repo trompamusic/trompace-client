@@ -1,5 +1,5 @@
 # Generate GraphQL queries for mutations pertaining to digital document objects.
-from trompace import StringConstant, docstring_interpolate, filter_none_args
+from trompace import StringConstant, check_required_args, docstring_interpolate, filter_none_args
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
 from .templates import format_mutation
 from ..constants import SUPPORTED_LANGUAGES
@@ -31,6 +31,7 @@ def mutation_create_digitaldocument(*, title: str, contributor: str, creator: st
         UnsupportedLanguageException if the input language is not one of the supported languages.
         NotAMimeTypeException: if ``format_`` is not a valid mimetype.
     """
+    check_required_args(title=title, contributor=contributor, creator=creator, source=source, format_=format_)
     if language not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
 

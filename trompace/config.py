@@ -4,6 +4,7 @@ import logging
 import os
 
 from typing import List, Dict
+from urllib.parse import urlparse
 
 import requests
 
@@ -16,6 +17,8 @@ class TrompaConfig:
     host: str = None
     websocket_host: str = None
 
+    # Is authentication required to write to the CE?
+    server_auth_required: bool = True
     # JWT identifier
     jwt_id: str = None
     # JWT key
@@ -57,23 +60,35 @@ class TrompaConfig:
 
     def _set_server(self):
         server = self.config["server"]
-        if "host" not in server or "secure" not in server:
-            raise ValueError("Cannot find 'server.host' or 'server.secure' option")
+        if "host" not in server:
+            raise ValueError("Cannot find 'server.host' option")
         host = server.get("host")
-        if server.getboolean("secure"):
-            self.host = "https://{}".format(host)
-            self.websocket_host = "wss://{}/graphql".format(host)
-            self.secure = True
+        parsed = urlparse(host)
+        print(parsed)
+        hostpath = parsed.netloc + parsed.path
+        if not parsed.scheme and "secure" not in server:
+            raise ValueError("No scheme set on ")
+        elif not parsed.scheme:
+            scheme = "https" if server.getboolean("secure") else "http"
+            trompace.logger.debug("Using 'server.secure' to set http/https flag but this is deprecated")
+            trompace.logger.debug("Use a fully qualified URL in 'server.host'")
         else:
-            self.host = "http://{}".format(host)
-            self.websocket_host = "ws://{}/graphql".format(host)
-            self.secure = False
+            scheme = parsed.scheme
+        self.host = f"{scheme}://{hostpath}"
+        wss_scheme = "wss" if scheme == "https" else "ws"
+        wss_path = os.path.join(hostpath, "graphql")
+        self.websocket_host = f"{wss_scheme}://{wss_path}"
 
     def _set_jwt(self):
         server = self.config["server"]
         host = server.get("host")
 
         auth = self.config["auth"]
+        self.server_auth_required = auth.getboolean("required", True)
+        if not self.server_auth_required:
+            trompace.logger.debug("Auth not required, skipping setup")
+            return
+
         if "id" not in auth or "key" not in auth or "scopes" not in auth:
             raise ValueError("Cannot find 'auth.id' or 'auth.key' or 'auth.scopes' option")
 
@@ -88,7 +103,7 @@ class TrompaConfig:
         else:
             cache_dir = auth.get("token_cache_dir")
 
-        jwt_cache_file = f".trompace-client-jwt-token-cache-{host}"
+        jwt_cache_file = f".trompace-client-jwt-token-cache-{host.replace('/', '-')}"
         self.jwt_key_cache = os.path.join(cache_dir, jwt_cache_file)
 
         if os.path.exists(self.jwt_key_cache):
@@ -99,7 +114,7 @@ class TrompaConfig:
 
     def _set_jwt_token(self, token):
         try:
-            decoded = jwt.decode(token, verify=False)
+            decoded = jwt.decode(token, algorithms=["HS256"], options={"verify_signature": False})
             self.jwt_token_encoded = token
             self.jwt_token_decoded = decoded
         except jwt.DecodeError:
@@ -122,7 +137,7 @@ class TrompaConfig:
             self._set_jwt_token(token)
             self._save_jwt_token(token)
         elif self.jwt_token_encoded:
-            token = jwt.decode(self.jwt_token_encoded, verify=False)
+            token = jwt.decode(self.jwt_token_encoded, algorithms=["HS256"], options={"verify_signature": False})
             now = datetime.datetime.now(datetime.timezone.utc).timestamp()
             expired = token.get('exp', 0) < now
             # check if it's expiring

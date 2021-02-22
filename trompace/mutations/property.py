@@ -5,7 +5,7 @@ from trompace import StringConstant
 from .templates import mutation_create, mutation_link, format_link_mutation, format_mutation
 
 
-def mutation_create_property(title: str, name: str, description: str, rangeIncludes: List[StringConstant]):
+def mutation_create_property(title: str, name: str, rangeIncludes: List[StringConstant], description: str = None):
     """Returns a mutation for creating a property
     Arguments:
         title: The title of the property
@@ -16,7 +16,6 @@ def mutation_create_property(title: str, name: str, description: str, rangeInclu
         The string for the mutation for creating the property.
 
     """
-    # import pdb;pdb.set_trace()
     args = {
         "title": title,
         "name": name,
@@ -25,9 +24,9 @@ def mutation_create_property(title: str, name: str, description: str, rangeInclu
     }
     return format_mutation("CreateProperty", args)
 
-def mutation_create_propertyvaluespecification(name: str, description: str, defaultValue: str, valueMaxLength: int,
+def mutation_create_propertyvaluespecification(name: str, defaultValue: str, valueMaxLength: int,
                                                valueMinLength: int, multipleValues: bool, valueName: str,
-                                               valuePattern: str, valueRequired: bool):
+                                               valuePattern: str, valueRequired: bool, description: str = None):
     """Returns a mutation for creating a property value specification
     Each PropertyValueSpecification defines a scalar input parameter that the Component user should be prompted with when preparing
     the request for an algorithm process job. There are numerous properties that can be used to set requirements, type and limits for a scalar parameter.

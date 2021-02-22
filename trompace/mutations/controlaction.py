@@ -35,8 +35,9 @@ UPDATE_CONTROLACTION = """UpdateControlAction(
     }}"""
 
 
-def mutation_create_controlaction(name: str, description: str,
-                                  actionstatus: ActionStatusType = ActionStatusType.PotentialActionStatus):
+def mutation_create_controlaction(name: str,
+                                  actionstatus: ActionStatusType = ActionStatusType.PotentialActionStatus,
+                                  description: str = None):
     """Returns a mutation for creating a ControlAction.
     If an action status is not set, defaults to a PotentialActionStatus
     Arguments:

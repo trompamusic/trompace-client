@@ -2,7 +2,7 @@ import datetime
 
 import pytz
 
-from trompace import filter_none_args
+from trompace import check_required_args, filter_none_args
 from trompace.mutations.templates import format_mutation
 
 
@@ -21,6 +21,7 @@ def create_rating(*, creator: str, ratingvalue: int, bestrating: int, worstratin
     Returns:
         A GraphQL Mutation to create a Rating in the Trompa CE
     """
+    check_required_args(creator=creator, ratingvalue=ratingvalue, bestrating=bestrating)
     utcnow = datetime.datetime.now(pytz.UTC)
 
     params = {"creator": creator,

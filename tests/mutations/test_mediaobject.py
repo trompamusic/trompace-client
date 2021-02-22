@@ -1,4 +1,3 @@
-# Tests for mutations pertaining to music composition objects.
 import os
 
 import pytest
@@ -50,17 +49,17 @@ class TestMediaObject(CeTestCase):
         self.assert_queries_equal(created_delete, expected)
 
     def test_add_broad_match(self):
-        expected = self.read_file(os.path.join(self.data_dir, "merge_work_example.txt"))
+        expected = self.read_file(os.path.join(self.data_dir, "merge_exampleofwork.txt"))
 
-        created_match = mediaobject.mutation_merge_media_object_work_example(
+        created_match = mediaobject.mutation_merge_mediaobject_example_of_work(
             "ff562d2e-2265-4f61-b340-561c92e797e9",
             "59ce8093-5e0e-4d59-bfa6-805edb11e396")
         self.assert_queries_equal(created_match, expected)
 
     def test_remove_broad_match(self):
-        expected = self.read_file(os.path.join(self.data_dir, "remove_work_example.txt"))
+        expected = self.read_file(os.path.join(self.data_dir, "remove_exampleofwork.txt"))
 
-        created_match = mediaobject.mutation_remove_media_object_work_example(
+        created_match = mediaobject.mutation_remove_mediaobject_example_of_work(
             "ff562d2e-2265-4f61-b340-561c92e797e9",
             "59ce8093-5e0e-4d59-bfa6-805edb11e396")
         self.assert_queries_equal(created_match, expected)

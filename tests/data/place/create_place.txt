@@ -1,0 +1,13 @@
+mutation {
+  CreatePlace(
+title: "Place title"
+        contributor: "https://placedatabase.com"
+        creator: "https://upf.edu"
+        source: "https://placedatabase.com/place"
+        format: "text/html"
+        name: "Place title"
+        language: en
+) {
+identifier
+}
+}

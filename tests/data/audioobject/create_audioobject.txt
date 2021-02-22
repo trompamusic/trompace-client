@@ -1,0 +1,19 @@
+mutation {
+  CreateAudioObject(
+title: "Rossinyol - webpage"
+        contributor: "www.upf.edu"
+        creator: "trompamusic.eu"
+        source: "https://www.cpdl.org/wiki/index.php/Rossinyol"
+        format: "text/html"
+        name: "Rossinyol"
+        description: "Traditional choir piece"
+        encodingFormat: "audio/mpeg"
+        embedUrl: "https://example.com/embed/rossinyol"
+        contentUrl: "https://example.com/audio/rossinyol.mp3"
+        inLanguage: "ca"
+        date: { year: 1972 }
+        language: en
+) {
+identifier
+}
+}
