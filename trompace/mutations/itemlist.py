@@ -127,7 +127,7 @@ def mutation_create_listitem(contributor: str, name: str = None,
 
 
 @docstring_interpolate("listitem_args", LISTITEM_ARGS_DOCS)
-def mutation_update_listitem(identifier, contributor: str, name: str = None,
+def mutation_update_listitem(identifier: str, contributor: str = None, name: str = None,
                              description: str = None, position: Optional[int] = None):
     """Returns a mutation for updating a ListItem object.
     (https://schema.org/ListItem)

@@ -5,7 +5,7 @@ from trompace.config import config
 from trompace.connection import submit_query
 from trompace.mutations import itemlist as mutations_itemlist
 from trompace.constants import ItemListOrderType
-from trompace.queries.itemlist import query_listitems
+from trompace.queries.itemlist import query_listitems, query_itemlist
 from trompace.exceptions import QueryException, IDNotFoundException
 
 
@@ -143,6 +143,18 @@ def merge_listitem_item_nodes(listitem_id: str, item_id: str):
         raise QueryException(resp['errors'])
 
 
+def update_listitem_position(listitem_id: str, position: int):
+    """
+    """
+    mutation = mutations_itemlist.mutation_update_listitem(identifier=listitem_id,
+                                                           position=position)
+    resp = submit_query(mutation)
+    result = resp.get("data", {}).get("UpdateListItem")
+
+    if not result:
+        raise QueryException(resp['errors'])
+
+
 def check_item_nodes(item_ids: list):
     """ Check if Items already exist in the CE
 
@@ -162,6 +174,24 @@ def check_item_nodes(item_ids: list):
         not_found = set(item_ids) - set([item['identifier'] for item in result])
 
     return not_found
+
+
+def check_itemlist_node(itemlist_id: str):
+    """ Check if ItemList already exists in the CE
+
+    Arguments:
+        listitem_id: The unique identifiers of the ItemList objects
+    Return:
+        True if ListItem object exists
+    """
+    query = query_itemlist(identifier=itemlist_id)
+    resp = submit_query(query)
+    result = resp.get("data", {}).get("ItemList")
+
+    if not result:
+        raise QueryException(resp['errors'])
+    else:
+        return result
 
 
 LISTITEM_SEQ_ARGS_DOCS = """listitems: the ListItems objects to create
@@ -311,6 +341,100 @@ def create_itemlist(contributor: str, name: str, description: str,
 
     merge_sequence_listitem_nextitem_nodes(listitem_ids=listitems_ids)
 
-    if node_ids:
+    if ids_mode:
         merge_sequence_listitem_item_nodes(listitem_ids=listitems_ids,
                                            item_ids=listitems)
+
+
+MAININSERT_ARGS_DOCS = """contributor: A person, an organization, or a service
+        responsible for contributing the ListItem to the web resource.
+        This can be either a name or a base URL.
+        name: The name of the ListItem object.
+        description: The description of the ListItem object
+        itemlist_id: The identifier of the ItemList
+        ids_mode: True if the ListItem has an Item associated by identifier
+        append: True if ListItem is appended at the bottom of the ItemList
+        position: the position of the ListItem in the ItemList
+        """
+
+
+@docstring_interpolate("maininsert_args", MAININSERT_ARGS_DOCS)
+def insert_listitem_itemlist(contributor: str, name: str, description: str,
+                             listitem: str, itemlist_id: str, ids_mode: bool,
+                             append: bool, position: Optional[int] = None):
+    """ Main function to insert a ListItem in a ItemList object by appending
+    it at the bottom, or by inserting it at a specific position.
+
+    Arguments:
+        {maincreate_args}
+    """
+    if append and isinstance(position, int):
+        raise ValueError("cannot select both append and position arguments")
+
+    itemlist_obj = check_itemlist_node(itemlist_id=itemlist_id)
+    if not itemlist_obj:
+        raise IDNotFoundException(itemlist_id)
+
+    itemlist_obj = itemlist_obj[0]
+    itemlist_id = itemlist_obj["identifier"]
+    itemlist_elements = itemlist_obj["itemListElement"]
+
+    if ids_mode:
+        description = None
+    else:
+        description = listitem
+
+    if append:
+        position = len(itemlist_elements)
+        lastitem_id = itemlist_elements[0]["identifier"]
+
+        listitem_id = create_listitem_node(contributor=contributor,
+                                           name=name,
+                                           description=description,
+                                           position=position)
+
+        merge_itemlist_itemlistelement_nodes(itemlist_id=itemlist_id,
+                                             element_id=listitem_id)
+
+        merge_listitem_nextitem_nodes(listitem_id=lastitem_id,
+                                      nextitem_id=listitem_id)
+
+        if ids_mode:
+            merge_listitem_item_nodes(listitem_id=listitem_id, item_id=listitem)
+
+    elif isinstance(position, int):
+        if position > len(itemlist_elements):
+            raise ValueError("position selected is greater than the "
+                             "length of the list. Use append method.")
+
+        # Create
+        listitem_id = create_listitem_node(contributor=contributor,
+                                           name=name,
+                                           description=description,
+                                           position=position)
+
+        merge_itemlist_itemlistelement_nodes(itemlist_id=itemlist_id,
+                                             element_id=listitem_id)
+        if ids_mode:
+            merge_listitem_item_nodes(listitem_id=listitem_id, item_id=listitem)
+
+        # Update
+        itemlist_elements = sorted(itemlist_elements, key=lambda k: k['position'])
+
+        if position > 0:
+            merge_listitem_nextitem_nodes(listitem_id=itemlist_elements[position-1]["identifier"],
+                                          nextitem_id=listitem_id)
+
+        merge_listitem_nextitem_nodes(listitem_id=listitem_id,
+                                      nextitem_id=itemlist_elements[position]["identifier"])
+
+        k = position
+        while k < len(itemlist_elements):
+            update_listitem_position(itemlist_elements[k]["identifier"], k+1)
+            k += 1
+
+        k = position
+        while k+1 < len(itemlist_elements):
+            merge_listitem_nextitem_nodes(listitem_id=itemlist_elements[k]["identifier"],
+                                          nextitem_id=itemlist_elements[k+1]["identifier"])
+            k += 1
