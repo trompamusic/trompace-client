@@ -2,7 +2,8 @@ from typing import Optional
 from trompace import (docstring_interpolate, filter_none_args,
                       StringConstant, check_required_args)
 from trompace.constants import ItemListOrderType
-from trompace.mutations.templates import format_mutation, format_link_mutation
+from trompace.mutations.templates import (format_mutation, format_link_mutation,
+                                          format_sequence_mutation, format_sequence_link_mutation)
 import trompace.exceptions
 
 ITEMLIST_ARGS_DOCS = """name: The name of the ItemList object.
@@ -272,3 +273,121 @@ def mutation_remove_itemlist_itemlist_element(itemlist_id: str,
     check_required_args(itemlist_id=itemlist_id, element_id=element_id)
     return format_link_mutation("RemoveItemListItemListElement", itemlist_id,
                                 element_id)
+
+
+LISTITEM_SEQ_ARGS_DOCS = """listitems: the ListItems objects to create
+        ids_mode: the type of Items to create (from ID or from string value)
+        contributor: A person, an organization, or a service
+        responsible for contributing the ListItem to the web resource.
+        This can be either a name or a base URL.
+        name: The name of the ListItem object.
+        """
+
+
+@docstring_interpolate("listitem_args", LISTITEM_SEQ_ARGS_DOCS)
+def mutation_sequence_create_listitem(listitems: list, contributor: str,
+                                      name: str = None, description: list = None):
+    """Returns a mutation for creating a sequence of ListItem objects
+    (https://schema.org/itemListElement)
+
+    Arguments:
+        {listitem_args}
+
+    Returns:
+        The string for the mutation for creating a sequence of ListItem objects
+    """
+    mutation_list = []
+
+    mutationname = "CreateListItem"
+    for pos, listitem in enumerate(listitems):
+        args = {
+            "contributor": contributor,
+            "name": name,
+            "description": description[pos],
+            "position": pos,
+        }
+        mutationalias = "ListItemAlias{}".format(pos)
+        mutation_list.append((mutationalias, mutationname, args))
+
+    return format_sequence_mutation(mutations=mutation_list)
+
+
+def mutation_sequence_add_itemlist_itemlist_element(itemlist_id: str,
+                                                    element_ids: list):
+    """Returns a mutation for adding a sequence of ThingInterface in an
+    ItemList object based on the identifiers.
+    (https://schema.org/itemListElement)
+
+    Arguments:
+        itemlist_id: The unique identifier of the ItemList object.
+        element_id: The list of unique identifiers of the ThingInterface objects.
+
+    Returns:
+        The string for the mutation for adding a sequence of ThingInterface in an
+        ItemList object based on the identifiers.
+    """
+    check_required_args(itemlist_id=itemlist_id, element_ids=element_ids)
+
+    mutation_list = []
+
+    mutationname = "MergeItemListItemListElement"
+    for pos, element_id in enumerate(element_ids):
+        args = [itemlist_id, element_id]
+        mutationalias = "MergeItemListItemListElementAlias{}".format(pos)
+        mutation_list.append((mutationalias, mutationname, args))
+
+    return format_sequence_link_mutation(mutations=mutation_list)
+
+
+def mutation_sequence_add_listitem_item(listitem_ids: list,
+                                        item_ids: list):
+    """Returns a mutation for adding a sequence of ThingInterface in an
+    ListItem objects based on the identifiers.
+    (https://schema.org/itemListElement)
+
+    Arguments:
+        itemlist_ids: The list of unique identifiers of the ListItem objects.
+        element_ids: The list of unique identifiers of the ThingInterface objects.
+
+    Returns:
+        The string for the mutation for adding a sequence of ThingInterface in an
+    ListItem objects based on the identifiers.
+    """
+    check_required_args(listitem_ids=listitem_ids, item_ids=item_ids)
+
+    mutation_list = []
+
+    mutationname = "MergeListItemItem"
+    for pos, _ in enumerate(listitem_ids):
+        args = [listitem_ids[pos], item_ids[pos]]
+        mutationalias = "MergeListItemItemAlias{}".format(pos)
+        mutation_list.append((mutationalias, mutationname, args))
+
+    return format_sequence_link_mutation(mutations=mutation_list)
+
+
+def mutation_sequence_add_listitem_nextitem(listitem_ids: list):
+    """Returns a mutation for adding a sequence of NextItem to an
+    ListItem objects based on the identifiers.
+    (https://schema.org/itemListElement)
+
+    Arguments:
+        listitem_ids: The list of unique identifier of the ListItems objects.
+
+    Returns:
+        The string for the mutation for adding a sequence of NextItem to an
+    ListItem objects based on the identifiers.
+    """
+    check_required_args(listitem_ids=listitem_ids)
+
+    mutation_list = []
+
+    mutationname = "MergeListItemNextItem"
+    pos = 0
+    while pos+1 < len(listitem_ids):
+        args = [listitem_ids[pos], listitem_ids[pos+1]]
+        mutationalias = "MergeListItemNextItemAlias{}".format(pos)
+        mutation_list.append((mutationalias, mutationname, args))
+        pos += 1
+
+    return format_sequence_link_mutation(mutations=mutation_list)
