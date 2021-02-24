@@ -140,3 +140,60 @@ def mutation_delete_audio_object(identifier: str):
     """
 
     return format_mutation("DeleteAudioObject", {"identifier": identifier})
+
+
+def mutation_remove_audio_object_work_example(audio_object_identifier: str, work_identifier: str):
+    """Returns a mutation for creating removing a audio object as an example of a work.
+
+    Arguments:
+        audio_object_identifier: The unique identifier of the audio object.
+        work_identifier: The unique identifier of the work that the audio object is an example of.
+
+    Returns:
+        The string for the mutation for removing a audio object as an example of the work.
+    """
+
+    return format_link_mutation("RemoveAudioObjectExampleOfWork", audio_object_identifier, work_identifier)
+
+
+def mutation_merge_audio_object_encoding(audio_object_identifier_1: str, audio_object_identifier_2: str):
+    """Returns a mutation for creating merging a audio object as an encoding of another audio object.
+
+    Arguments:
+        audio_object_identifier_1: The unique identifier of the audio object that is encoding the other.
+        audio_object_identifier_2: The unique identifier of the audio object being encoded.
+
+    Returns:
+        The string for the mutation for merging a audio object as an encoding of another audio object.
+    """
+
+    return format_link_mutation("MergeAudioObjectEncoding", audio_object_identifier_1, audio_object_identifier_2)
+
+
+def mutation_remove_audio_object_encoding(audio_object_identifier_1: str, audio_object_identifier_2: str):
+    """Returns a mutation for creating removing a audio object as an encoding of another audio object.
+
+    Arguments:
+        audio_object_identifier_1: The unique identifier of the audio object that is encoding the other.
+        audio_object_identifier_2: The unique identifier of the audio object being encoded.
+
+    Returns:
+        The string for the mutation for removing a audio object as an encoding of another audio object.
+    """
+
+    return format_link_mutation("RemoveAudioObjectEncoding", audio_object_identifier_1, audio_object_identifier_2)
+
+
+# link AudioObject to Work (step 5)
+def mutation_merge_audio_object_work_example(audio_object_identifier: str, work_identifier: str):
+    """Returns a mutation for creating merging a audio object as an example of a work.
+
+    Arguments:
+        audio_object_identifier: The unique identifier of the audio object.
+        work_identifier: The unique identifier of the work that the audio object is an example of.
+
+    Returns:
+        The string for the mutation for merging a audio object as an example of the work.
+    """
+
+    return format_link_mutation("MergeAudioObjectExampleOfWork", audio_object_identifier, work_identifier)
