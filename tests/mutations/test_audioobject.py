@@ -16,7 +16,7 @@ class TestAudioObject(CeTestCase):
     def test_create(self):
         expected = self.read_file(os.path.join(self.data_dir, "create_audioobject.txt"))
 
-        created_audioobject = audioobject.mutation_create_audio_object(
+        created_audioobject = audioobject.mutation_create_audioobject(
             title="Rossinyol - webpage", name="Rossinyol", description="Traditional choir piece",
             date="1972", creator="trompamusic.eu",
             contributor="www.upf.edu", format_="text/html", encodingformat="audio/mpeg",
