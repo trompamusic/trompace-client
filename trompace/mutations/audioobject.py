@@ -23,18 +23,18 @@ AUDIOOBJECT_ARGS_DOCS = """name: The name of the audio object.
 
 
 @docstring_interpolate("audioobject_args", AUDIOOBJECT_ARGS_DOCS)
-def mutation_create_audio_object(*, title: str, contributor: str, creator: str, source: str, format_: str,
-                                 name: str = None, description: str = None, date: str = None,
-                                 encodingformat: str = None, embedurl: str = None, url: str = None,
-                                 contenturl: str = None, language: str = None, inlanguage: str = None,
-                                 license: str = None, subject: str = None):
-    """Returns a mutation for creating a audo object object.
+def mutation_create_audioobject(*, title: str, contributor: str, creator: str, source: str, format_: str,
+                                name: str = None, description: str = None, date: str = None,
+                                encodingformat: str = None, embedurl: str = None, url: str = None,
+                                contenturl: str = None, language: str = None, inlanguage: str = None,
+                                license: str = None, subject: str = None):
+    """Returns a mutation for creating a AudioObject.
 
     Arguments:
         {audioobject_args}
 
     Returns:
-        The string for the mutation for creating the audio object.
+        The string for the mutation for creating the AudioObject.
 
     Raises:
         UnsupportedLanguageException if the input language is not one of the supported languages.
@@ -79,18 +79,18 @@ def mutation_create_audio_object(*, title: str, contributor: str, creator: str, 
 
 
 @docstring_interpolate("audioobject_args", AUDIOOBJECT_ARGS_DOCS)
-def mutation_update_audio_object(identifier: str, *, name: str = None, title: str = None, description: str = None,
-                                 date: str = None, creator: str = None, contributor: str = None,
-                                 format_: str = None, encodingformat: str = None, source: str = None, license: str = None,
-                                 subject: str = None, contenturl: str = None, language: str = None, inlanguage: str = None):
-    """Returns a mutation for updating a audio object object.
+def mutation_update_audioobject(identifier: str, *, name: str = None, title: str = None, description: str = None,
+                                date: str = None, creator: str = None, contributor: str = None,
+                                format_: str = None, encodingformat: str = None, source: str = None, license: str = None,
+                                subject: str = None, contenturl: str = None, language: str = None, inlanguage: str = None):
+    """Returns a mutation for updating a AudioObject.
 
     Arguments:
-        identifier: The identifier of the audio object in the CE to be updated.
+        identifier: The identifier of the AudioObject in the CE to be updated.
         {audioobject_args}
 
     Returns:
-        The string for the mutation for updating the audio object.
+        The string for the mutation for updating the AudioObject.
 
     Raises:
         Assertion error if the input language or inlanguage is not one of the supported languages.
@@ -129,14 +129,73 @@ def mutation_update_audio_object(identifier: str, *, name: str = None, title: st
     return format_mutation("UpdateAudioObject", args)
 
 
-def mutation_delete_audio_object(identifier: str):
-    """Returns a mutation for deleting a audio object object based on the identifier.
+def mutation_delete_audioobject(identifier: str):
+    """Returns a mutation for deleting a AudioObject based on the identifier.
 
     Arguments:
-        identifier: The unique identifier of the audio object object.
+        identifier: The unique identifier of the AudioObject.
 
     Returns:
-        The string for the mutation for deleting the audio object object based on the identifier.
+        The string for the mutation for deleting the AudioObject based on the identifier.
     """
 
     return format_mutation("DeleteAudioObject", {"identifier": identifier})
+
+
+def mutation_merge_audioobject_encoding(audioobject_identifier: str, audiobject_derivative_identifier: str):
+    """Returns a mutation for indicating that a derivative AudioObject *encodes* a primary AudioObject
+    (https://schema.org/encoding). For example a transcription of a score is an *encoding* of that score.
+
+    Arguments:
+        audiobject_identifier: The unique identifier of the "main" AudioObject.
+        audiobject_derivative_identifier: The unique identifier of the AudioObject which is the encoding.
+
+    Returns:
+        A GraphQL mutation for MergeAudioObjectEncoding.
+    """
+
+    return format_link_mutation("MergeAudioObjectEncoding", audioobject_identifier, audiobject_derivative_identifier)
+
+
+def mutation_remove_audioobject_encoding(audioobject_identifier: str, audiobject_derivative_identifier: str):
+    """Returns a mutation for removing that a derivative AudioObject *encodes* a primary AudioObject
+    (https://schema.org/encoding). For example a transcription of a score is an *encoding* of that score.
+
+    Arguments:
+        audiobject_identifier: The unique identifier of the "main" AudioObject.
+        audiobject_derivative_identifier: The unique identifier of the AudioObject which is the encoding.
+
+    Returns:
+        A GraphQL mutation for RemoveAudioObjectEncoding.
+    """
+    return format_link_mutation("RemoveAudioObjectEncoding", audioobject_identifier, audiobject_derivative_identifier)
+
+
+def mutation_merge_audioobject_exampleofwork(audioobject_identifier: str, work_identifier: str):
+    """Returns a mutation for indicating that a AudioObject is an example of a work
+    (https://schema.org/exampleOfWork).
+
+    Arguments:
+        audioobject_identifier: The unique identifier of the AudioObject.
+        work_identifier: The unique identifier of the work that the AudioObject is an example of.
+
+    Returns:
+        A GraphQL mutation for MergeAudioObjectExampleOfWork.
+    """
+
+    return format_link_mutation("MergeAudioObjectExampleOfWork", audioobject_identifier, work_identifier)
+
+
+def mutation_remove_audioobject_exampleofwork(audioobject_identifier: str, work_identifier: str):
+    """Returns a mutation for removing that a AudioObject is an example of a work
+    (https://schema.org/exampleOfWork).
+
+    Arguments:
+        audio_object_identifier: The unique identifier of the AudioObject.
+        work_identifier: The unique identifier of the work that the AudioObject is an example of.
+
+    Returns:
+        A GraphQL mutation for RemoveAudioObjectExampleOfWork.
+    """
+
+    return format_link_mutation("RemoveAudioObjectExampleOfWork", audioobject_identifier, work_identifier)
