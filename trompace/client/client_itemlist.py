@@ -1,6 +1,5 @@
 
 from typing import Optional
-from trompace import docstring_interpolate
 from trompace.config import config
 from trompace.connection import submit_query
 from trompace.mutations import itemlist as mutations_itemlist
@@ -9,24 +8,18 @@ from trompace.queries.itemlist import query_listitems, query_itemlist
 from trompace.exceptions import QueryException, IDNotFoundException
 
 
-ITEMLIST_ARGS_DOCS = """contributor: A person, an organization, or a service
-        responsible for contributing the ItemList to the web resource.
-        name: The name of the ItemList object.
-        description: The description of the ItemList object
-        ordered: The type of ordering for the list (ascending, descending,
-        unordered, ordered)
-        """
-
-
-@docstring_interpolate("itemlist_args", ITEMLIST_ARGS_DOCS)
 def create_itemlist_node(contributor: str, name: str, description: str = None,
                          ordered: bool = False):
     """Create a ItemList object and return the corresponding identifier.
     (https://schema.org/ItemList)
 
     Arguments:
-        {itemlist_args}
-
+        contributor: A person, an organization, or a service responsible for contributing the ItemList to the web resource.
+        name: The name of the ItemList object.
+        description: The description of the ItemList object
+        ordered: The type of ordering for the list (ascending, descending, unordered, ordered)
+    Raises:
+        QueryException if the query fails to execute
     Returns:
         The identifier of the ItemList object created
     """
@@ -51,24 +44,18 @@ def create_itemlist_node(contributor: str, name: str, description: str = None,
     return itemlist_id
 
 
-LISTITEM_ARGS_DOCS = """contributor: A person, an organization, or a service
-        responsible for contributing the ListItem to the web resource.
-        This can be either a name or a base URL.
-        name: The name of the ListItem object.
-        description: The description of the ItemList object
-        position: the position of the ListItem
-        """
-
-
-@docstring_interpolate("listitem_args", LISTITEM_ARGS_DOCS)
 def create_listitem_node(contributor: str, name: str, description: str = None,
                          position: Optional[int] = None):
     """Create a ListItem object and return the corresponding identifier.
     (https://schema.org/ListItem)
 
     Arguments:
-        {listitem_args}
-
+        contributor: A person, an organization, or a service responsible for contributing the ListItem to the web resource.
+        name: The name of the ListItem object.
+        description: The description of the ItemList object
+        position: the position of the ListItem
+    Raises:
+        QueryException if the query fails to execute
     Returns:
        The identifier of the ListItem object created
     """
@@ -96,6 +83,8 @@ def merge_itemlist_itemlistelement_nodes(itemlist_id: str, element_id: str):
     Arguments:
         itemlist_id: The unique identifier of the ItemList object.
         element_id: The unique identifier of the ThingInterface object.
+    Raises:
+        QueryException if the query fails to execute
     """
     mutation = mutations_itemlist.mutation_add_itemlist_itemlist_element(
                                                     itemlist_id=itemlist_id,
@@ -113,6 +102,8 @@ def merge_listitem_nextitem_nodes(listitem_id: str, nextitem_id: str):
     Arguments:
         listitem_id: The unique identifier of the ListItem object.
         nextitem_id: The unique identifier of the NextItem object.
+    Raises:
+        QueryException if the query fails to execute
     """
     mutation = mutations_itemlist.mutation_add_listitem_nextitem(
                                                     listitem_id=listitem_id,
@@ -131,6 +122,8 @@ def merge_listitem_item_nodes(listitem_id: str, item_id: str):
     Arguments:
         listitem_id: The unique identifier of the ListItem object.
         item_id: The unique identifier of the Item object.
+    Raises:
+        QueryException if the query fails to execute
     """
     mutation = mutations_itemlist.mutation_add_listitem_item(
                                                     listitem_id=listitem_id,
@@ -145,6 +138,13 @@ def merge_listitem_item_nodes(listitem_id: str, item_id: str):
 
 def update_listitem_position(listitem_id: str, position: int):
     """
+    Submit a mutation which changes the value of the position field on a given ListItem
+
+    Arguments:
+        listitem_id: the CE identifier of a ListItem
+        position: The value to set the position field to
+    Raises:
+        QueryException if the query fails to execute
     """
     mutation = mutations_itemlist.mutation_update_listitem(identifier=listitem_id,
                                                            position=position)
@@ -155,11 +155,13 @@ def update_listitem_position(listitem_id: str, position: int):
         raise QueryException(resp['errors'])
 
 
-def check_item_nodes(item_ids: list):
+def get_nonexistent_listitem_nodes(item_ids: list):
     """ Check if Items already exist in the CE
 
     Arguments:
         item_ids: The list of unique identifiers of the Item objects
+    Raises:
+        QueryException if the query fails to execute
     Return:
         Set of identifiers not found
     """
@@ -176,11 +178,13 @@ def check_item_nodes(item_ids: list):
     return not_found
 
 
-def check_itemlist_node(itemlist_id: str):
+def itemlist_node_exists(itemlist_id: str):
     """ Check if ItemList already exists in the CE
 
     Arguments:
         listitem_id: The unique identifiers of the ItemList objects
+    Raises:
+        QueryException if the query fails to execute
     Return:
         True if ListItem object exists
     """
@@ -194,16 +198,6 @@ def check_itemlist_node(itemlist_id: str):
         return result
 
 
-LISTITEM_SEQ_ARGS_DOCS = """listitems: the ListItems objects to create
-        ids_mode: the type of Items to create (from ID or from string value)
-        contributor: A person, an organization, or a service
-        responsible for contributing the ListItem to the web resource.
-        This can be either a name or a base URL.
-        name: The name of the ListItem object.
-        """
-
-
-@docstring_interpolate("listitem_args", LISTITEM_SEQ_ARGS_DOCS)
 def create_sequence_listitem_nodes(listitems: list, ids_mode: bool,
                                    contributor: str, name: str):
     """Create a sequence of ListItem object and return
@@ -211,8 +205,12 @@ def create_sequence_listitem_nodes(listitems: list, ids_mode: bool,
     (https://schema.org/ListItem)
 
     Arguments:
-        {listitem_args}
-
+        listitems: the ListItems objects to create
+        ids_mode: the type of Items to create (from ID or from string value)
+        contributor: A person, an organization, or a service responsible for contributing the ListItem to the web resource.
+        name: The name of the ListItem object.
+    Raises:
+        QueryException if the query fails to execute
     Returns:
        The identifiers of the ListItem objects created.
     """
@@ -244,6 +242,9 @@ def merge_sequence_itemlist_itemlistelement_nodes(itemlist_id: str,
     Arguments:
         itemlist_id: The unique identifier of the ItemList object.
         element_ids: The list of unique identifier of the ThingInterface object.
+    Raises:
+        QueryException if the query fails to execute
+        ValueError if not all the ListItems passed as input are found
     """
     mutation = mutations_itemlist.mutation_sequence_add_itemlist_itemlist_element(itemlist_id=itemlist_id,
                                                                                   element_ids=element_ids)
@@ -253,7 +254,7 @@ def merge_sequence_itemlist_itemlistelement_nodes(itemlist_id: str,
     if not result:
         raise QueryException(resp['errors'])
     elif len(result.keys()) != len(element_ids):
-        raise QueryException(resp['errors'])
+        raise ValueError("Number of ListItem objects founds does not match with input list")
 
 
 def merge_sequence_listitem_item_nodes(listitem_ids: list, item_ids: list):
@@ -263,6 +264,9 @@ def merge_sequence_listitem_item_nodes(listitem_ids: list, item_ids: list):
     Arguments:
         listitem_ids: The list of unique identifier of the ListItem object.
         item_ids: The list of unique identifier of the Item object.
+    Raises:
+        QueryException if the query fails to execute
+        ValueError if not all the Items passed as input are found
     """
     mutation = mutations_itemlist.mutation_sequence_add_listitem_item(listitem_ids=listitem_ids,
                                                                       item_ids=item_ids)
@@ -272,7 +276,7 @@ def merge_sequence_listitem_item_nodes(listitem_ids: list, item_ids: list):
     if not result:
         raise QueryException(resp['errors'])
     elif len(result.keys()) != len(listitem_ids):
-        raise QueryException(resp['errors'])
+        raise ValueError("Number of Item objects founds does not match with input list")
 
 
 def merge_sequence_listitem_nextitem_nodes(listitem_ids: list):
@@ -281,6 +285,8 @@ def merge_sequence_listitem_nextitem_nodes(listitem_ids: list):
 
     Arguments:
         listitem_ids: The list of unique identifiers of the ListItem objects.
+    Raises:
+        QueryException if the query fails to execute
     """
     mutation = mutations_itemlist.mutation_sequence_add_listitem_nextitem(listitem_ids=listitem_ids)
     resp = submit_query(mutation)
@@ -290,27 +296,23 @@ def merge_sequence_listitem_nextitem_nodes(listitem_ids: list):
         raise QueryException(resp['errors'])
 
 
-MAINCREATE_ARGS_DOCS = """contributor: A person, an organization, or a service
-        responsible for contributing the ItemList to the web resource.
-        This can be either a name or a base URL.
-        name: The name of the ItemList object.
-        description: The description of the ItemList object
-        position: the position of the ListItem
-        ordered: The type of ordering for the list (ascending, descending,
-        unordered, ordered)
-        node_ids: set of node identifiers to be added to ItemList as ListItem
-        values: set of values to be added to ItemList as ListItem
-        """
-
-
-@docstring_interpolate("maincreate_args", MAINCREATE_ARGS_DOCS)
 def create_itemlist(contributor: str, name: str, description: str,
                     ordered: bool, node_ids: list = None, values: list = None):
     """ Main function to create a ItemList object and related ListItem objects
     based on the input values or node identifiers.
 
     Arguments:
-        {maincreate_args}
+        contributor: A person, an organization, or a service responsible for contributing the ItemList to the web resource.
+        name: The name of the ItemList object.
+        description: The description of the ItemList object
+        position: the position of the ListItem
+        ordered: The type of ordering for the list (ascending, descending, unordered, ordered)
+        node_ids: set of node identifiers to be added to ItemList as ListItem
+        values: set of values to be added to ItemList as ListItem
+    Raises:
+        ValueError if both values and node_ids are passed as input arguments
+        IDNotFoundException if ListItem objects are not found
+        QueryException if the query fails to execute
     """
     listitems = []
     if values and node_ids:
@@ -319,7 +321,7 @@ def create_itemlist(contributor: str, name: str, description: str,
         [listitems.append(x) for x in values if x not in listitems]
         ids_mode = False
     elif node_ids:
-        not_found = check_item_nodes(node_ids)
+        not_found = get_nonexistent_listitem_nodes(node_ids)
         if not_found:
             raise IDNotFoundException(not_found)
         else:
@@ -346,19 +348,6 @@ def create_itemlist(contributor: str, name: str, description: str,
                                            item_ids=listitems)
 
 
-MAININSERT_ARGS_DOCS = """contributor: A person, an organization, or a service
-        responsible for contributing the ListItem to the web resource.
-        This can be either a name or a base URL.
-        name: The name of the ListItem object.
-        description: The description of the ListItem object
-        itemlist_id: The identifier of the ItemList
-        ids_mode: True if the ListItem has an Item associated by identifier
-        append: True if ListItem is appended at the bottom of the ItemList
-        position: the position of the ListItem in the ItemList
-        """
-
-
-@docstring_interpolate("maininsert_args", MAININSERT_ARGS_DOCS)
 def insert_listitem_itemlist(contributor: str, name: str, description: str,
                              listitem: str, itemlist_id: str, ids_mode: bool,
                              append: bool, position: Optional[int] = None):
@@ -366,12 +355,23 @@ def insert_listitem_itemlist(contributor: str, name: str, description: str,
     it at the bottom, or by inserting it at a specific position.
 
     Arguments:
-        {maincreate_args}
+        contributor: A person, an organization, or a service responsible for contributing the ListItem to the web resource.
+        name: The name of the ListItem object.
+        description: The description of the ListItem object
+        itemlist_id: The identifier of the ItemList
+        ids_mode: True if the ListItem has an Item associated by identifier
+        append: True if ListItem is appended at the bottom of the ItemList
+        position: the position of the ListItem in the ItemList
+    Raises:
+        ValueError if both append and position are passed as input arguments
+        ValueError if position is greater than the length of the input ItemList
+        IDNotFoundException if ListItem objects are not found
+        QueryException if the query fails to execute
     """
     if append and isinstance(position, int):
         raise ValueError("cannot select both append and position arguments")
 
-    itemlist_obj = check_itemlist_node(itemlist_id=itemlist_id)
+    itemlist_obj = itemlist_node_exists(itemlist_id=itemlist_id)
     if not itemlist_obj:
         raise IDNotFoundException(itemlist_id)
 
