@@ -5,17 +5,20 @@ from typing import Dict, Any
 from trompace import make_parameters
 from trompace.mutations import MUTATION
 
-MUTATION_ALIAS_TEMPLATE = '''{mutationalias}: {mutationname}(
-{parameters}
-) {{
-identifier
-}}'''
 
 MUTATION_TEMPLATE = '''{mutationname}(
 {parameters}
 ) {{
 identifier
 }}'''
+
+
+MUTATION_ALIAS_TEMPLATE = '''{mutationalias}: {mutationname}(
+{parameters}
+) {{
+identifier
+}}'''
+
 
 LINK_MUTATION_TEMPLATE = '''{mutationname}(
     from: {{identifier: "{identifier_1}"}}
@@ -28,6 +31,49 @@ LINK_MUTATION_TEMPLATE = '''{mutationname}(
       identifier
     }}
   }}'''
+
+
+LINK_MUTATION_ALIAS_TEMPLATE = '''{mutationalias}: {mutationname}(
+    from: {{identifier: "{identifier_1}"}}
+    to: {{identifier: "{identifier_2}"}}
+  ) {{
+    from {{
+      identifier
+    }}
+    to {{
+      identifier
+    }}
+  }}'''
+
+
+def format_sequence_link_mutation(mutations: list):
+    """Create a mutation link sequence  to send to the Contributor Environment.
+    Arguments:
+        mutations: a list of mutations [(mutationalias, mutationname, args),...]
+    Returns:
+        A formatted mutation sequence
+    """
+    formatted_mutations = []
+    for mutation in mutations:
+        mutationalias, mutationname, args = mutation
+        identifier_1, identifier_2 = args
+        formatted_mutation = create_alias_link_mutation(mutationalias=mutationalias, mutationname=mutationname, identifier_1=identifier_1, identifier_2=identifier_2)
+        formatted_mutations.append(formatted_mutation)
+
+    return MUTATION.format(mutation="\n".join(formatted_mutations))
+
+
+def create_alias_link_mutation(mutationalias: str, mutationname: str, identifier_1: str, identifier_2: str):
+    """Create a mutation link alias to send to the Contributor Environment.
+    Arguments:
+        mutationalias: the alias of the mutation to generate
+        mutationname: the name of the mutation to generate
+        identifier_1: The unique identifier of the first object.
+        identifier_2: The unique identifier of the second object.
+    Returns:
+        A mutation string
+    """
+    return LINK_MUTATION_ALIAS_TEMPLATE.format(mutationalias=mutationalias, mutationname=mutationname, identifier_1=identifier_1, identifier_2=identifier_2)
 
 
 def format_sequence_mutation(mutations: list):
@@ -47,7 +93,7 @@ def format_sequence_mutation(mutations: list):
 
 
 def create_alias_mutation(mutationalias: str, mutationname: str, args: Dict[str, Any]):
-    """Create a mutation to send to the Contributor Environment.
+    """Create a mutation alias to send to the Contributor Environment.
     Arguments:
         mutationalias: the alias of the mutation to generate
         mutationname: the name of the mutation to generate
