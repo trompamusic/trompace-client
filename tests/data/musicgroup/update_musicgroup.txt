@@ -1,0 +1,8 @@
+mutation {
+  UpdateMusicGroup(
+identifier: "457c6b78-3c58-44d0-b789-3373ea22304a"
+        title: "Not Queen - MusicBrainz"
+) {
+identifier
+}
+}

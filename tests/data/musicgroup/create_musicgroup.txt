@@ -1,0 +1,14 @@
+mutation {
+  CreateMusicGroup(
+title: "Queen - MusicBrainz"
+        contributor: "https://musicbrainz.org"
+        creator: "https://github.com/trompamusic/trompa-ce-client/tree/v0.1/demo"
+        source: "https://musicbrainz.org/artist/0383dadf-2a4e-4d10-a46a-e9e041da8eb3"
+        format: "text/html"
+        name: "Queen"
+        language: en
+        foundingDate: { year: 1970 month: 6 day: 27 }
+) {
+identifier
+}
+}

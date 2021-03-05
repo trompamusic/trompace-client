@@ -1,0 +1,13 @@
+mutation {
+  RemoveMusicGroupExactMatch(
+    from: {identifier: "457c6b78-3c58-44d0-b789-3373ea22304a"}
+    to: {identifier: "fdf1e9e8-4f5b-40ab-81e7-521ea66d0aa6"}
+  ) {
+    from {
+      identifier
+    }
+    to {
+      identifier
+    }
+  }
+}
