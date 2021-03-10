@@ -6,11 +6,11 @@ def main(print_queries: bool, submit_queries: bool):
     admin_vcard = "https://alastair.trompa-solid.upf.edu/profile/card#me"
     user_vcard = "https://testuser.trompa-solid.upf.edu/profile/card#me"
 
-    definition = rating.create_rating(
+    definition = rating.create_rating_definition(
         creator=admin_vcard,
         bestrating=10,
         worstrating=1,
-        additionaltype=rating.RATING_DEFINITION_ADDITIONAL_TYPE
+        name="Overal performance"
     )
 
     print("\nRating - Definition\n")

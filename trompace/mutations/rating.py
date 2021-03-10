@@ -1,11 +1,32 @@
-import datetime
-
-import pytz
-
 from trompace import check_required_args, filter_none_args
 from trompace.mutations.templates import format_mutation, format_link_mutation
 
 RATING_DEFINITION_ADDITIONAL_TYPE = "https://vocab.trompamusic.eu/vocab#RatingDefinition"
+
+
+def create_rating_definition(*, creator: str, bestrating: int, worstrating: int, name: str = None):
+    """Return a mutation for making a Rating definition.
+    A Rating (https://schema.org/Rating) is an evaluation on a numeric scale.
+    A Rating definition describes the structure that a rating can take. It is used so that an annotation
+    tool can give a title and present an input according to the correct scale (e.g. 1-5 or 1-100).
+
+    This is a helper method that requires a bestrating and worstrating value and automatically sets
+    additionaltype to RATING_DEFINITION_ADDITIONAL_TYPE
+
+    A name is recommended if multiple ratings are going to be shown on the same annotator, but isn't necessary.
+
+    """
+    check_required_args(creator=creator, bestrating=bestrating, worstrating=worstrating)
+
+    params = {"creator": creator,
+              "name": name,
+              "bestRating": bestrating,
+              "worstRating": worstrating,
+              "additionalType": RATING_DEFINITION_ADDITIONAL_TYPE}
+
+    params = filter_none_args(params)
+
+    return format_mutation(mutationname="CreateRating", args=params)
 
 
 def create_rating(*, creator: str, bestrating: int, ratingvalue: int = None, worstrating: int = None,
@@ -13,14 +34,10 @@ def create_rating(*, creator: str, bestrating: int, ratingvalue: int = None, wor
     """Return a mutation for making a Rating.
     A Rating (https://schema.org/Rating) is an evaluation on a numeric scale.
 
-    If you want to create a template rating for other people to follow, set additionatype to
-    RATING_DEFINITION_ADDITIONAL_TYPE.
-
     Arguments:
         creator: a URI to the identity of the user who created this DefinedTerm
         bestrating: The highest value allowed in this rating system
-        ratingvalue: The rating for the content. Must be set if ``additionaltype`` is not
-          ``https://vocab.trompamusic.eu/vocab#RatingDefinition``
+        ratingvalue: The rating for the content.
         worstrating (optional): The lowest value allowed in this rating system. If worstRating is omitted, 1 is assumed.
         ratingexplanation (optional): A freeform text box describing why this rating was given
         additionaltype (optional): A schema.org additionalType used to categorise this Rating
@@ -29,13 +46,7 @@ def create_rating(*, creator: str, bestrating: int, ratingvalue: int = None, wor
         A GraphQL Mutation to create a Rating in the Trompa CE
     """
 
-    args = {"creator": creator,
-            "bestrating": bestrating}
-    # Only check that ratingvalue is present if we're not making a Rating definition
-    if additionaltype != RATING_DEFINITION_ADDITIONAL_TYPE:
-        args["ratingvalue"] = ratingvalue
-
-    check_required_args(**args)
+    check_required_args(creator=creator, bestrating=bestrating, ratingvalue=ratingvalue)
 
     params = {"creator": creator,
               "ratingValue": ratingvalue,
