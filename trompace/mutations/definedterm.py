@@ -21,9 +21,12 @@ def _verify_additional_type(additionaltype):
     """Check that the input to additionaltype is a list of strings.
     If it is empty, raise ValueError
     If it is a string, convert it to a list of strings."""
+    if additionaltype is None:
+        return None
+
     if isinstance(additionaltype, str):
         additionaltype = [additionaltype]
-    if len(additionaltype) < 0:
+    if len(additionaltype) == 0:
         raise ValueError("additionaltype must be a non-empty list")
     return additionaltype
 
@@ -105,7 +108,7 @@ def update_defined_term_set(identifier: str, *, creator: str = None, name: str =
 
 
 def update_defined_term(identifier: str, *, creator: str = None, termcode: str = None,
-                        additionaltype: List[str], broader: str = None, image: str = None):
+                        additionaltype: List[str] = None, broader: str = None, image: str = None):
     """Return a mutation for updating a DefinedTerm.
 
     TODO: Copy arguments from create_

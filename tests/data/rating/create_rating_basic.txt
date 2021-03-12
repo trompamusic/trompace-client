@@ -3,7 +3,6 @@ mutation {
 creator: "https://trompamusic.eu/user/mozart"
         ratingValue: 5
         bestRating: 5
-        created: {formatted: "2020-04-09T10:57:55+00:00"}
 ) {
 identifier
 }

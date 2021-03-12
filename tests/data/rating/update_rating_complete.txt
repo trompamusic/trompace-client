@@ -6,7 +6,6 @@ identifier: "60ab3727-5972-4785-867f-2d050b0acde0"
         bestRating: 10
         worstRating: 1
         additionalType: "https://vocab.trompamusic.eu/vocab#PerformanceFeedback"
-        modified: {formatted: "2020-04-09T12:21:27+00:00"}
 ) {
 identifier
 }

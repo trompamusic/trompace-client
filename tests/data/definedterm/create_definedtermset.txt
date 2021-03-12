@@ -1,9 +1,8 @@
 mutation {
   CreateDefinedTermSet(
-additionalType: "https://vocab.trompamusic.eu/vocab#TagCollection"
+additionalType: ["https://vocab.trompamusic.eu/vocab#TagCollection"]
         creator: "https://trompamusic.eu/user/mozart"
         name: "Bowing direction"
-        created: {formatted: "2020-04-09T10:57:55+00:00"}
 ) {
 identifier
 }
