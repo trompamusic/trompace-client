@@ -150,6 +150,19 @@ def merge_annotation_bodynode(annotation_id, node_id):
     return format_link_mutation("MergeAnnotationBodyNode", annotation_id, node_id)
 
 
+def merge_annotation_motivationdefinedterm(annotation_id, definedterm_id):
+    """
+
+    Args:
+        annotation_id: CE Node ID of an Annotation object
+        definedterm_id: CE Node ID of a DefinedTerm object which is a more specific annotation Motivation
+
+    Returns:
+
+    """
+    return format_link_mutation("MergeAnnotationMotivationDefinedTerm", annotation_id, definedterm_id)
+
+
 def update_annotation_ce_target(identifier: str, target: str = None, field: str = None, fragment: str = None):
     """Return a mutation for updating an AnnotationCETarget.
 
