@@ -68,8 +68,7 @@ def mutation_create_musicgroup(*, title: str, contributor: str, creator: str, so
 def mutation_update_musicgroup(identifier: str, *, title: str = None, contributor: str = None, creator: str = None,
                                source: str = None, format_: str = None, language: str = None, name: str = None,
                                founding_date: str = None, disolution_date: str = None,
-                               description: str = None, image: str = None, publisher: str = None,
-                           ):
+                               description: str = None, image: str = None, publisher: str = None):
     """Returns a mutation for updating a MusicGroup
 
     Args:
@@ -145,3 +144,14 @@ def mutation_musicgroup_remove_exact_match_musicgroup(identifier_from: str, iden
     Returns: a mutation to remove the exactMatch relationship from the MusicGroup objects
     """
     return format_link_mutation("RemoveMusicGroupExactMatch", identifier_from, identifier_to)
+
+
+def mutation_add_musicgroup_member(identifier_from: str, identifier_to: str):
+    """Returns a mutation for linking a Person object with an MusicGroup object.
+
+    Args:
+        identifier_from: the identifer of the Person to match to
+        identifier_to: the identifier of the MusicGroup to which Person belong
+    Returns: a mutation for linking a Person object with an MusicGroup object
+    """
+    return format_link_mutation("MergeMusicGroupMember", identifier_from, identifier_to)
