@@ -146,12 +146,25 @@ def mutation_musicgroup_remove_exact_match_musicgroup(identifier_from: str, iden
     return format_link_mutation("RemoveMusicGroupExactMatch", identifier_from, identifier_to)
 
 
-def mutation_add_musicgroup_member(identifier_from: str, identifier_to: str):
-    """Returns a mutation for linking a Person object with an MusicGroup object.
+def mutation_merge_musicgroup_member(person_identifier: str, musicgroup_identifier: str):
+    """Returns a mutation for adding a Person object as member of a MusicGroup object.
+    (https://schema.org/member)
 
     Args:
-        identifier_from: the identifer of the Person to match to
-        identifier_to: the identifier of the MusicGroup to which Person belong
-    Returns: a mutation for linking a Person object with an MusicGroup object
+        person_identifier: the identifer of the Person to match to
+        musicgroup_identifier: the identifier of the MusicGroup to which Person belong
+    Returns: a mutation for adding a Person object as member of a MusicGroup object
     """
-    return format_link_mutation("MergeMusicGroupMember", identifier_from, identifier_to)
+    return format_link_mutation("MergeMusicGroupMember", person_identifier, musicgroup_identifier)
+
+
+def mutation_remove_musicgroup_member(person_identifier: str, musicgroup_identifier: str):
+    """Returns a mutation for removing a Person object as member of a MusicGroup object.
+    (https://schema.org/member)
+
+    Args:
+        person_identifier: the identifer of the Person to match to
+        musicgroup_identifier: the identifier of the MusicGroup to which Person belong
+    Returns: a mutation for removing a Person object as member of a MusicGroup object
+    """
+    return format_link_mutation("RemoveMusicGroupMember", person_identifier, musicgroup_identifier)
