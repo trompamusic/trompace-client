@@ -105,16 +105,22 @@ def mutation_merge_music_recording_audio(recording_identifier, audio_identifier)
     Args:
         recording_identifier: The identifier of a MusicRecording.
         audio_identifier: The identifier of a AudioObject linked to a MusicRecording.
+
+    Returns:
+        The string for the mutation for adding a Audio object to a MusicRecording object.
     """
     return format_link_mutation("MergeMusicRecordingAudio", recording_identifier, audio_identifier)
 
 
 def mutation_remove_music_recording_audio(recording_identifier, audio_identifier):
-    """Returns a mutation for removing a Audio object to a MusicRecording object
+    """Returns a mutation for removing a Audio object to a MusicRecording object.
     (https://schema.org/workExample).
 
     Args:
         recording_identifier: The identifier of a MusicRecording.
         audio_identifier: The identifier of a AudioObject linked to a MusicRecording.
+
+    Returns:
+        The string for the mutation for removing a Audio object to a MusicRecording object.
     """
     return format_link_mutation("RemoveMusicRecordingAudio", recording_identifier, audio_identifier)
