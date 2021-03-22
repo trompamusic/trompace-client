@@ -12,6 +12,7 @@ QUERY_CONTROLACTION_ID = """
                 identifier
             }}
             object {{
+                identifier
                 ... on PropertyValue {{
                     value
                     name
