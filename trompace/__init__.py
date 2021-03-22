@@ -52,6 +52,40 @@ def encode_list(thelist, encoder):
             yield encoder.encode(item)
 
 
+def make_filter(args: dict):
+    assert len(args) == 1
+    encoder = json.JSONEncoder()
+    parts = ["{"]
+    for k, v in args.items():
+        parts.append(k + ":")
+        if isinstance(v, dict):
+            parts.append(make_filter(v))
+        else:
+            parts.append(encoder.encode(v))
+    parts.append("}")
+    return " ".join(parts)
+
+
+def make_select_query(args):
+    parts = []
+    for a in args:
+        if isinstance(a, str):
+            parts.append(a)
+        elif isinstance(a, dict):
+            assert len(a) == 1
+            for k, v in a.items():
+                assert isinstance(v, list) or isinstance(v, dict)
+                parts.append(k + "{")
+                if isinstance(v, list):
+                    parts.append(make_select_query(v))
+                elif isinstance(v, dict):
+                    parts.append(make_select_query([v]))
+                parts.append("}")
+        elif isinstance(a, list):
+            parts.extend(a)
+    return "\n".join(parts)
+
+
 def make_parameters(**kwargs):
     """Convert query parameters to the graphql format.
     This creates a formatted string of parameters and values suitable to be passed to a graphql
