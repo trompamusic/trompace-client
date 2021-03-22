@@ -116,7 +116,7 @@ class TrompaConfig:
             decoded = jwt.decode(token, algorithms=["HS256"], options={"verify_signature": False})
             self.jwt_token_encoded = token
             self.jwt_token_decoded = decoded
-        except jwt.DecodeError:
+        except (jwt.DecodeError, jwt.ExpiredSignatureError):
             trompace.logger.warn("Could not decode cached jwt token, ignoring")
 
     def _save_jwt_token(self, token):
