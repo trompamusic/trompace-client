@@ -1,6 +1,6 @@
 # Generate GraphQL queries for mutations pertaining to software applications.
 from trompace.exceptions import UnsupportedLanguageException, NotAMimeTypeException
-from trompace import StringConstant
+from trompace import StringConstant, filter_none_args
 from .templates import mutation_create, mutation_link
 from ..constants import SUPPORTED_LANGUAGES
 
@@ -23,42 +23,47 @@ ADD_ENTRYPOINT_APPLICATION = '''AddEntryPointActionApplication(
     }}'''
 
 
-def mutation_create_application(*, application_name: str, contributor: str, creator: str, source: str, subject: str,
-                                language: str, description: str = None, formatin="html/text", identifier=None):
+def mutation_create_application(*, name: str, contributor: str, creator: str, source: str, title: str = None,
+                                subject: str = None, language: str = None, description: str = None, format_: str = None,
+                                softwareversion: str = None):
     """Returns a mutation for creating a software application object
     Arguments:
-        application_name: The name of the software application.
+        name: The name of the software application.
+        title: the html title of the page at `source`
         contributor: A person, an organization, or a service responsible for adding the software application. This can be either a name or a base URL.
         creator: The person, organization or service responsible for adding the software application.
         source: The URL of the web resource to be represented by the node.
         subject: The subject associated with the application.
         description: An account of the software application.
-        language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
+        language: The language of the page at `source`. Currently supported languages are en,es,ca,nl,de,fr
+        softwareversion: the version of the software
     Returns:
         The string for the mutation for creating the artist.
     Raises:
         UnsupportedLanguageException if the input language is not one of the supported languages.
-        NotAMimeTypeException if the formatin is not a mimetype.
+        NotAMimeTypeException if format_ is not a valid mimetype.
     """
 
-    if language not in SUPPORTED_LANGUAGES:
+    if language and language not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
-    if "/" not in formatin:
-        raise NotAMimeTypeException(formatin)
+    if format_ and "/" not in format_:
+        raise NotAMimeTypeException(format_)
 
     args = {
-        "title": application_name,
-        "name": application_name,
+        "name": name,
         "contributor": contributor,
         "creator": creator,
         "source": source,
+        "title": title,
         "subject": subject,
         "description": description,
-        "format": formatin,
-        "language": StringConstant(language.lower()),
+        "format": format_,
+        "softwareVersion": softwareversion
     }
-    if identifier:
-        args["identifier"] = identifier
+    if language:
+        args["language"] = StringConstant(language.lower())
+
+    args = filter_none_args(args)
     return mutation_create(args, CREATE_APPLICATION)
 
 
