@@ -233,3 +233,18 @@ def mutation_remove_media_object_wasderivedfrom(mediaobject_derivative_identifie
     return format_link_mutation("RemoveMediaObjectWasDerivedFrom",
                                 mediaobject_derivative_identifier,
                                 mediaobject_source_identifier)
+
+
+def mutation_add_media_object_used(mediaobject_identifier: str, thing_identifier: str):
+    """Returns a mutation for indicating that a MediaObject *used* some other thing to create it
+    (http://www.w3.org/ns/prov#used). For example an MEI file coverted from musicxml might use
+    the verovio software.
+
+    Arguments:
+        mediaobject_identifier: The unique identifier of a MediaObject.
+        thing_identifier: The unique identifier of some Thing that was used to create the MediaObject.
+
+    Returns:
+        A GraphQL mutation for MergeMediaObjectUsed.
+    """
+    return format_link_mutation("MergeMediaObjectUsed", mediaobject_identifier, thing_identifier)
