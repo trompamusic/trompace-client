@@ -2,7 +2,6 @@ mutation {
   UpdateDefinedTerm(
 identifier: "07e8458f-7597-4a67-80bd-06035d01456f"
         termCode: "down"
-        modified: {formatted: "2020-04-04T15:31:04+00:00"}
 ) {
 identifier
 }
