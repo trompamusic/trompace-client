@@ -8,19 +8,17 @@ import trompace.exceptions
 
 ITEMLIST_ARGS_DOCS = """name: The name of the ItemList object.
         contributor: A person, an organization, or a service responsible
-        for contributing the ItemList to the web resource.
-        This can be either a name or a base URL.
-        itemlistorder: The type of ordering for the list
-        (ascending, descending, unordered, ordered)
+          for contributing the ItemList to the web resource. This can be either a name or a base URL.
+        creator: The person, organization or service who created the ItemList.
+        itemlistorder: The type of ordering for the list (ascending, descending, unordered, ordered)
         description: The description of the ItemList object
         """
 
 
 @docstring_interpolate("itemlist_args", ITEMLIST_ARGS_DOCS)
 def mutation_create_itemlist(contributor: str, name: str = None,
-                             itemlistorder: ItemListOrderType =
-                             ItemListOrderType.ItemListUnordered,
-                             description: str = None):
+                             itemlistorder: ItemListOrderType = ItemListOrderType.ItemListUnordered,
+                             creator: str = None, description: str = None):
     """Returns a mutation for creating an ItemList object.
     (https://schema.org/ItemList)
 
@@ -35,6 +33,7 @@ def mutation_create_itemlist(contributor: str, name: str = None,
 
     args = {
         "contributor": contributor,
+        "creator": creator,
         "name": name,
         "description": description,
         "itemListOrder": StringConstant(itemlistorder)
@@ -49,6 +48,7 @@ def mutation_create_itemlist(contributor: str, name: str = None,
 def mutation_update_itemlist(identifier: str, contributor: str,
                              name: str = None,
                              itemlistorder: ItemListOrderType = None,
+                             creator: str = None,
                              description: str = None):
     """Returns a mutation for updating an ItemList object.
     (https://schema.org/ItemList)
@@ -68,6 +68,7 @@ def mutation_update_itemlist(identifier: str, contributor: str,
         "contributor": contributor,
         "name": name,
         "description": description,
+        "creator": creator,
     }
     if itemlistorder is not None:
         args["itemListOrder"] = StringConstant(itemlistorder)
@@ -94,16 +95,16 @@ def mutation_delete_itemlist(identifier: str):
 
 
 LISTITEM_ARGS_DOCS = """name: The name of the ListItem object.
-        contributor: A person, an organization, or a service responsible
-        for contributing the ListItem to the web resource.
-        This can be either a name or a base URL.
+        creator: The person, organization or service who created the ListItem.
+        contributor: A person, an organization, or a service responsible for contributing the ListItem to the web resource.
+          This can be either a name or a base URL.
         description: The description of the ListItem object
         position: the position of the ListItem
         """
 
 
 @docstring_interpolate("listitem_args", LISTITEM_ARGS_DOCS)
-def mutation_create_listitem(contributor: str, name: str = None,
+def mutation_create_listitem(contributor: str, name: str = None, creator: str = None,
                              description: str = None, position: Optional[int] = None):
     """Returns a mutation for creating a ListItem object.
     (https://schema.org/ListItem)
@@ -117,6 +118,7 @@ def mutation_create_listitem(contributor: str, name: str = None,
     args = {
         "contributor": contributor,
         "name": name,
+        "creator": creator,
         "description": description,
         "position": position,
     }
@@ -128,13 +130,12 @@ def mutation_create_listitem(contributor: str, name: str = None,
 
 @docstring_interpolate("listitem_args", LISTITEM_ARGS_DOCS)
 def mutation_update_listitem(identifier: str, contributor: str = None, name: str = None,
-                             description: str = None, position: Optional[int] = None):
+                             creator: str = None, description: str = None, position: int = None):
     """Returns a mutation for updating a ListItem object.
     (https://schema.org/ListItem)
 
     Arguments:
-        identifier: The identifier of the ListItem in the CE to be
-        updated.
+        identifier: The identifier of the ListItem in the CE to be updated.
         {listitem_args}
 
     Returns:
@@ -144,6 +145,7 @@ def mutation_update_listitem(identifier: str, contributor: str = None, name: str
         "identifier": identifier,
         "contributor": contributor,
         "name": name,
+        "creator": creator,
         "description": description,
         "position": position,
     }
@@ -276,16 +278,15 @@ def mutation_remove_itemlist_itemlist_element(itemlist_id: str,
 
 
 LISTITEM_SEQ_ARGS_DOCS = """listitems: the ListItems objects to create
-        ids_mode: the type of Items to create (from ID or from string value)
-        contributor: A person, an organization, or a service
-        responsible for contributing the ListItem to the web resource.
-        This can be either a name or a base URL.
+        creator: The person, organization or service who created the items.
+        contributor: A person, an organization, or a service responsible for contributing the ListItem to
+          the web resource. This can be either a name or a base URL.
         name: The name of the ListItem object.
         """
 
 
 @docstring_interpolate("listitem_args", LISTITEM_SEQ_ARGS_DOCS)
-def mutation_sequence_create_listitem(listitems: list, contributor: str,
+def mutation_sequence_create_listitem(listitems: list, contributor: str, creator: str = None,
                                       name: str = None, description: list = None):
     """Returns a mutation for creating a sequence of ListItem objects
     (https://schema.org/itemListElement)
@@ -303,6 +304,7 @@ def mutation_sequence_create_listitem(listitems: list, contributor: str,
         args = {
             "contributor": contributor,
             "name": name,
+            "creator": creator,
             "description": description[pos],
             "position": pos,
         }
@@ -320,7 +322,7 @@ def mutation_sequence_add_itemlist_itemlist_element(itemlist_id: str,
 
     Arguments:
         itemlist_id: The unique identifier of the ItemList object.
-        element_id: The list of unique identifiers of the ThingInterface objects.
+        element_ids: The list of unique identifiers of the ThingInterface objects.
 
     Returns:
         The string for the mutation for adding a sequence of ThingInterface in an
@@ -346,8 +348,8 @@ def mutation_sequence_add_listitem_item(listitem_ids: list,
     (https://schema.org/itemListElement)
 
     Arguments:
-        itemlist_ids: The list of unique identifiers of the ListItem objects.
-        element_ids: The list of unique identifiers of the ThingInterface objects.
+        listitem_ids: The list of unique identifiers of the ListItem objects.
+        item_ids: The list of unique identifiers of the ThingInterface objects.
 
     Returns:
         The string for the mutation for adding a sequence of ThingInterface in an

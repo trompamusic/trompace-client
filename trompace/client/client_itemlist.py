@@ -8,7 +8,7 @@ from trompace.queries.itemlist import query_listitems, query_itemlist
 from trompace.exceptions import QueryException, IDNotFoundException
 
 
-def create_itemlist_node(contributor: str, name: str, description: str = None,
+def create_itemlist_node(contributor: str, name: str, creator: str = None, description: str = None,
                          ordered: bool = False):
     """Create a ItemList object and return the corresponding identifier.
     (https://schema.org/ItemList)
@@ -16,6 +16,7 @@ def create_itemlist_node(contributor: str, name: str, description: str = None,
     Arguments:
         contributor: A person, an organization, or a service responsible for contributing the ItemList to the web resource.
         name: The name of the ItemList object.
+        creator: The person, organization or service who created the ItemList.
         description: The description of the ItemList object
         ordered: The type of ordering for the list (ascending, descending, unordered, ordered)
     Raises:
@@ -29,6 +30,7 @@ def create_itemlist_node(contributor: str, name: str, description: str = None,
 
     mutation = mutations_itemlist.mutation_create_itemlist(
                                         contributor=contributor,
+                                        creator=creator,
                                         name=name,
                                         itemlistorder=itemlistorder,
                                         description=description)
@@ -44,14 +46,15 @@ def create_itemlist_node(contributor: str, name: str, description: str = None,
     return itemlist_id
 
 
-def create_listitem_node(contributor: str, name: str, description: str = None,
-                         position: Optional[int] = None):
+def create_listitem_node(contributor: str, name: str, creator: str = None,
+                         description: str = None, position: Optional[int] = None):
     """Create a ListItem object and return the corresponding identifier.
     (https://schema.org/ListItem)
 
     Arguments:
         contributor: A person, an organization, or a service responsible for contributing the ListItem to the web resource.
         name: The name of the ListItem object.
+        creator: The person, organization or service who created the ListItem.
         description: The description of the ItemList object
         position: the position of the ListItem
     Raises:
@@ -60,10 +63,12 @@ def create_listitem_node(contributor: str, name: str, description: str = None,
        The identifier of the ListItem object created
     """
     mutation = mutations_itemlist.mutation_create_listitem(
-                                                    contributor=contributor,
-                                                    name=name,
-                                                    description=description,
-                                                    position=position)
+        contributor=contributor,
+        name=name,
+        creator=creator,
+        description=description,
+        position=position
+    )
 
     resp = submit_query(mutation)
     result = resp.get("data", {}).get("CreateListItem")
@@ -182,7 +187,7 @@ def itemlist_node_exists(itemlist_id: str):
     """ Check if ItemList already exists in the CE
 
     Arguments:
-        listitem_id: The unique identifiers of the ItemList objects
+        itemlist_id: The unique identifiers of the ItemList object
     Raises:
         QueryException if the query fails to execute
     Return:
@@ -297,7 +302,7 @@ def merge_sequence_listitem_nextitem_nodes(listitem_ids: list):
 
 
 def create_itemlist(contributor: str, name: str, description: str,
-                    ordered: bool, node_ids: list = None, values: list = None):
+                    ordered: bool, creator: str = None, node_ids: list = None, values: list = None):
     """ Main function to create a ItemList object and related ListItem objects
     based on the input values or node identifiers.
 
@@ -305,8 +310,8 @@ def create_itemlist(contributor: str, name: str, description: str,
         contributor: A person, an organization, or a service responsible for contributing the ItemList to the web resource.
         name: The name of the ItemList object.
         description: The description of the ItemList object
-        position: the position of the ListItem
-        ordered: The type of ordering for the list (ascending, descending, unordered, ordered)
+        creator: The person, organization or service who created the ItemList.
+        ordered: True if the list should be ordered, False if not
         node_ids: set of node identifiers to be added to ItemList as ListItem
         values: set of values to be added to ItemList as ListItem
     Raises:
@@ -317,6 +322,8 @@ def create_itemlist(contributor: str, name: str, description: str,
     listitems = []
     if values and node_ids:
         raise ValueError("cannot provide both node_ids and values arguments")
+    elif not values and not node_ids:
+        raise ValueError("must provide one of node_ids and values")
     elif values:
         [listitems.append(x) for x in values if x not in listitems]
         ids_mode = False
@@ -350,7 +357,7 @@ def create_itemlist(contributor: str, name: str, description: str,
 
 def insert_listitem_itemlist(contributor: str, name: str, description: str,
                              listitem: str, itemlist_id: str, ids_mode: bool,
-                             append: bool, position: Optional[int] = None):
+                             append: bool, creator: str = None, position: Optional[int] = None):
     """ Main function to insert a ListItem in a ItemList object by appending
     it at the bottom, or by inserting it at a specific position.
 
@@ -361,6 +368,7 @@ def insert_listitem_itemlist(contributor: str, name: str, description: str,
         itemlist_id: The identifier of the ItemList
         ids_mode: True if the ListItem has an Item associated by identifier
         append: True if ListItem is appended at the bottom of the ItemList
+        creator: The person, organization or service who created the ItemList.
         position: the position of the ListItem in the ItemList
     Raises:
         ValueError if both append and position are passed as input arguments
@@ -390,6 +398,7 @@ def insert_listitem_itemlist(contributor: str, name: str, description: str,
 
         listitem_id = create_listitem_node(contributor=contributor,
                                            name=name,
+                                           creator=creator,
                                            description=description,
                                            position=position)
 
