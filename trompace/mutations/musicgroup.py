@@ -68,8 +68,7 @@ def mutation_create_musicgroup(*, title: str, contributor: str, creator: str, so
 def mutation_update_musicgroup(identifier: str, *, title: str = None, contributor: str = None, creator: str = None,
                                source: str = None, format_: str = None, language: str = None, name: str = None,
                                founding_date: str = None, disolution_date: str = None,
-                               description: str = None, image: str = None, publisher: str = None,
-                           ):
+                               description: str = None, image: str = None, publisher: str = None):
     """Returns a mutation for updating a MusicGroup
 
     Args:
@@ -145,3 +144,27 @@ def mutation_musicgroup_remove_exact_match_musicgroup(identifier_from: str, iden
     Returns: a mutation to remove the exactMatch relationship from the MusicGroup objects
     """
     return format_link_mutation("RemoveMusicGroupExactMatch", identifier_from, identifier_to)
+
+
+def mutation_merge_musicgroup_member(person_identifier: str, musicgroup_identifier: str):
+    """Returns a mutation for adding a Person object as member of a MusicGroup object.
+    (https://schema.org/member)
+
+    Args:
+        person_identifier: the identifer of the Person to match to
+        musicgroup_identifier: the identifier of the MusicGroup to which Person belong
+    Returns: a mutation for adding a Person object as member of a MusicGroup object
+    """
+    return format_link_mutation("MergeMusicGroupMember", person_identifier, musicgroup_identifier)
+
+
+def mutation_remove_musicgroup_member(person_identifier: str, musicgroup_identifier: str):
+    """Returns a mutation for removing a Person object as member of a MusicGroup object.
+    (https://schema.org/member)
+
+    Args:
+        person_identifier: the identifer of the Person to match to
+        musicgroup_identifier: the identifier of the MusicGroup to which Person belong
+    Returns: a mutation for removing a Person object as member of a MusicGroup object
+    """
+    return format_link_mutation("RemoveMusicGroupMember", person_identifier, musicgroup_identifier)

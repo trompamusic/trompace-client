@@ -55,7 +55,7 @@ def submit_query(querystr: str, auth_required=False):
         if "errors" in resp.keys():
             raise QueryException(resp['errors'])
     except ValueError:
-        raise QueryException(r.content)
+        raise QueryException([{"message": r.content}])
     return resp
 
 

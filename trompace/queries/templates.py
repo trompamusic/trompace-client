@@ -1,11 +1,10 @@
 # Templates for generating GraphQL queries.
 
 # To be added EntryPoint, ControlAction, PropertyValueSpecification and Property
-from .. import make_parameters, QUERY
 from typing import Dict, Any
 
 from trompace.queries import QUERY
-from trompace import make_parameters
+from trompace import make_parameters, make_select_query
 
 QUERY_TEMPLATE = '''{queryname}{parameters}
 {{
@@ -52,7 +51,7 @@ def format_query(queryname: str, args: Dict[str, Any], return_items_list: list):
     if args:
         parameters = "({})".format(make_parameters(**args))
     formatted_query = QUERY_TEMPLATE.format(queryname=queryname, parameters=parameters,
-                                            return_items="\n".join(return_items_list))
+                                            return_items=make_select_query(return_items_list))
     return QUERY.format(query=formatted_query)
 
 
