@@ -48,8 +48,7 @@ def mutation_create_itemlist(contributor: str, name: str = None,
 @docstring_interpolate("itemlist_args", ITEMLIST_ARGS_DOCS)
 def mutation_update_itemlist(identifier: str, contributor: str,
                              name: str = None,
-                             itemlistorder: ItemListOrderType =
-                             ItemListOrderType.ItemListUnordered,
+                             itemlistorder: ItemListOrderType = None,
                              description: str = None):
     """Returns a mutation for updating an ItemList object.
     (https://schema.org/ItemList)
@@ -61,7 +60,7 @@ def mutation_update_itemlist(identifier: str, contributor: str,
     Returns:
         The string for the mutation for updating the ItemList.
     """
-    if not isinstance(itemlistorder, ItemListOrderType):
+    if itemlistorder is not None and not isinstance(itemlistorder, ItemListOrderType):
         raise trompace.exceptions.InvalidItemListOrderTypeException(itemlistorder)
 
     args = {
@@ -69,8 +68,9 @@ def mutation_update_itemlist(identifier: str, contributor: str,
         "contributor": contributor,
         "name": name,
         "description": description,
-        "itemListOrder": StringConstant(itemlistorder)
     }
+    if itemlistorder is not None:
+        args["itemListOrder"] = StringConstant(itemlistorder)
 
     args = filter_none_args(args)
 
