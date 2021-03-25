@@ -191,7 +191,7 @@ def itemlist_node_exists(itemlist_id: str):
     query = query_itemlist(identifier=itemlist_id)
     resp = submit_query(query)
     result = resp.get("data", {}).get("ItemList")
-
+    print(query)
     if not result:
         raise QueryException(resp['errors'])
     else:
@@ -378,15 +378,18 @@ def insert_listitem_itemlist(contributor: str, name: str, description: str,
     itemlist_obj = itemlist_obj[0]
     itemlist_id = itemlist_obj["identifier"]
     itemlist_elements = itemlist_obj["itemListElement"]
+    itemlist_elements = sorted(itemlist_elements, key=lambda k: k['position'])
 
+    # If input ListItem objects are already node in the CE, set description to None.
     if ids_mode:
         description = None
+    # If input ListItem objects are strings, set description to the input string.
     else:
         description = listitem
 
     if append:
         position = len(itemlist_elements)
-        lastitem_id = itemlist_elements[0]["identifier"]
+        lastitem_id = itemlist_elements[-1]["identifier"]
 
         listitem_id = create_listitem_node(contributor=contributor,
                                            name=name,
@@ -419,8 +422,6 @@ def insert_listitem_itemlist(contributor: str, name: str, description: str,
             merge_listitem_item_nodes(listitem_id=listitem_id, item_id=listitem)
 
         # Update
-        itemlist_elements = sorted(itemlist_elements, key=lambda k: k['position'])
-
         if position > 0:
             merge_listitem_nextitem_nodes(listitem_id=itemlist_elements[position-1]["identifier"],
                                           nextitem_id=listitem_id)
