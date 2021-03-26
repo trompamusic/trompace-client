@@ -14,8 +14,8 @@ MUSICRECORDING_ARGS_DOCS = """name: The name of the MusicRecording object.
 
 
 @docstring_interpolate("musicrecording_args", MUSICRECORDING_ARGS_DOCS)
-def mutation_create_musicrecording(*, title: str, contributor: str, creator: str, source: str, format_: str,
-                                   name: str = None, language: str = None):
+def mutation_create_musicrecording(*, title: str, contributor: str, creator: str, source: str, format_: str, encodingformat: str = None,
+                                   name: str = None, language: str = None, description: str, date: str = None, subject: str = None):
     """Returns a mutation for creating a MusicRecording object.
     https://schema.org/MusicRecording
 
@@ -39,7 +39,13 @@ def mutation_create_musicrecording(*, title: str, contributor: str, creator: str
         "source": source,
         "format": format_,
         "name": name,
+        "description": description,
+        "encodingFormat": encodingformat,
+        "subject": subject
     }
+
+    if date is not None:
+        args["date"] = _Neo4jDate(date)
     if language is not None:
         args["language"] = StringConstant(language.lower())
 
@@ -49,8 +55,8 @@ def mutation_create_musicrecording(*, title: str, contributor: str, creator: str
 
 
 @docstring_interpolate("musicrecording_args", MUSICRECORDING_ARGS_DOCS)
-def mutation_update_musicrecording(identifier: str, *, title: str, contributor: str, creator: str, source: str,
-                                   format_: str, name: str = None, language: str = None):
+def mutation_update_musicrecording(identifier: str, *, title: str, contributor: str, creator: str, source: str, encodingformat: str = None,
+                                   format_: str, name: str = None, language: str = None, description: str, date: str = None, subject: str = None):
     """Returns a mutation for updating a MusicRecording object.
     https://schema.org/MusicRecording
 
@@ -75,7 +81,13 @@ def mutation_update_musicrecording(identifier: str, *, title: str, contributor: 
         "source": source,
         "format": format_,
         "name": name,
+        "description": description,
+        "encodingFormat": encodingformat,
+        "subject": subject
     }
+
+    if date is not None:
+        args["date"] = _Neo4jDate(date)
     if language is not None:
         args["language"] = StringConstant(language.lower())
 
