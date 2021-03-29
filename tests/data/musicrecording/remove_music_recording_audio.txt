@@ -1,0 +1,13 @@
+mutation {
+  RemoveMusicRecordingAudio(
+    from: {identifier: "d3f968f4-90cd-4764-93bc-6fadcc2a35e6"}
+    to: {identifier: "b10ac895-beb8-489e-8168-3e786d1aeb0e"}
+  ) {
+    from {
+      identifier
+    }
+    to {
+      identifier
+    }
+  }
+}

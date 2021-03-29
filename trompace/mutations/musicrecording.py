@@ -14,8 +14,8 @@ MUSICRECORDING_ARGS_DOCS = """name: The name of the MusicRecording object.
 
 
 @docstring_interpolate("musicrecording_args", MUSICRECORDING_ARGS_DOCS)
-def mutation_create_musicrecording(*, title: str, contributor: str, creator: str, source: str, format_: str, encodingformat: str = None,
-                                   name: str = None, language: str = None, description: str, date: str = None, subject: str = None):
+def mutation_create_musicrecording(*, name: str = None, title: str,  description: str, contributor: str, creator: str, source: str,
+                                   format_: str, encodingformat: str = None, subject: str = None, language: str = None, date: str = None):
     """Returns a mutation for creating a MusicRecording object.
     https://schema.org/MusicRecording
 
@@ -34,21 +34,21 @@ def mutation_create_musicrecording(*, title: str, contributor: str, creator: str
         raise UnsupportedLanguageException(language)
 
     args = {
+        "name": name,
         "title": title,
+        "description": description,
         "contributor": contributor,
         "creator": creator,
         "source": source,
         "format": format_,
-        "name": name,
-        "description": description,
         "encodingFormat": encodingformat,
         "subject": subject
     }
 
-    if date is not None:
-        args["date"] = _Neo4jDate(date)
     if language is not None:
         args["language"] = StringConstant(language.lower())
+    if date is not None:
+        args["date"] = _Neo4jDate(date)
 
     args = filter_none_args(args)
 
@@ -58,7 +58,7 @@ def mutation_create_musicrecording(*, title: str, contributor: str, creator: str
 @docstring_interpolate("musicrecording_args", MUSICRECORDING_ARGS_DOCS)
 def mutation_update_musicrecording(identifier: str, *, title: str = None, contributor: str = None,
                                    creator: str = None, source: str = None, encodingformat: str = None,
-                                   format_: str, name: str = None, language: str = None,
+                                   format_: str = None, name: str = None, language: str = None,
                                    description: str = None, date: str = None, subject: str = None):
     """Returns a mutation for updating a MusicRecording object.
     https://schema.org/MusicRecording
