@@ -1,4 +1,4 @@
-
+    
 from typing import Optional
 from trompace.config import config
 from trompace.connection import submit_query
@@ -191,7 +191,7 @@ def itemlist_node_exists(itemlist_id: str):
     query = query_itemlist(identifier=itemlist_id)
     resp = submit_query(query)
     result = resp.get("data", {}).get("ItemList")
-    print(query)
+
     if not result:
         raise QueryException(resp['errors'])
     else:
@@ -365,6 +365,7 @@ def insert_listitem_itemlist(contributor: str, name: str, description: str,
     Raises:
         ValueError if both append and position are passed as input arguments
         ValueError if position is greater than the length of the input ItemList
+        ValueError if a ListItem with position null is in the ItemList
         IDNotFoundException if ListItem objects are not found
         QueryException if the query fails to execute
     """
@@ -378,7 +379,11 @@ def insert_listitem_itemlist(contributor: str, name: str, description: str,
     itemlist_obj = itemlist_obj[0]
     itemlist_id = itemlist_obj["identifier"]
     itemlist_elements = itemlist_obj["itemListElement"]
-    itemlist_elements = sorted(itemlist_elements, key=lambda k: k['position'])
+    # We can't guarantee the order that items come out of the CE, so explicitly sort them
+    try:
+        itemlist_elements = sorted(itemlist_elements, key=lambda k: k['position'])
+    except TypeError:
+        raise ValueError("A ListItem with position null is present. Check the ItemList before to proceed.")
 
     # If input ListItem objects are already node in the CE, set description to None.
     if ids_mode:
