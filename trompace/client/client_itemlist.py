@@ -1,4 +1,3 @@
-    
 from typing import Optional
 from trompace.config import config
 from trompace.connection import submit_query
