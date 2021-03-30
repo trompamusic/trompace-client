@@ -1,4 +1,3 @@
-
 from typing import Optional
 from trompace.config import config
 from trompace.connection import submit_query
@@ -373,6 +372,7 @@ def insert_listitem_itemlist(contributor: str, name: str, description: str,
     Raises:
         ValueError if both append and position are passed as input arguments
         ValueError if position is greater than the length of the input ItemList
+        ValueError if a ListItem with position null is in the ItemList
         IDNotFoundException if ListItem objects are not found
         QueryException if the query fails to execute
     """
@@ -386,15 +386,22 @@ def insert_listitem_itemlist(contributor: str, name: str, description: str,
     itemlist_obj = itemlist_obj[0]
     itemlist_id = itemlist_obj["identifier"]
     itemlist_elements = itemlist_obj["itemListElement"]
+    # We can't guarantee the order that items come out of the CE, so explicitly sort them
+    try:
+        itemlist_elements = sorted(itemlist_elements, key=lambda k: k['position'])
+    except TypeError:
+        raise ValueError("A ListItem with position null is present. Check the ItemList before to proceed.")
 
+    # If input ListItem objects are already node in the CE, set description to None.
     if ids_mode:
         description = None
+    # If input ListItem objects are strings, set description to the input string.
     else:
         description = listitem
 
     if append:
         position = len(itemlist_elements)
-        lastitem_id = itemlist_elements[0]["identifier"]
+        lastitem_id = itemlist_elements[-1]["identifier"]
 
         listitem_id = create_listitem_node(contributor=contributor,
                                            name=name,
@@ -428,8 +435,6 @@ def insert_listitem_itemlist(contributor: str, name: str, description: str,
             merge_listitem_item_nodes(listitem_id=listitem_id, item_id=listitem)
 
         # Update
-        itemlist_elements = sorted(itemlist_elements, key=lambda k: k['position'])
-
         if position > 0:
             merge_listitem_nextitem_nodes(listitem_id=itemlist_elements[position-1]["identifier"],
                                           nextitem_id=listitem_id)
