@@ -126,7 +126,7 @@ def mutation_merge_music_composition_included_composition(main_identifier, part_
 
     Args:
         main_identifier: The identifier of a main MusicComposition.
-        part_identifier: The identifier of a MusicComposition which is an included part of the main MusicComposition
+        part_identifier: The identifier of a MusicComposition which is an included part of the main MusicComposition.
     """
     return format_link_mutation("MergeMusicCompositionIncludedComposition", main_identifier, part_identifier)
 
@@ -137,7 +137,7 @@ def mutation_remove_music_composition_included_composition(main_identifier, part
 
     Args:
         main_identifier: The identifier of a main MusicComposition.
-        part_identifier: The identifier of a MusicComposition which is an included part of the main MusicComposition
+        part_identifier: The identifier of a MusicComposition which is an included part of the main MusicComposition.
     """
     return format_link_mutation("RemoveMusicCompositionIncludedComposition", main_identifier, part_identifier)
 
@@ -149,7 +149,7 @@ def mutation_merge_music_composition_has_part(main_identifier, part_identifier):
 
     Args:
         main_identifier: The identifier of a main MusicComposition.
-        part_identifier: The identifier of a MusicComposition which is a part of the main MusicComposition
+        part_identifier: The identifier of a MusicComposition which is a part of the main MusicComposition.
     """
     return format_link_mutation("MergeMusicCompositionHasPart", main_identifier, part_identifier)
 
@@ -160,7 +160,7 @@ def mutation_remove_music_composition_has_part(main_identifier, part_identifier)
 
     Args:
         main_identifier: The identifier of a main MusicComposition.
-        part_identifier: The identifier of a MusicComposition which is a part of the main MusicComposition
+        part_identifier: The identifier of a MusicComposition which is a part of the main MusicComposition.
     """
     return format_link_mutation("RemoveMusicCompositionHasPart", main_identifier, part_identifier)
 
@@ -171,7 +171,7 @@ def mutation_merge_music_composition_composer(composition_identifier, person_ide
 
     Args:
         composition_identifier: The identifier of a MusicComposition.
-        person_identifier: The identifier of a Person who composed the MusicComposition
+        person_identifier: The identifier of a Person who composed the MusicComposition.
     """
     return format_link_mutation("MergeMusicCompositionComposer", composition_identifier, person_identifier)
 
@@ -182,7 +182,7 @@ def mutation_remove_music_composition_composer(composition_identifier, person_id
 
     Args:
         composition_identifier: The identifier of a MusicComposition.
-        person_identifier: The identifier of a Person who composed the MusicComposition
+        person_identifier: The identifier of a Person who composed the MusicComposition.
     """
     return format_link_mutation("RemoveMusicCompositionComposer", composition_identifier, person_identifier)
 
@@ -215,7 +215,7 @@ def mutation_merge_music_composition_work_example(music_composition_id: str, cre
 
     Args:
         music_composition_id: The identifier of a MusicComposition.
-        creativework_id: The identifier of a CreativeWork which is an example of the MusicComposition
+        creativework_id: The identifier of a CreativeWork which is an example of the MusicComposition.
     """
 
     return format_link_mutation("MergeMusicCompositionWorkExample", music_composition_id, creativework_id)
@@ -227,7 +227,30 @@ def mutation_remove_music_composition_work_example(music_composition_id: str, cr
 
     Args:
         music_composition_id: The identifier of a MusicComposition.
-        creativework_id: The identifier of a CreativeWork which is an example of the MusicComposition
+        creativework_id: The identifier of a CreativeWork which is an example of the MusicComposition.
     """
 
     return format_link_mutation("RemoveMusicCompositionWorkExample", music_composition_id, creativework_id)
+
+def mutation_merge_music_composition_recorded_as(music_composition_id: str, music_recording_id: str):
+    """Returns a mutation for adding a MusicRecording as an recording of a MusicComposition
+    (https://schema.org/recordedAs).
+
+    Args:
+        music_composition_id: The identifier of a MusicComposition.
+        music_recording_id: The identifier of a MusicRecording which is a recording of the MusicComposition.
+    """
+
+    return format_link_mutation("MergeMusicCompositionRecordedAs", music_composition_id, music_recording_id)
+
+
+def mutation_remove_music_composition_recorded_as(music_composition_id: str, music_recording_id: str):
+    """Returns a mutation for removing a MusicRecording as a recording of a MusicComposition.
+    (https://schema.org/recordedAs).
+
+    Args:
+        music_composition_id: The identifier of a MusicComposition.
+        music_recording_id: The identifier of a MusicRecording which is a recording of the MusicComposition.
+    """
+
+    return format_link_mutation("RemoveMusicCompositionRecordedAs", music_composition_id, music_recording_id)

@@ -1,0 +1,8 @@
+mutation {
+  UpdateMusicRecording(
+		identifier: "2eeca6dd-c62c-490e-beb0-2e3899fca74f"
+        title: "Best of you - 2006 version"
+) {
+identifier
+}
+}

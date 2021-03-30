@@ -1,0 +1,16 @@
+mutation {
+  CreateMusicRecording(
+        name: "Best of you"
+        title: "Muziekweb - de muziekbibliotheek van Nederland"
+        description: "Description of the MusicRecording"
+        contributor: "https://www.muziekweb.nl"
+        creator: "https://github.com/trompamusic/ce-data-import"
+        source: "https://www.muziekweb.nl/Embed/JK157518-0002"
+        format: "text/html"
+        encodingFormat: "text/html"
+        subject: "Best of you"
+        language: en
+) {
+identifier
+}
+}
