@@ -14,7 +14,7 @@ class TestApplication(CeTestCase):
     def test_create(self):
         expected = self.read_file(os.path.join(self.data_dir, "create_softwareapplication.txt"))
 
-        created_application = mutation_create_application(application_name="Verovio MusicXML Converter",
+        created_application = mutation_create_application(name="Verovio MusicXML Converter",
                                                           contributor="https://www.verovio.org",
                                                           creator="Verovio",
                                                           source="https://github.com/rism-ch/verovio",
