@@ -92,14 +92,40 @@ def create_annotation_textual_body(creator: str, value: str, format_: str = None
     return format_mutation(mutationname="CreateAnnotationTextualBody", args=params)
 
 
+def create_annotation_motivation(creator: str, title: str, description: str,
+                                 broader_schema: AnnotationSchemaMotivation = None,
+                                 broader_url: str = None):
+    """Return a mutation for making an Annotation motivation
+    A custom motivation should be a special case of one of the standard 13 motivations in
+    the web annotation vocabulary (https://www.w3.org/TR/annotation-vocab/#named-individuals),
+    or a URL pointing to an external motivation
+
+    Arguments:
+        creator: a URI to the identity of the user who created this Motivation
+        title: a descriptive name for the motivation
+        description: a detailed description of the motivation
+        broader_schema: a AnnotationSchemaMotivation value describing what this motivation is
+           a special case of
+        broader_url: a URL to an oa:Motivation describing what this motivation is a special case of
+    """
+    params = {"creator": creator,
+              "title": title,
+              "description": description,
+              "broaderUrl": broader_url,
+              }
+    if broader_schema:
+        params["broaderMotivation"] = StringConstant(broader_schema.name)
+    params = filter_none_args(params)
+    return format_mutation(mutationname="CreateAnnotationCEMotivation", args=params)
+
+
 def create_annotation(creator: str, motivation: AnnotationSchemaMotivation,
                       target_url: str = None, body_url: str = None):
-    """Return a mutation for making an Annotation.
-    A web Annotation (https://www.w3.org/TR/annotation-model)
+    """Return a mutation for making a web Annotation (https://www.w3.org/TR/annotation-model)
 
     Arguments:
         creator: a URI to the identity of the user who created this Annotation
-        motivation: a AnnotationSchemaMotivation value, or the ID of an AnnotationCEMotivation node)
+        motivation: a AnnotationSchemaMotivation value, or the ID of an AnnotationCEMotivation node
         target_url: if the target is the URL of an external object, the URL
         body_url: if the body is the URL of an external object, the URL
 
@@ -107,6 +133,7 @@ def create_annotation(creator: str, motivation: AnnotationSchemaMotivation,
         A GraphQL Mutation to create an Annotation in the Trompa CE
     """
 
+    check_required_args(creator=creator, motivation=motivation)
     params = {"creator": creator,
               "motivation": StringConstant(motivation.name),
               "targetUrl": target_url,
@@ -119,8 +146,9 @@ def create_annotation(creator: str, motivation: AnnotationSchemaMotivation,
 
 def merge_annotation_targetnode(annotation_id, target_id):
     """
+    Join an annotation with an AnnotationCETarget
 
-    Args:
+    Arguments:
         annotation_id: CE Node ID of an Annotation object
         target_id: CE Node ID of an AnnotationCETarget object
 
@@ -130,8 +158,8 @@ def merge_annotation_targetnode(annotation_id, target_id):
 
 def merge_annotation_bodytext(annotation_id, textualbody_id):
     """
-
-    Args:
+    Join an annotation with a body described in an AnnotationTextualBody
+    Arguments:
         annotation_id: CE Node ID of an Annotation object
         textualbody_id: CE Node ID of an AnnotationTextualBody object
 
@@ -141,8 +169,8 @@ def merge_annotation_bodytext(annotation_id, textualbody_id):
 
 def merge_annotation_bodynode(annotation_id, node_id):
     """
-
-    Args:
+    Join an annotation with body described in any node in the CE
+    Arguments:
         annotation_id: CE Node ID of an Annotation object
         node_id: CE Node ID of any object that implements ThingInterface
 
@@ -152,8 +180,9 @@ def merge_annotation_bodynode(annotation_id, node_id):
 
 def merge_annotation_motivationdefinedterm(annotation_id, definedterm_id):
     """
+    Join an annotation with a DefinedTerm that describes a custom annotation Motivation
 
-    Args:
+    Arguments:
         annotation_id: CE Node ID of an Annotation object
         definedterm_id: CE Node ID of a DefinedTerm object which is a more specific annotation Motivation
 
@@ -163,12 +192,27 @@ def merge_annotation_motivationdefinedterm(annotation_id, definedterm_id):
     return format_link_mutation("MergeAnnotationMotivationDefinedTerm", annotation_id, definedterm_id)
 
 
+def merge_annotation_cemotivation(annotation_id, cemotivation_id):
+    """
+    Join an annotation with an AnnotationCEMotivation object that describes a custom annotation Motivation
+
+    Arguments:
+        annotation_id: CE Node ID of an Annotation object
+        cemotivation_id: CE Node ID of a AnnotationCEMotivation object which is a more specific annotation Motivation
+
+    Returns:
+
+    """
+    return format_link_mutation("MergeAnnotationMotivationNode", annotation_id, cemotivation_id)
+
+
 def update_annotation_ce_target(identifier: str, target: str = None, field: str = None, fragment: str = None):
     """Return a mutation for updating an AnnotationCETarget.
 
     Returns:
         A GraphQL Mutation to update an AnnotationCETarget in the Trompa CE
     """
+    check_required_args(identifier=identifier)
     params = {"identifier": identifier,
               "target": target,
               "field": field,
@@ -184,6 +228,7 @@ def update_annotation_textual_body(identifier: str, value: str = None, format_: 
     Returns:
         A GraphQL Mutation to update an AnnotationTextualBody in the Trompa CE
     """
+    check_required_args(identifier=identifier)
     if language and language.lower() not in SUPPORTED_LANGUAGES:
         raise UnsupportedLanguageException(language)
 
@@ -198,6 +243,25 @@ def update_annotation_textual_body(identifier: str, value: str = None, format_: 
     return format_mutation(mutationname="UpdateAnnotationTextualBody", args=params)
 
 
+def update_annotation_motivation(identifier: str, creator: str, title: str, description: str,
+                                 broader_schema: AnnotationSchemaMotivation = None,
+                                 broader_url: str = None):
+    """Return a mutation for updating an Annotation motivation
+
+    """
+    check_required_args(identifier=identifier)
+    params = {"identifier": identifier,
+              "creator": creator,
+              "title": title,
+              "description": description,
+              "broaderUrl": broader_url,
+              }
+    if broader_schema:
+        params["broaderMotivation"] = StringConstant(broader_schema.name),
+    params = filter_none_args(params)
+    return format_mutation(mutationname="UpdateAnnotationCEMotivation", args=params)
+
+
 def update_annotation(identifier: str, target: str = None, motivation: Union[AnnotationSchemaMotivation, str] = None,
                       body: str = None, creator: str = None):
     """Return a mutation for updating an Annotation.
@@ -205,6 +269,7 @@ def update_annotation(identifier: str, target: str = None, motivation: Union[Ann
     Returns:
         A GraphQL Mutation to create an Annotation in the Trompa CE
     """
+    check_required_args(identifier=identifier)
     params = {"identifier": identifier,
               "target": target,
               "motivation": motivation,
@@ -239,6 +304,19 @@ def delete_annotation_textual_body(identifier: str):
     """
     params = {"identifier": identifier}
     return format_mutation(mutationname="DeleteAnnotationTextualBody", args=params)
+
+
+def delete_annotation_motivation(identifier: str):
+    """Return a mutation for deleting an AnnotationCEMotivation.
+
+    Arguments:
+        identifier: The identifier of the AnnotationCEMotivation to delete
+
+    Returns:
+        A GraphQL Mutation to delete an AnnotationCEMotivation from the Trompa CE
+    """
+    params = {"identifier": identifier}
+    return format_mutation(mutationname="UpdateAnnotationCEMotivation", args=params)
 
 
 def delete_annotation(identifier: str):
