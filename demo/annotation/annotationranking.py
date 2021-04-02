@@ -1,12 +1,10 @@
 # Perform an annotation by ranking an item
 from demo.annotation import audio_file_liebestraum
-from demo.definedterm import fixed_vocabulary
 from trompace.mutations import annotation, rating
 
 
 def main(print_queries: bool, submit_queries: bool):
     user_vcard = "https://testuser.trompa-solid.upf.edu/profile/card#me"
-
 
     audio_id = audio_file_liebestraum(print_queries, submit_queries)
 
