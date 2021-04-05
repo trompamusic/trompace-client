@@ -1,5 +1,5 @@
 import enum
-from typing import Union
+from typing import Union, List
 
 from trompace import filter_none_args, StringConstant, check_required_args
 from trompace.constants import SUPPORTED_LANGUAGES
@@ -120,7 +120,7 @@ def create_annotation_motivation(creator: str, title: str, description: str,
 
 
 def create_annotation(creator: str, motivation: AnnotationSchemaMotivation,
-                      target_url: str = None, body_url: str = None):
+                      target_url: str = None, body_url: List[str] = None):
     """Return a mutation for making a web Annotation (https://www.w3.org/TR/annotation-model)
 
     Arguments:
