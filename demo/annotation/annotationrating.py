@@ -4,9 +4,20 @@ from trompace.mutations import annotation, rating
 
 
 def main(print_queries: bool, submit_queries: bool):
+    admin_vcard = "https://alastair.trompa-solid.upf.edu/profile/card#me"
     user_vcard = "https://testuser.trompa-solid.upf.edu/profile/card#me"
 
     audio_id = audio_file_liebestraum(print_queries, submit_queries)
+
+    # A 'template' of the rating that we're using. This can be used to show a graphical widget,
+    # and also as a common template that can be used to join together multiple annotations
+    rating_definition = rating.create_rating_definition(creator=admin_vcard, worstrating=0, bestrating=10)
+    rating_definition_id = "rating-definition-id"
+    print("Rating (definition)")
+    if print_queries:
+        print(rating_definition)
+    if submit_queries:
+        rating_definition_id = send_query_and_get_id(rating_definition, "CreateRating")
 
     # The annotation target. We're annotating the URL that is at the `source` field of the above audio object
     target = annotation.create_annotation_ce_target(
@@ -55,6 +66,14 @@ def main(print_queries: bool, submit_queries: bool):
         print(user_rating)
     if submit_queries:
         rating_id = send_query_and_get_id(user_rating, "CreateRating")
+
+    # Say that the rating was derived from the original definition that we created
+    rating_was_derived_from_definition = rating.rating_add_was_derived_from_rating(rating_id, rating_definition_id)
+    print("Rating - join to definition template")
+    if print_queries:
+        print(rating_was_derived_from_definition)
+    if submit_queries:
+        send_query_and_get_id(rating_was_derived_from_definition)
 
     # Join the annotation with the AnnotationCETarget
     annotation_target_join = annotation.merge_annotation_targetnode(ann_id, target_id)
