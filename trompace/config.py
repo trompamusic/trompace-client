@@ -2,6 +2,7 @@ import configparser
 import datetime
 import logging
 import os
+import urllib
 
 from typing import List, Dict
 from urllib.parse import urlparse
@@ -75,8 +76,8 @@ class TrompaConfig:
             scheme = parsed.scheme
         self.host = f"{scheme}://{hostpath}"
         wss_scheme = "wss" if scheme == "https" else "ws"
-        wss_path = os.path.join(hostpath, "graphql")
-        self.websocket_host = f"{wss_scheme}://{wss_path}"
+        websocket_host = f"{wss_scheme}://{hostpath}"
+        self.websocket_host = urllib.parse.urljoin(websocket_host, "graphql")
 
     def _set_jwt(self):
         server = self.config["server"]
@@ -154,7 +155,7 @@ class TrompaConfig:
 def get_jwt(host, jwt_id, jwt_key, jwt_scopes):
     """Request a JWT key from the CE"""
     # TODO: Would be nice to put this in trompace.connection, but issues with circular import
-    url = os.path.join(host, "jwt")
+    url = urllib.parse.urljoin(host, "jwt")
     data = {
         "id": jwt_id,
         "apiKey": jwt_key,
