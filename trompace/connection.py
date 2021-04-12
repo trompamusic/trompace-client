@@ -59,7 +59,21 @@ def submit_query(querystr: str, auth_required=False):
     return resp
 
 
-async def download_file(url, file_link):
+async def download_file_async(url, file_link):
+    """
+    Downloads a file linked by the URL as saves it in the link provided in file_link.
+    Arguments:
+    url: url for the file to be downloaded
+    file_link: the path to save the file in
+    """
+    with requests.get(url, stream=True) as r:
+        r.raise_for_status()
+        with open(file_link, 'wb') as f:
+            for chunk in r.iter_content(chunk_size=8192):
+                if chunk:
+                    f.write(chunk)
+
+def download_file(url, file_link):
     """
     Downloads a file linked by the URL as saves it in the link provided in file_link.
     Arguments:

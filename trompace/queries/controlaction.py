@@ -8,16 +8,18 @@ QUERY_CONTROLACTION_ID = """
         ControlAction(identifier: "{identifier}") {{
             actionStatus
             identifier
+            wasDerivedFrom{{
+                identifier
+            }}
             object {{
+                identifier
                 ... on PropertyValue {{
                     value
                     name
                     title
                     nodeValue {{
-                        ... on DigitalDocument {{
                             format
                             source
-                        }}
                     }}
                 }}
             }}
@@ -35,4 +37,15 @@ def query_controlaction(identifier: str):
         The string for the quereing the control action.
     """
     query_ca = QUERY_CONTROLACTION_ID.format(identifier=identifier)
+    return query_ca
+
+def query_controlaction_filter(filter: str, return_items_list: list = ["identifier", "name"]):
+
+    """Returns a query for querying the database for a controlaction object given a specific filter.
+    Arguments:
+        identifier: The identifier of the control action in the CE.
+    Returns:
+        The string for the quereing the control action.
+    """
+    query_ca = format_query("ControlAction", filter, return_items_list)
     return query_ca
