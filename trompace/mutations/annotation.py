@@ -264,7 +264,7 @@ def update_annotation_motivation(identifier: str, creator: str, title: str, desc
               "broaderUrl": broader_url,
               }
     if broader_schema:
-        params["broaderMotivation"] = StringConstant(broader_schema.name),
+        params["broaderMotivation"] = StringConstant(broader_schema.name)
     params = filter_none_args(params)
     return format_mutation(mutationname="UpdateAnnotationCEMotivation", args=params)
 
@@ -345,5 +345,5 @@ def create_annotation_toolkit(creator: str, name: str, description: str = None):
                                     additionaltype=[ADDITIONAL_TYPE_ANNOTATION_TOOLKIT])
 
 
-def create_annotation_toolkit_element(creator: str, itemurl: str = None):
-    return mutation_create_listitem(creator=creator, itemurl=itemurl)
+def create_annotation_toolkit_element(creator: str, name: str = None, itemurl: str = None):
+    return mutation_create_listitem(creator=creator, name=name, itemurl=itemurl)
