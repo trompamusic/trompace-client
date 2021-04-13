@@ -1,7 +1,7 @@
 from typing import List
 
 from trompace import check_required_args, filter_none_args
-from trompace.mutations import MUTATION
+from trompace.mutations import MUTATION, _verify_additional_type
 from trompace.mutations.templates import format_mutation, format_link_mutation
 
 ADD_DEF_TERM_DEF_TERMSET = '''AddDefinedTermSetHasDefinedTerm (
@@ -17,18 +17,7 @@ ADD_DEF_TERM_DEF_TERMSET = '''AddDefinedTermSetHasDefinedTerm (
 }}'''
 
 
-def _verify_additional_type(additionaltype):
-    """Check that the input to additionaltype is a list of strings.
-    If it is empty, raise ValueError
-    If it is a string, convert it to a list of strings."""
-    if additionaltype is None:
-        return None
 
-    if isinstance(additionaltype, str):
-        additionaltype = [additionaltype]
-    if len(additionaltype) == 0:
-        raise ValueError("additionaltype must be a non-empty list")
-    return additionaltype
 
 
 def create_defined_term_set(*, creator: str, name: str, additionaltype: List[str], image: str = None):

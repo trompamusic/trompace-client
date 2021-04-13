@@ -4,6 +4,7 @@ from typing import Union, List
 from trompace import filter_none_args, StringConstant, check_required_args
 from trompace.constants import SUPPORTED_LANGUAGES
 from trompace.exceptions import UnsupportedLanguageException
+from trompace.mutations.itemlist import mutation_create_itemlist, mutation_create_listitem
 from trompace.mutations.templates import format_mutation, format_link_mutation
 
 # For making DefinedTerms that are a collection of tags
@@ -11,8 +12,14 @@ ADDITIONAL_TYPE_TAG_COLLECTION = "https://vocab.trompamusic.eu/vocab#TagCollecti
 ADDITIONAL_TYPE_TAG_COLLECTION_ELEMENT = "https://vocab.trompamusic.eu/vocab#TagCollectionElement"
 
 # For making DefinedTerms that are a collection of annotation motivations
-ADDITIONAL_TYPE_MOTIVATION_COLLECTION = "https://trompamusic.eu/vocab#AnnotationMotivationCollection"
-ADDITIONAL_TYPE_MOTIVATION_COLLECTION_ELEMENT = "https://trompamusic.eu/vocab#AnnotationMotivationCollectionElement"
+ADDITIONAL_TYPE_MOTIVATION_COLLECTION = "https://vocab.trompamusic.eu/vocab#AnnotationMotivationCollection"
+ADDITIONAL_TYPE_MOTIVATION_COLLECTION_ELEMENT = "https://vocab.trompamusic.eu/vocab#AnnotationMotivationCollectionElement"
+
+# For saying that an ItemList is an annotation toolkit
+ADDITIONAL_TYPE_ANNOTATION_TOOLKIT = "https://vocab.trompamusic.eu/vocab#AnnotationToolkit"
+
+# For saying that an ItemList is an annotation session
+ADDITIONAL_TYPE_ANNOTATION_SESSION = "https://vocab.trompamusic.eu/vocab#AnnotationSession"
 
 OA_ANNOTATION_MOTIVATION_TYPE = "http://www.w3.org/ns/oa#Motivation"
 
@@ -330,3 +337,13 @@ def delete_annotation(identifier: str):
     """
     params = {"identifier": identifier}
     return format_mutation(mutationname="DeleteAnnotation", args=params)
+
+
+def create_annotation_toolkit(creator: str, name: str, description: str = None):
+    # TODO: Not sure what to do about ordering
+    return mutation_create_itemlist(name=name, creator=creator, description=description,
+                                    additionaltype=[ADDITIONAL_TYPE_ANNOTATION_TOOLKIT])
+
+
+def create_annotation_toolkit_element(creator: str, itemurl: str = None):
+    return mutation_create_listitem(creator=creator, itemurl=itemurl)
