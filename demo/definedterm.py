@@ -67,7 +67,7 @@ def motivation_collection(print_queries: bool, submit_queries: bool):
     dt_upbow = definedterm.create_defined_term(creator=admin_vcard,
                                                additionaltype=[annotation.ADDITIONAL_TYPE_MOTIVATION_COLLECTION_ELEMENT,
                                                                annotation.OA_ANNOTATION_MOTIVATION_TYPE],
-                                               broader=annotation.AnnotationSchemaMotivation.commenting.value,
+                                               broader_schema=annotation.AnnotationSchemaMotivation.commenting,
                                                image="https://alastair.trompa-solid.upf.edu/annotation-images/upbow.png",
                                                termcode="Upbow")
 
@@ -75,21 +75,21 @@ def motivation_collection(print_queries: bool, submit_queries: bool):
                                                  additionaltype=[
                                                      annotation.ADDITIONAL_TYPE_MOTIVATION_COLLECTION_ELEMENT,
                                                      annotation.OA_ANNOTATION_MOTIVATION_TYPE],
-                                                 broader=annotation.AnnotationSchemaMotivation.commenting.value,
+                                                 broader_schema=annotation.AnnotationSchemaMotivation.commenting,
                                                  image="https://alastair.trompa-solid.upf.edu/annotation-images/downbow.png",
                                                  termcode="Downbow")
 
     dt_arco = definedterm.create_defined_term(creator=admin_vcard,
                                               additionaltype=[annotation.ADDITIONAL_TYPE_MOTIVATION_COLLECTION_ELEMENT,
                                                               annotation.OA_ANNOTATION_MOTIVATION_TYPE],
-                                              broader=annotation.AnnotationSchemaMotivation.commenting.value,
+                                              broader_schema=annotation.AnnotationSchemaMotivation.commenting,
                                               image="https://alastair.trompa-solid.upf.edu/annotation-images/arco.png",
                                               termcode="Arco")
 
     dt_slur = definedterm.create_defined_term(creator=admin_vcard,
                                               additionaltype=[annotation.ADDITIONAL_TYPE_MOTIVATION_COLLECTION_ELEMENT,
                                                               annotation.OA_ANNOTATION_MOTIVATION_TYPE],
-                                              broader=annotation.AnnotationSchemaMotivation.commenting.value,
+                                              broader_schema=annotation.AnnotationSchemaMotivation.commenting,
                                               image="https://alastair.trompa-solid.upf.edu/annotation-images/slur.png",
                                               termcode="Slur")
 
