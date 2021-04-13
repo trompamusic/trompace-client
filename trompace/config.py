@@ -63,15 +63,15 @@ class TrompaConfig:
         server = self.config["server"]
         if "host" not in server:
             raise ValueError("Cannot find 'server.host' option")
+        if "secure" in server:
+            raise ValueError("Config file has changed, add http:// or https:// to server.host")
         host = server.get("host")
+        if not host.startswith("http") or "://" not in host:
+            raise ValueError("server.host option doesn't appear to be a url with scheme")
         parsed = urlparse(host)
         hostpath = parsed.netloc + parsed.path
-        if not parsed.scheme and "secure" not in server:
-            raise ValueError("No scheme set on ")
-        elif not parsed.scheme:
-            scheme = "https" if server.getboolean("secure") else "http"
-            trompace.logger.debug("Using 'server.secure' to set http/https flag but this is deprecated")
-            trompace.logger.debug("Use a fully qualified URL in 'server.host'")
+        if not parsed.scheme:
+            raise ValueError("No scheme set on host")
         else:
             scheme = parsed.scheme
         self.host = f"{scheme}://{hostpath}"

@@ -14,12 +14,11 @@ class TestConfig:
         c.config = configparser.ConfigParser()
         c.config.read_dict(settings)
 
-        c._set_server()
-        assert c.host == "http://localhost:4000"
-        assert c.websocket_host == "ws://localhost:4000/graphql"
+        with pytest.raises(ValueError):
+            c._set_server()
 
-    def test_set_server_no_secure(self):
-        # host with no scheme, and no secure flag
+    def test_set_server_no_scheme(self):
+        # host with no scheme
         settings = {"server": {"host": "localhost:4000"}}
         c = config.TrompaConfig()
         c.config = configparser.ConfigParser()
