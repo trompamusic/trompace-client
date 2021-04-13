@@ -66,7 +66,7 @@ def make_filter(args: dict):
     return " ".join(parts)
 
 
-def make_select_query(args):
+def make_select_query(args) -> str:
     parts = []
     for a in args:
         if isinstance(a, str):

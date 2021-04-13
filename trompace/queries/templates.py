@@ -1,7 +1,7 @@
 # Templates for generating GraphQL queries.
 
 # To be added EntryPoint, ControlAction, PropertyValueSpecification and Property
-from typing import Dict, Any
+from typing import Dict, Any, Union
 
 from trompace.queries import QUERY
 from trompace import make_parameters, make_select_query
@@ -37,12 +37,12 @@ itemListElement{{
 }}'''
 
 
-def format_query(queryname: str, args: Dict[str, Any], return_items_list: list):
+def format_query(queryname: str, args: Dict[str, Any], return_items: Union[list, str]):
     """Create a query to send to the Contributor Environment.
     Arguments:
         queryname: the name of the query to generate
         args: a dictionary of field: value pairs to add to the query.
-        return_items_list: A list of items for the query to return.
+        return_items: A list of items for the query to return, or a formatted string of graphql.
     Returns:
         A formatted query
     """
@@ -50,8 +50,10 @@ def format_query(queryname: str, args: Dict[str, Any], return_items_list: list):
     parameters = ""
     if args:
         parameters = "({})".format(make_parameters(**args))
+    if isinstance(return_items, list):
+        return_items = make_select_query(return_items)
     formatted_query = QUERY_TEMPLATE.format(queryname=queryname, parameters=parameters,
-                                            return_items=make_select_query(return_items_list))
+                                            return_items=return_items)
     return QUERY.format(query=formatted_query)
 
 
