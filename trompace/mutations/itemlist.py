@@ -1,24 +1,27 @@
-from typing import Optional
+from graphql import validation
+from typing import Optional, List
 from trompace import (docstring_interpolate, filter_none_args,
                       StringConstant, check_required_args)
 from trompace.constants import ItemListOrderType
+from trompace.mutations import _verify_additional_type
 from trompace.mutations.templates import (format_mutation, format_link_mutation,
                                           format_sequence_mutation, format_sequence_link_mutation)
 import trompace.exceptions
 
 ITEMLIST_ARGS_DOCS = """name: The name of the ItemList object.
-        contributor: A person, an organization, or a service responsible
-          for contributing the ItemList to the web resource. This can be either a name or a base URL.
         creator: The person, organization or service who created the ItemList.
         itemlistorder: The type of ordering for the list (ascending, descending, unordered, ordered)
-        description: The description of the ItemList object
+        contributor (optional): A person, an organization, or a service responsible
+          for contributing the ItemList to the web resource. This can be either a name or a base URL.
+        description (optional): The description of the ItemList object
+        additionaltype (optional): A list of schema.org additionalTypes used to categorise this ItemList
         """
 
 
 @docstring_interpolate("itemlist_args", ITEMLIST_ARGS_DOCS)
-def mutation_create_itemlist(contributor: str, name: str = None,
+def mutation_create_itemlist(name: str, creator: str,
                              itemlistorder: ItemListOrderType = ItemListOrderType.ItemListUnordered,
-                             creator: str = None, description: str = None):
+                             description: str = None, contributor: str = None, additionaltype: List[str] = None):
     """Returns a mutation for creating an ItemList object.
     (https://schema.org/ItemList)
 
@@ -30,14 +33,18 @@ def mutation_create_itemlist(contributor: str, name: str = None,
     """
     if not isinstance(itemlistorder, ItemListOrderType):
         raise trompace.exceptions.InvalidItemListOrderTypeException(itemlistorder)
+    check_required_args(name=name, creator=creator)
+    additionaltype = _verify_additional_type(additionaltype)
 
     args = {
-        "contributor": contributor,
         "creator": creator,
         "name": name,
+        "contributor": contributor,
         "description": description,
-        "itemListOrder": StringConstant(itemlistorder)
+        "additionalType": additionaltype
     }
+    if itemlistorder:
+        args["itemListOrder"] = StringConstant(itemlistorder)
 
     args = filter_none_args(args)
 
@@ -45,11 +52,10 @@ def mutation_create_itemlist(contributor: str, name: str = None,
 
 
 @docstring_interpolate("itemlist_args", ITEMLIST_ARGS_DOCS)
-def mutation_update_itemlist(identifier: str, contributor: str,
-                             name: str = None,
+def mutation_update_itemlist(identifier: str, name: str = None, creator: str = None,
                              itemlistorder: ItemListOrderType = None,
-                             creator: str = None,
-                             description: str = None):
+                             description: str = None, contributor: str = None,
+                             additionaltype: List[str] = None):
     """Returns a mutation for updating an ItemList object.
     (https://schema.org/ItemList)
 
@@ -62,6 +68,8 @@ def mutation_update_itemlist(identifier: str, contributor: str,
     """
     if itemlistorder is not None and not isinstance(itemlistorder, ItemListOrderType):
         raise trompace.exceptions.InvalidItemListOrderTypeException(itemlistorder)
+    check_required_args(identifier=identifier)
+    additionaltype = _verify_additional_type(additionaltype)
 
     args = {
         "identifier": identifier,
@@ -69,6 +77,7 @@ def mutation_update_itemlist(identifier: str, contributor: str,
         "name": name,
         "description": description,
         "creator": creator,
+        "additionalType": additionaltype,
     }
     if itemlistorder is not None:
         args["itemListOrder"] = StringConstant(itemlistorder)
@@ -99,13 +108,14 @@ LISTITEM_ARGS_DOCS = """name: The name of the ListItem object.
         contributor: A person, an organization, or a service responsible for contributing the ListItem to the web resource.
           This can be either a name or a base URL.
         description: The description of the ListItem object
+        itemurl: If the item of this ListItem points to a URL outside of the CE, the item URL 
         position: the position of the ListItem
         """
 
 
 @docstring_interpolate("listitem_args", LISTITEM_ARGS_DOCS)
-def mutation_create_listitem(contributor: str, name: str = None, creator: str = None,
-                             description: str = None, position: Optional[int] = None):
+def mutation_create_listitem(creator: str, name: str = None, contributor: str = None,
+                             description: str = None, itemurl: str = None, position: Optional[int] = None):
     """Returns a mutation for creating a ListItem object.
     (https://schema.org/ListItem)
 
@@ -115,11 +125,13 @@ def mutation_create_listitem(contributor: str, name: str = None, creator: str = 
     Returns:
         The string for the mutation for creating the ListItem.
     """
+    check_required_args(creator=creator)
     args = {
         "contributor": contributor,
         "name": name,
         "creator": creator,
         "description": description,
+        "itemUrl": itemurl,
         "position": position,
     }
 
@@ -129,8 +141,8 @@ def mutation_create_listitem(contributor: str, name: str = None, creator: str = 
 
 
 @docstring_interpolate("listitem_args", LISTITEM_ARGS_DOCS)
-def mutation_update_listitem(identifier: str, contributor: str = None, name: str = None,
-                             creator: str = None, description: str = None, position: int = None):
+def mutation_update_listitem(identifier: str, creator: str = None, name: str = None, contributor: str = None,
+                             description: str = None, itemurl: str = None, position: int = None):
     """Returns a mutation for updating a ListItem object.
     (https://schema.org/ListItem)
 
@@ -143,10 +155,11 @@ def mutation_update_listitem(identifier: str, contributor: str = None, name: str
     """
     args = {
         "identifier": identifier,
-        "contributor": contributor,
-        "name": name,
         "creator": creator,
+        "name": name,
+        "contributor": contributor,
         "description": description,
+        "itemUrl": itemurl,
         "position": position,
     }
 
