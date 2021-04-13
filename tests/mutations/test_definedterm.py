@@ -1,9 +1,9 @@
 import os
 
-from freezegun import freeze_time
-
 from trompace.mutations import definedterm
 from tests import CeTestCase
+from trompace.mutations.annotation import ADDITIONAL_TYPE_TAG_COLLECTION, ADDITIONAL_TYPE_TAG_COLLECTION_ELEMENT, \
+    AnnotationSchemaMotivation
 
 
 class TestDefinedTerm(CeTestCase):
@@ -12,24 +12,43 @@ class TestDefinedTerm(CeTestCase):
         super()
         self.data_dir = os.path.join(self.test_directory, "data", "definedterm")
 
-    @freeze_time("2020-04-09T10:57:55")
     def test_create_defined_term_set(self):
         expected = self.read_file("create_definedtermset.txt")
 
         create_dts = definedterm.create_defined_term_set(
             creator="https://trompamusic.eu/user/mozart",
             name="Bowing direction",
-            additionaltype="https://vocab.trompamusic.eu/vocab#TagCollection")
+            additionaltype=[ADDITIONAL_TYPE_TAG_COLLECTION])
         self.assert_queries_equal(create_dts, expected)
 
-    @freeze_time("2020-04-09T10:57:55")
     def test_create_defined_term(self):
         expected = self.read_file("create_definedterm.txt")
 
         create_dt = definedterm.create_defined_term(
             creator="https://trompamusic.eu/user/mozart",
             termcode="up",
-            additionaltype="https://vocab.trompamusic.eu/vocab#TagCollectionElement")
+            additionaltype=[ADDITIONAL_TYPE_TAG_COLLECTION_ELEMENT])
+        self.assert_queries_equal(create_dt, expected)
+
+    def test_create_defined_term_broader_url(self):
+        expected = self.read_file("create_definedterm_broader_url.txt")
+
+        create_dt = definedterm.create_defined_term(
+            creator="https://trompamusic.eu/user/mozart",
+            termcode="up",
+            additionaltype=[ADDITIONAL_TYPE_TAG_COLLECTION_ELEMENT],
+            broader_url="http://some_url/motivation")
+        self.assert_queries_equal(create_dt, expected)
+
+    def test_create_defined_term_broader_schema(self):
+        expected = self.read_file("create_definedterm_broader_schema.txt")
+
+        create_dt = definedterm.create_defined_term(
+            creator="https://trompamusic.eu/user/mozart",
+            termcode="up",
+            additionaltype=[ADDITIONAL_TYPE_TAG_COLLECTION_ELEMENT],
+            broader_schema=AnnotationSchemaMotivation.commenting
+        )
         self.assert_queries_equal(create_dt, expected)
 
     def test_defined_term_add_to_defined_term_set(self):
@@ -40,7 +59,6 @@ class TestDefinedTerm(CeTestCase):
             defined_term="5bd8a1c8-4e9e-4640-ae4b-134680af9acf")
         self.assert_queries_equal(add, expected)
 
-    @freeze_time("2020-03-24T20:11:20")
     def test_update_defined_term_set(self):
         expected = self.read_file("update_definedtermset.txt")
 
@@ -48,14 +66,12 @@ class TestDefinedTerm(CeTestCase):
                                                          name="Bowing direction")
         self.assert_queries_equal(update_dts, expected)
 
-    @freeze_time("2020-04-04T15:31:04+00:00")
     def test_update_defined_term(self):
         expected = self.read_file("update_definedterm.txt")
 
         update_dts = definedterm.update_defined_term("07e8458f-7597-4a67-80bd-06035d01456f",
                                                      termcode="down")
         self.assert_queries_equal(update_dts, expected)
-
 
     def test_delete_defined_term_set(self):
         expected = self.read_file("delete_definedtermset.txt")

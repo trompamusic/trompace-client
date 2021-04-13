@@ -1,0 +1,10 @@
+mutation {
+  CreateDefinedTerm(
+additionalType: ["https://vocab.trompamusic.eu/vocab#TagCollectionElement"]
+        creator: "https://trompamusic.eu/user/mozart"
+        termCode: "up"
+        broaderMotivation: commenting
+) {
+identifier
+}
+}

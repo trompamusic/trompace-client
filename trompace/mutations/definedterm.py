@@ -1,23 +1,8 @@
 from typing import List
 
-from trompace import check_required_args, filter_none_args
-from trompace.mutations import MUTATION, _verify_additional_type
+from trompace import StringConstant, check_required_args, filter_none_args
+from trompace.mutations import _verify_additional_type, annotation
 from trompace.mutations.templates import format_mutation, format_link_mutation
-
-ADD_DEF_TERM_DEF_TERMSET = '''AddDefinedTermSetHasDefinedTerm (
-    from: {{identifier: "{defined_term_set_id}"}}
-    to: {{identifier: "{defined_term_id}"}}
-) {{
-    from {{
-        __typename
-    }}
-    to {{
-        __typename
-    }}
-}}'''
-
-
-
 
 
 def create_defined_term_set(*, creator: str, name: str, additionaltype: List[str], image: str = None):
@@ -45,8 +30,8 @@ def create_defined_term_set(*, creator: str, name: str, additionaltype: List[str
     return format_mutation(mutationname="CreateDefinedTermSet", args=params)
 
 
-def create_defined_term(*, creator: str, termcode: str, additionaltype: List[str],
-                        broader: str = None, image: str = None):
+def create_defined_term(*, creator: str, termcode: str, additionaltype: List[str], broader_url: str = None,
+                        broader_schema: annotation.AnnotationSchemaMotivation = None, image: str = None):
     """Return a mutation for making a DefinedTerm.
     A DefinedTerm (https://schema.org/DefinedTerm) is a word, name, acronym, phrase, etc. with a formal definition.
     It is part of a DefinedTermSet.
@@ -55,7 +40,8 @@ def create_defined_term(*, creator: str, termcode: str, additionaltype: List[str
         creator: a URI to the identity of the user who created this DefinedTerm
         termcode: The name of this term
         additionaltype: A list of schema.org additionalTypes used to categorise this DefinedTerm
-        broader (optional): a type to be related with skos:broader
+        broader_url (optional): a type to be related with skos:broader
+        broader_schema (optional): an annotation motivation to be related with skos:broader
         image (optional): an image to describe this DefinedTerm
 
     Returns:
@@ -67,8 +53,10 @@ def create_defined_term(*, creator: str, termcode: str, additionaltype: List[str
     params = {"additionalType": additionaltype,
               "creator": creator,
               "termCode": termcode,
-              "broader": broader,
+              "broaderUrl": broader_url,
               "image": image}
+    if broader_schema is not None:
+        params["broaderMotivation"] = StringConstant(broader_schema.name)
     params = filter_none_args(params)
 
     return format_mutation(mutationname="CreateDefinedTerm", args=params)
@@ -97,7 +85,8 @@ def update_defined_term_set(identifier: str, *, creator: str = None, name: str =
 
 
 def update_defined_term(identifier: str, *, creator: str = None, termcode: str = None,
-                        additionaltype: List[str] = None, broader: str = None, image: str = None):
+                        additionaltype: List[str] = None, broader_url: str = None,
+                        broader_schema: annotation.AnnotationSchemaMotivation = None, image: str = None):
     """Return a mutation for updating a DefinedTerm.
 
     TODO: Copy arguments from create_
@@ -111,9 +100,10 @@ def update_defined_term(identifier: str, *, creator: str = None, termcode: str =
               "creator": creator,
               "termCode": termcode,
               "additionalType": additionaltype,
-              "broader": broader,
+              "broaderUrl": broader_url,
               "image": image}
-
+    if broader_schema is not None:
+        params["broaderMotivation"] = StringConstant(broader_schema.name)
     params = filter_none_args(params)
 
     return format_mutation(mutationname="UpdateDefinedTerm", args=params)
