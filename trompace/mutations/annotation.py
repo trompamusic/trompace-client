@@ -347,3 +347,14 @@ def create_annotation_toolkit(creator: str, name: str, description: str = None):
 
 def create_annotation_toolkit_element(creator: str, name: str = None, itemurl: str = None):
     return mutation_create_listitem(creator=creator, name=name, itemurl=itemurl)
+
+
+def create_annotation_session(creator: str, name: str, description: str = None):
+    return mutation_create_itemlist(name=name, creator=creator, description=description,
+                                    additionaltype=[ADDITIONAL_TYPE_ANNOTATION_SESSION])
+
+
+def create_annotation_session_element(creator: str):
+    # To add an annotation to an annotation session we don't need any additional information
+    #  in the ListItem, it's just a basic container
+    return mutation_create_listitem(creator=creator)
