@@ -53,7 +53,6 @@ def encode_list(thelist, encoder):
 
 
 def make_filter(args: dict):
-    assert len(args) == 1
     encoder = json.JSONEncoder()
     parts = ["{"]
     for k, v in args.items():
@@ -62,6 +61,7 @@ def make_filter(args: dict):
             parts.append(make_filter(v))
         else:
             parts.append(encoder.encode(v))
+        parts.append(" ")
     parts.append("}")
     return " ".join(parts)
 
