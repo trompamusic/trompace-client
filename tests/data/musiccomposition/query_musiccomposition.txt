@@ -2,6 +2,7 @@ query {
   MusicComposition
 {
 identifier
-name
+title
+source
 }
 }
