@@ -14,12 +14,27 @@ QUERY_CONTROLACTION_ID = """
             object {{
                 identifier
                 ... on PropertyValue {{
+                    wasDerivedFrom {{
+                      identifier
+                    }}               
                     value
                     name
                     title
                     nodeValue {{
+                            ... on AudioObject {{
+                               contentUrl
+                              }}
+                            ... on MediaObject {{
+                               contentUrl
+                              }}
+                            ... on VideoObject {{
+                               contentUrl
+                              }}
+                            ... on DigitalDocument {{
+                               source
+                              }}                       
                             format
-                            source
+                            
                     }}
                 }}
             }}
