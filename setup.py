@@ -10,7 +10,7 @@ setup(
     description="A python library to read from and write to the Trompa CE",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/trompamusic/trompa-ce-client",
+    url="https://github.com/trompamusic/trompace-client",
     packages=find_packages(exclude=['tests', 'demo']),
     use_scm_version=True,
     setup_requires=['setuptools_scm'],

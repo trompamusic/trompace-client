@@ -5,24 +5,24 @@ from trompace.mutations.templates import format_mutation, format_link_mutation
 from trompace import StringConstant, _Neo4jDate, check_required_args, filter_none_args, docstring_interpolate
 from trompace.constants import SUPPORTED_LANGUAGES, SUPPORTED_GENDER
 
-PERSON_ARGS_DOCS = """title: The title of the resource indicated by `source`
-        contributor: The main URL of the site where the information about this Person was taken from
-        creator: The person, organization or service who is creating this Person (e.g. URL of the software)
-        source: The URL of the web resource where information about this Person is taken from
-        language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr
-        format_: The mimetype of the resource indicated by `source`
-        name: The name of the person
-        family_name (optional): The family name of the person
-        given_name (optional): The given name of the person
-        gender (optional): The person's gender
-        birth_date (optional): The birth date of the person, formatted as yyyy, yyyy-mm or yyyy-mm-dd
-        death_date (optional): The date of death of the person , formatted as yyyy, yyyy-mm or yyyy-mm-dd
-        description (optional): A biographical description of the person
-        image (optional): URL to an image associated with the person
-        publisher (optional): An entity responsible for making the resource available
-        honorific_prefix (optional): An honorific prefix.
-        honorific_suffix (optional): An honorific suffix.
-        job_title (optional): The person's job title."""
+PERSON_ARGS_DOCS = """title: The title of the resource indicated by `source` (:dcterms:`title`)
+        contributor: The main URL of the site where the information about this Person was taken from (:dcterms:`contributor`)
+        creator: The person, organization or service who is creating this Person (e.g. URL of the software) (:dcterms:`creator`)
+        source: The URL of the web resource where information about this Person is taken from (:dcterms:`source`)
+        language: The language the metadata is written in. Currently supported languages are en,es,ca,nl,de,fr (:dcterms:`language`)
+        format_: The mimetype of the resource indicated by `source` (:dcterms:`format`)
+        name: The name of the person (:schema:`name`)
+        family_name (optional): The family name of the person (:schema:`familyName`)
+        given_name (optional): The given name of the person (:schema:`givenName`)
+        gender (optional): The person's gender (:schema:`gender`)
+        birth_date (optional): The birth date of the person, formatted as yyyy, yyyy-mm or yyyy-mm-dd (:schema:`birthDate`)
+        death_date (optional): The date of death of the person , formatted as yyyy, yyyy-mm or yyyy-mm-dd (:schema:`deathDate`)
+        description (optional): A biographical description of the person (:dcterms:`description`)
+        image (optional): URL to an image associated with the person (:schema:`image`)
+        publisher (optional): An entity responsible for making the resource available (:dcterms:`publisher`)
+        honorific_prefix (optional): An honorific prefix (:schema:`honorificPrefix`)
+        honorific_suffix (optional): An honorific suffix (:schema:`honorificSuffix`)
+        job_title (optional): The person's job title. (:schema:`jobTitle`)"""
 
 
 @docstring_interpolate("person_args", PERSON_ARGS_DOCS)
