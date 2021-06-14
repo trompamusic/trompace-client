@@ -34,10 +34,12 @@ async def submit_query_async(querystr: str, auth_required=False):
 
 def submit_query(querystr: str, auth_required=False):
     """Submit a query to the CE.
-    Arguments:
+
+    Args:
         querystr: The query to be submitted
-        auth_required: If true, send an authentication key with this request. Don't send a key
-           if the global config.server_auth_required is false
+        auth_required: If ``True``, send an authentication key with this request. Required if the CE has authentication
+          enabled and you are sending a mutation. Not required for queries. The request is not authenticated
+          if the ``auth.required`` config item is ``False``
     """
     q = {"query": querystr}
     headers = {}

@@ -37,7 +37,9 @@ templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 extlinks = {'schema': ('https://schema.org/%s', 'schema:'),
-            'dcterms': ('http://purl.org/dc/terms/%s', 'dcterms:')
+            'dcterms': ('http://purl.org/dc/terms/%s', 'dcterms:'),
+            'oa': ('http://www.w3.org/ns/oa#%s', 'oa:'),
+            'prov': ('http://www.w3.org/ns/prov#%s', 'prov:')
             }
 
 
