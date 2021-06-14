@@ -1,0 +1,13 @@
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix schema: <http://schema.org/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix ex: <http://example.org/example/> .
+
+ex:MusicBrainz_Mahler a schema:Person ;
+  dc:name "Gustav Mahler" ;
+  schema:source "https://musicbrainz.org/artist/8d610e51-64b4-4654-b8df-064b0fb7a9d9" .
+
+ex:Wikipedia_Mahler a schema:Person ;
+  dc:name "Gustav Mahler" ;
+  schema:source "https://en.wikipedia.org/wiki/Gustav_Mahler" ;
+  skos:exactMatch ex:MusicBrainz_Mahler .

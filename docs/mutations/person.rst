@@ -29,8 +29,8 @@ exactMatch
 The `skos:exactMatch <http://www.w3.org/2004/02/skos/core#exactMatch>`_ relationship is used to identify
 that two ``Person`` nodes refer to the exact same natural person.
 
-.. image:: ../graphics/x.png
-  :target: ../_images/x.png
+.. image:: ../graphics/person-exactmatch-person.png
+  :target: ../_images/person-exactmatch-person.png
 
 Use the ``MergePersonExactMatch`` mutation to create a one-way link between two ``Person`` objects
 

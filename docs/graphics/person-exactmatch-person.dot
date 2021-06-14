@@ -1,0 +1,12 @@
+digraph {
+	rankdir = LR;
+	charset="utf-8";
+
+	"Rex:Wikipedia_Mahler" -> "Rex:MusicBrainz_Mahler" [ label="skos:exactMatch" ];
+	"Rex:MusicBrainz_Mahler" -> "Rex:Wikipedia_Mahler" [ label="skos:exactMatch" ];
+
+	// Resources
+	"Rex:MusicBrainz_Mahler" [ label="ex:MusicBrainz_Mahler\ndc:name \"Gustav Mahler\"\nschema:source \"https://musicbrainz.org/artist/8d610e51-64b4-4654-b8df-064b0fb7a9d9\"", shape = ellipse, color = blue ];
+	"Rex:Wikipedia_Mahler" [ label="ex:Wikipedia_Mahler\ndc:name \"Gustav Mahler\"\nschema:source \"https://en.wikipedia.org/wiki/Gustav_Mahler\"", shape = ellipse, color = blue ];
+
+}
