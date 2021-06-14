@@ -23,15 +23,19 @@ QUERY_CONTROLACTION_ID = """
                     nodeValue {{
                             ... on AudioObject {{
                                contentUrl
+                               identifier
                               }}
                             ... on MediaObject {{
                                contentUrl
+                               identifier
                               }}
                             ... on VideoObject {{
                                contentUrl
+                               identifier
                               }}
                             ... on DigitalDocument {{
                                source
+                               identifier
                               }}                       
                             format
                             
