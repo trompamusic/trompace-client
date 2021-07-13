@@ -1,19 +1,27 @@
 from typing import List
 
-from trompace import StringConstant, check_required_args, filter_none_args
+from trompace import StringConstant, check_required_args, filter_none_args, docstring_interpolate
 from trompace.mutations import _verify_additional_type, annotation
 from trompace.mutations.templates import format_mutation, format_link_mutation
 
 
-def create_defined_term_set(*, creator: str, name: str, additionaltype: List[str], image: str = None):
+DEFINEDTERMSET_ARGS_DOCS = """creator: a URI to the identity of the user who created this DefinedTermSet (:dcterms:`creator`)
+        name: the name of this DefinedTermSet (:schema:`name`)
+        additionaltype: A list of schema.org additionalTypes used to categorise this DefinedTermSet (:schema:`additionalType`)
+        broader_url (optional): a type to be related with :skos:`broader`
+        broader_schema (optional): an annotation motivation to be related with :skos:`broader`
+        image (optional): an image to describe this DefinedTermSet (:schema:`image`)
+"""
+
+
+@docstring_interpolate("definedtermset_args", DEFINEDTERMSET_ARGS_DOCS)
+def create_defined_term_set(*, creator: str, name: str, additionaltype: List[str], broader_url: str = None,
+                            broader_schema: annotation.AnnotationSchemaMotivation = None, image: str = None):
     """Return a mutation for making a DefinedTermSet.
-    A DefinedTermSet (https://schema.org/DefinedTermSet) is a group of defined terms, e.g. categories or labels.
+    A :schema:`DefinedTermSet` is a group of defined terms, e.g. categories or labels.
 
     Arguments:
-        creator: a URI to the identity of the user who created this DefinedTermSet
-        name: the name of this DefinedTermSet
-        additionaltype: A list of schema.org additionalTypes used to categorise this DefinedTermSet
-        image (optional): an image to describe this DefinedTermSet
+        {definedtermset_args}
 
     Returns:
         A GraphQL Mutation to create a DefinedTermSet in the Trompa CE
@@ -25,24 +33,30 @@ def create_defined_term_set(*, creator: str, name: str, additionaltype: List[str
     params = {"additionalType": additionaltype,
               "creator": creator,
               "name": name,
+              "broaderUrl": broader_url,
               "image": image}
+    if broader_schema is not None:
+        params["broaderMotivation"] = StringConstant(broader_schema.name)
     params = filter_none_args(params)
     return format_mutation(mutationname="CreateDefinedTermSet", args=params)
 
 
-def create_defined_term(*, creator: str, termcode: str, additionaltype: List[str], broader_url: str = None,
-                        broader_schema: annotation.AnnotationSchemaMotivation = None, image: str = None):
+DEFINEDTERM_ARGS_DOCS = """creator: a URI to the identity of the user who created this DefinedTerm (:dcterms:`creator`)
+        termcode: The name of this term
+        additionaltype: A list of schema.org additionalTypes used to categorise this DefinedTerm (:schema:`additionalType`)
+
+        image (optional): an image to describe this DefinedTerm (:schema:`image`)
+"""
+
+
+@docstring_interpolate("definedterm_args", DEFINEDTERM_ARGS_DOCS)
+def create_defined_term(*, creator: str, termcode: str, additionaltype: List[str], image: str = None):
     """Return a mutation for making a DefinedTerm.
-    A DefinedTerm (https://schema.org/DefinedTerm) is a word, name, acronym, phrase, etc. with a formal definition.
+    A :schema:`DefinedTerm` is a word, name, acronym, phrase, etc. with a formal definition.
     It is part of a DefinedTermSet.
 
     Arguments:
-        creator: a URI to the identity of the user who created this DefinedTerm
-        termcode: The name of this term
-        additionaltype: A list of schema.org additionalTypes used to categorise this DefinedTerm
-        broader_url (optional): a type to be related with skos:broader
-        broader_schema (optional): an annotation motivation to be related with skos:broader
-        image (optional): an image to describe this DefinedTerm
+        {definedterm_args}
 
     Returns:
         A GraphQL Mutation to create a DefinedTerm in the Trompa CE
@@ -53,20 +67,23 @@ def create_defined_term(*, creator: str, termcode: str, additionaltype: List[str
     params = {"additionalType": additionaltype,
               "creator": creator,
               "termCode": termcode,
-              "broaderUrl": broader_url,
               "image": image}
-    if broader_schema is not None:
-        params["broaderMotivation"] = StringConstant(broader_schema.name)
+
     params = filter_none_args(params)
 
     return format_mutation(mutationname="CreateDefinedTerm", args=params)
 
 
+@docstring_interpolate("definedtermset_args", DEFINEDTERMSET_ARGS_DOCS)
 def update_defined_term_set(identifier: str, *, creator: str = None, name: str = None,
-                            additionaltype: List[str] = None, image: str = None):
+                            additionaltype: List[str] = None, broader_url: str = None,
+                            broader_schema: annotation.AnnotationSchemaMotivation = None,
+                            image: str = None):
     """Return a mutation for updating a DefinedTermSet.
 
-    TODO: Copy arguments from create_
+    Arguments:
+        identifier: The identifier of the DefinedTermSet in the CE to be updated (:dcterms:`identifier`).
+        {definedtermset_args}
 
     Returns:
         A GraphQL Mutation to update a DefinedTermSet in the Trompa CE
@@ -77,19 +94,23 @@ def update_defined_term_set(identifier: str, *, creator: str = None, name: str =
               "creator": creator,
               "name": name,
               "additionalType": additionaltype,
+              "broaderUrl": broader_url,
               "image": image}
-
+    if broader_schema is not None:
+        params["broaderMotivation"] = StringConstant(broader_schema.name)
     params = filter_none_args(params)
 
     return format_mutation(mutationname="UpdateDefinedTermSet", args=params)
 
 
+@docstring_interpolate("definedterm_args", DEFINEDTERM_ARGS_DOCS)
 def update_defined_term(identifier: str, *, creator: str = None, termcode: str = None,
-                        additionaltype: List[str] = None, broader_url: str = None,
-                        broader_schema: annotation.AnnotationSchemaMotivation = None, image: str = None):
+                        additionaltype: List[str] = None, image: str = None):
     """Return a mutation for updating a DefinedTerm.
 
-    TODO: Copy arguments from create_
+    Arguments:
+        identifier: The identifier of the DefinedTerm in the CE to be updated (:dcterms:`identifier`).
+        {definedterm_args}
 
     Returns:
         A GraphQL Mutation to update a DefinedTerm in the Trompa CE
@@ -100,10 +121,8 @@ def update_defined_term(identifier: str, *, creator: str = None, termcode: str =
               "creator": creator,
               "termCode": termcode,
               "additionalType": additionaltype,
-              "broaderUrl": broader_url,
               "image": image}
-    if broader_schema is not None:
-        params["broaderMotivation"] = StringConstant(broader_schema.name)
+
     params = filter_none_args(params)
 
     return format_mutation(mutationname="UpdateDefinedTerm", args=params)

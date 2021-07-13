@@ -21,6 +21,27 @@ class TestDefinedTerm(CeTestCase):
             additionaltype=[ADDITIONAL_TYPE_TAG_COLLECTION])
         self.assert_queries_equal(create_dts, expected)
 
+    def test_create_defined_term_set_broader_url(self):
+        expected = self.read_file("create_definedtermset_broader_url.txt")
+
+        create_dt = definedterm.create_defined_term_set(
+            creator="https://trompamusic.eu/user/mozart",
+            name="performance directions",
+            additionaltype=[ADDITIONAL_TYPE_TAG_COLLECTION],
+            broader_url="http://some_url/motivation")
+        self.assert_queries_equal(create_dt, expected)
+
+    def test_create_defined_term_set_broader_schema(self):
+        expected = self.read_file("create_definedtermset_broader_schema.txt")
+
+        create_dt = definedterm.create_defined_term_set(
+            creator="https://trompamusic.eu/user/mozart",
+            name="performance directions",
+            additionaltype=[ADDITIONAL_TYPE_TAG_COLLECTION],
+            broader_schema=AnnotationSchemaMotivation.commenting
+        )
+        self.assert_queries_equal(create_dt, expected)
+
     def test_create_defined_term(self):
         expected = self.read_file("create_definedterm.txt")
 
@@ -28,27 +49,6 @@ class TestDefinedTerm(CeTestCase):
             creator="https://trompamusic.eu/user/mozart",
             termcode="up",
             additionaltype=[ADDITIONAL_TYPE_TAG_COLLECTION_ELEMENT])
-        self.assert_queries_equal(create_dt, expected)
-
-    def test_create_defined_term_broader_url(self):
-        expected = self.read_file("create_definedterm_broader_url.txt")
-
-        create_dt = definedterm.create_defined_term(
-            creator="https://trompamusic.eu/user/mozart",
-            termcode="up",
-            additionaltype=[ADDITIONAL_TYPE_TAG_COLLECTION_ELEMENT],
-            broader_url="http://some_url/motivation")
-        self.assert_queries_equal(create_dt, expected)
-
-    def test_create_defined_term_broader_schema(self):
-        expected = self.read_file("create_definedterm_broader_schema.txt")
-
-        create_dt = definedterm.create_defined_term(
-            creator="https://trompamusic.eu/user/mozart",
-            termcode="up",
-            additionaltype=[ADDITIONAL_TYPE_TAG_COLLECTION_ELEMENT],
-            broader_schema=AnnotationSchemaMotivation.commenting
-        )
         self.assert_queries_equal(create_dt, expected)
 
     def test_defined_term_add_to_defined_term_set(self):

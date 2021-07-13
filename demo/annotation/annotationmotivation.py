@@ -52,16 +52,21 @@ def main(print_queries: bool, submit_queries: bool):
 
     # Join the annotation with the more specific motiviation. This is the Arco DefinedTerm
     # from the DefinedTermSet that we provided
-    arco_id = vocabulary_ids["dt_arco_id"]
-    annotation_definedterm_join = annotation.merge_annotation_motivationdefinedterm(ann_id, arco_id)
+    dts_id = vocabulary_ids["dts_id"]
+    annotation_motivation_join = annotation.merge_annotation_motivationdefinedtermset(ann_id, dts_id)
 
-    print("Annotation - link to target and body")
+    arco_id = vocabulary_ids["dt_arco_id"]
+    annotation_body_join = annotation.merge_annotation_bodynode(ann_id, arco_id)
+
+    print("Annotation - link to target, motivation, and body")
     if print_queries:
         print(annotation_target_join)
-        print(annotation_definedterm_join)
+        print(annotation_motivation_join)
+        print(annotation_body_join)
     if submit_queries:
         send_query_and_get_id(annotation_target_join)
-        send_query_and_get_id(annotation_definedterm_join)
+        send_query_and_get_id(annotation_motivation_join)
+        send_query_and_get_id(annotation_body_join)
 
 
 if __name__ == '__main__':

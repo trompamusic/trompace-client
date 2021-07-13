@@ -185,18 +185,18 @@ def merge_annotation_bodynode(annotation_id, node_id):
     return format_link_mutation("MergeAnnotationBodyNode", annotation_id, node_id)
 
 
-def merge_annotation_motivationdefinedterm(annotation_id, definedterm_id):
+def merge_annotation_motivationdefinedtermset(annotation_id, definedtermset_id):
     """
     Join an annotation with a DefinedTerm that describes a custom annotation Motivation
 
     Arguments:
         annotation_id: CE Node ID of an Annotation object
-        definedterm_id: CE Node ID of a DefinedTerm object which is a more specific annotation Motivation
+        definedtermset_id: CE Node ID of a DefinedTermSet object which is a more specific annotation Motivation
 
     Returns:
 
     """
-    return format_link_mutation("MergeAnnotationMotivationDefinedTerm", annotation_id, definedterm_id)
+    return format_link_mutation("MergeAnnotationMotivationDefinedTermSet", annotation_id, definedtermset_id)
 
 
 def merge_annotation_cemotivation(annotation_id, cemotivation_id):

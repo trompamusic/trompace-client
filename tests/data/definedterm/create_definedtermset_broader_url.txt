@@ -1,8 +1,8 @@
 mutation {
-  CreateDefinedTerm(
-additionalType: ["https://vocab.trompamusic.eu/vocab#TagCollectionElement"]
+  CreateDefinedTermSet(
+additionalType: ["https://vocab.trompamusic.eu/vocab#TagCollection"]
         creator: "https://trompamusic.eu/user/mozart"
-        termCode: "up"
+        name: "performance directions"
         broaderUrl: "http://some_url/motivation"
 ) {
 identifier
